@@ -1,0 +1,22 @@
+:root{
+    --primary-color: #0d6efd;
+    --secondary-color: #6c757d;
+    --background-color: #363636;
+    --text-color: #212529;
+}
+body{
+    background-color: var(--background-color);
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Aplicar hover scale apenas em links específicos */
+a.hover-scale{
+    transition: transform 0.3s ease-in-out;
+    transform: scale(1);
+    display: inline-block;
+}
+
+a.hover-scale:hover{
+    transform: scale(1.1);
+}
