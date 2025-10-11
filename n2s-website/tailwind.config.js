@@ -10,6 +10,9 @@ export default {
         fontFamily: {
            inter: ["'Inter'", "sans-serif"],
         },
+        scale: {
+            'hover-scale': '1.05', // define o valor de escala
+          },
   
         // Cores personalizadas
         colors: {
