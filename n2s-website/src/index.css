@@ -1,5 +1,34 @@
 @import "tailwindcss";
 
+/* Configuração da fonte Clash Grotesk Variable */
+* {
+  font-family: 'Clash Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+}
+
+
+/* Configuração de cores */
+@layer base {
+  h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: white;
+  }
+
+  a {
+    @apply text-gray-100 font-medium hover:text-white transition-all 
+    duration-300 hover-scale relative z-10 px-2 py-1 rounded-full hover:bg-[rgba(255,255,255,0.1)] text-sm;
+  }
+
+  a:hover {
+    color: #93c5fd;
+  }
+
+  p {
+    color: #d1d5db;
+    line-height: 1.625;
+  }
+}
+
 /* Animação fade-down personalizada */
 @keyframes fade-down {
   0% {
@@ -16,7 +45,7 @@
 
 /* Fade Down */
 .animate-fade-down {
-  animation: fade-down 0.75s ease-in-out;
+  animation: fade-down 0.75s ease;
 }
 
 /* Hover Scale - para qualquer elemento */
@@ -72,3 +101,6 @@
   animation: bounce-soft 2s ease-in-out infinite;
 }
 
+body {
+  background-color: #0b0b0b; /* ou sua cor de fundo real */
+}
