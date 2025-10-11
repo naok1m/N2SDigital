@@ -15,8 +15,8 @@
   }
 
   a {
-    @apply text-gray-100 font-medium hover:text-white transition-all 
-    duration-300 hover-scale relative z-10 px-2 py-1 rounded-full hover:bg-[rgba(255,255,255,0.1)] text-sm;
+    /* @apply text-gray-100 font-medium hover:text-white transition-all 
+    duration-300 hover-scale relative z-10 px-2 py-1 rounded-full hover:bg-[rgba(255,255,255,0.1)] text-sm; */
   }
 
   a:hover {
