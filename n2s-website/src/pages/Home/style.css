@@ -20,3 +20,103 @@ a.hover-scale{
 a.hover-scale:hover{
     transform: scale(1.1);
 }
+
+/* Efeitos 3D para o tablet */
+.tablet-3d {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+/* Transições suaves para elementos do tablet */
+.tablet-frame {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, opacity;
+}
+
+/* Efeito de profundidade para o vídeo */
+.video-container {
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+}
+
+/* Animação de entrada suave para projetos */
+.projects-enter {
+    transform: translateY(50px);
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.projects-enter.active {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Estilos para o carousel de tecnologias */
+.tech-ribbon {
+    background: linear-gradient(135deg, 
+        rgba(139, 92, 246, 0.1) 0%, 
+        rgba(168, 85, 247, 0.05) 50%, 
+        rgba(236, 72, 153, 0.1) 100%
+    );
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tech-ribbon:hover {
+    background: linear-gradient(135deg, 
+        rgba(139, 92, 246, 0.2) 0%, 
+        rgba(168, 85, 247, 0.1) 50%, 
+        rgba(236, 72, 153, 0.2) 100%
+    );
+    border-color: rgba(139, 92, 246, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(139, 92, 246, 0.2);
+}
+
+.tech-icon {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.tech-icon:hover {
+    filter: drop-shadow(0 4px 8px rgba(139, 92, 246, 0.3));
+}
+
+/* Animação de entrada para os elementos do carousel */
+.tech-item {
+    animation: slideInUp 0.6s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.tech-item:nth-child(1) { animation-delay: 0.1s; }
+.tech-item:nth-child(2) { animation-delay: 0.2s; }
+.tech-item:nth-child(3) { animation-delay: 0.3s; }
+.tech-item:nth-child(4) { animation-delay: 0.4s; }
+.tech-item:nth-child(5) { animation-delay: 0.5s; }
+.tech-item:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes slideInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Efeito de gradiente nas bordas do carousel */
+.carousel-fade-left {
+    background: linear-gradient(90deg, 
+        rgba(10, 10, 15, 1) 0%, 
+        rgba(10, 10, 15, 0.8) 50%, 
+        transparent 100%
+    );
+}
+
+.carousel-fade-right {
+    background: linear-gradient(270deg, 
+        rgba(10, 10, 15, 1) 0%, 
+        rgba(10, 10, 15, 0.8) 50%, 
+        transparent 100%
+    );
+}
