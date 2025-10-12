@@ -14,10 +14,6 @@
     color: white;
   }
 
-  a {
-    /* @apply text-gray-100 font-medium hover:text-white transition-all 
-    duration-300 hover-scale relative z-10 px-2 py-1 rounded-full hover:bg-[rgba(255,255,255,0.1)] text-sm; */
-  }
 
   a:hover {
     color: #93c5fd;
@@ -36,7 +32,6 @@
     transform: translateY(-20px);
   }
   100% {
-    opacity: 1;
     transform: translateY(0);
   }
 }
@@ -123,4 +118,121 @@
 
 body {
   background-color: #0b0b0b; /* ou sua cor de fundo real */
+}
+
+/* Estilos para a seção Hero */
+.hero-section {
+  background: linear-gradient(135deg, #0a0a0f 0%, #1a0b2e 50%, #2d1b69 100%);
+  position: relative;
+}
+
+/* Gradiente radial para vignette suave */
+.bg-gradient-radial {
+  background: radial-gradient(ellipse at center, transparent 0%, transparent 50%, rgba(0, 0, 0, 0.2) 80%, rgba(0, 0, 0, 0.3) 100%);
+}
+
+
+/* Melhorar o contraste e legibilidade */
+.hero-section h1,
+.hero-section h2,
+.hero-section p {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Shape divider curve */
+.custom-shape-divider-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  transform: rotate(180deg);
+}
+
+.custom-shape-divider-bottom svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 80px;
+}
+
+.custom-shape-divider-bottom .shape-fill {
+  fill: #0a0a0f;
+}
+
+/* Efeitos de background reutilizáveis para todas as seções */
+.section-noise-blur {
+  position: relative;
+}
+
+.section-noise-blur::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(0.5px);
+  pointer-events: none;
+}
+
+.section-noise-blur::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.15;
+  background-image: url('/noise.png');
+  background-size: 256px 256px;
+  background-repeat: repeat;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+/* Scrollbar personalizado - Tom roxo do site */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0f;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #110A1B;
+  border-radius: 6px;
+  border: 2px solid #0a0a0f;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #1a0f2e;
+  box-shadow: 0 0 10px rgba(17, 10, 27, 0.5);
+}
+
+/* Para Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #110A1B #0a0a0f;
+}
+
+/* Seletor de texto personalizado */
+::selection {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(168, 85, 247, 0.3) 50%, rgba(196, 132, 252, 0.3) 100%);
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(168, 85, 247, 0.8);
+}
+
+::-moz-selection {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(168, 85, 247, 0.3) 50%, rgba(196, 132, 252, 0.3) 100%);
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(168, 85, 247, 0.8);
+}
+
+/* Scroll Styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
 }

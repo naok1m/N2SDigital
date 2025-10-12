@@ -14,7 +14,7 @@ const linksDireita = [
 
 export default function Header() {
   return (
-    <header className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 animate-fade-down max-w-3xl px-2 md:px-4">
+    <header className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 animate-fade-down max-w-3xl px-2 md:px-4 opacity-50">
       <nav className="flex items-center justify-center gap-2 md:gap-3
                       bg-gradient-to-r from-[rgba(255,255,255,0.12)] via-[rgba(255,255,255,0.08)] to-[rgba(255,255,255,0.12)]
                       border border-[rgba(255,255,255,0.15)]
