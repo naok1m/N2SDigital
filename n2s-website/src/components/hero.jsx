@@ -10,7 +10,6 @@ export default function Hero() {
   const [show, setShow] = useState(false);
   
   // Refs para animações GSAP
-  const heroRef = useRef(null);
   const titleRef = useRef(null);
   const subtitleRef = useRef(null);
   const buttonRef = useRef(null);
@@ -198,7 +197,7 @@ export default function Hero() {
     }, 0); // Inicia 3s antes da curva terminar (delay 2 + duration 1 = 3s total, então 0s para iniciar junto com as animações de entrada)
 
     // Scroll-triggered animations para elementos
-    gsap.utils.toArray(".animate-on-scroll").forEach((element, index) => {
+    gsap.utils.toArray(".animate-on-scroll").forEach((element) => {
       gsap.fromTo(element,
         {
           y: 100,
