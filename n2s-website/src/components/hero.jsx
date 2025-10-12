@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import GlassButton from './glassButton';
 import CustomCursor from './CustomCursor';
+import InteractiveProjectCard from './InteractiveProjectCard';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -96,12 +97,12 @@ export default function Hero() {
       
       // 3. Garante que a seção de projetos esteja no topo (z-index)
       .set(projectsSectionRef.current, {
-        zIndex: 50 // Um z-index alto para sobrepor o tablet
+        zIndex: 100 // Um z-index alto para sobrepor o tablet
       }, 0.3) // Ativa no início do zoom (t=0.3)
 
       // 4. Revela a seção de projetos (fadeIn)
       .to(projectsSectionRef.current, {
-        opacity: 1, 
+        opacity: 2, 
         duration: 0.7,
       }, 0.3) // Começa o fade-in junto com o z-index
 
@@ -479,54 +480,51 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Terceira Seção - Projetos (Inicialmente invisível e sobreposta) */}
-        <section 
-          ref={projectsSectionRef} 
-          className="absolute inset-0 opacity-0 bg-[#1a0b2e] flex flex-col items-center justify-center p-8 overflow-hidden projects-section"
-          style={{ 
-            background: `
-              linear-gradient(135deg, 
-                #1a0b2e 0%, 
-                #170e26 15%, 
-                #150d22 25%, 
-                #120c1e 40%, 
-                #0f0a1a 55%, 
-                #0d0d16 70%, 
-                #0b0b12 85%, 
-                #0a0a0f 100%
-              )
-            `
-          }}
-        >
-          <div className="max-w-7xl mx-auto w-full text-white text-center">
-            <h2 className="text-5xl font-extrabold mb-12 bg-gradient-to-r from-[#d8b4fe] to-[#a855f7] bg-clip-text text-transparent">
-              🚀 Nossos Projetos de Destaque
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Card de Projeto 1 */}
-              <div className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-gray-800 hover:border-[#a855f7] transition duration-300 transform hover:scale-[1.02] shadow-xl">
-                <h3 className="text-3xl font-bold mb-2 text-[#a855f7]">E-commerce Avançado</h3>
-                <p className="text-gray-300">Desenvolvimento de plataforma de vendas com microserviços e alta performance.</p>
-                <span className="text-sm text-gray-400 block mt-4">Tecnologias: React, Node.js, AWS</span>
-              </div>
-              
-              {/* Card de Projeto 2 */}
-              <div className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-gray-800 hover:border-[#a855f7] transition duration-300 transform hover:scale-[1.02] shadow-xl">
-                <h3 className="text-3xl font-bold mb-2 text-[#a855f7]">App Mobile para Saúde</h3>
-                <p className="text-gray-300">Aplicativo nativo para iOS/Android com integração de dispositivos IoT.</p>
-                <span className="text-sm text-gray-400 block mt-4">Tecnologias: React Native, Swift, Kotlin</span>
-              </div>
+        {/* Terceira Seção - Projetos (MODIFICADA) */}
+{/* Terceira Seção - Projetos (MODIFICADA PARA USAR O COMPONENTE INTERATIVO) */}
+<section 
+  ref={projectsSectionRef} 
+  className="absolute inset-0 opacity-0 flex flex-col items-center justify-center p-8 overflow-hidden projects-section"
+  style={{ 
+    background: `
+      linear-gradient(135deg, 
+rgb(61, 0, 66) 0%, 
+rgb(37, 2, 58) 50%, 
+rgb(30, 3, 48) 100%
+      )
+    `
+  }}
+>
+  <div className="max-w-7xl mx-auto w-full text-center">
+    <h2 className="text-5xl font-extrabold mb-16 bg-gradient-to-r from-[#8b5cf6] to-[#6d28d9] bg-clip-text text-transparent">
+      🚀 Nossos Projetos de Destaque
+    </h2>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+      
+      {/* Card de Projeto 1 */}
+      <InteractiveProjectCard 
+        title="E-commerce Avançado"
+        description="Desenvolvimento de plataforma de vendas com microserviços e alta performance."
+        technologies="React, Node.js, AWS"
+      />
+      
+      {/* Card de Projeto 2 */}
+      <InteractiveProjectCard 
+        title="App Mobile para Saúde"
+        description="Aplicativo nativo para iOS/Android com integração de dispositivos IoT."
+        technologies="React Native, Swift, Kotlin"
+      />
 
-              {/* Card de Projeto 3 */}
-              <div className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-gray-800 hover:border-[#a855f7] transition duration-300 transform hover:scale-[1.02] shadow-xl">
-                <h3 className="text-3xl font-bold mb-2 text-[#a855f7]">Landing Page Imersiva</h3>
-                <p className="text-gray-300">Design e desenvolvimento focado em conversão e SEO para captação de leads.</p>
-                <span className="text-sm text-gray-400 block mt-4">Tecnologias: Next.js, GSAP, Tailwind CSS</span>
-              </div>
-            </div>
-          </div>
-        </section>
+      {/* Card de Projeto 3 */}
+      <InteractiveProjectCard 
+        title="Landing Page Imersiva"
+        description="Design e desenvolvimento focado em conversão e SEO para captação de leads."
+        technologies="Next.js, GSAP, Tailwind CSS"
+      />
 
+    </div>
+  </div>
+</section>
       </section>
 
       {/* Seção pós-transição (para que a página continue a rolar) */}
