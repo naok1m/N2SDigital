@@ -29,7 +29,7 @@ export default function Header() {
         ))}
 
         {/* Logo central */}
-        <div className="w-13 h-13 flex items-center justify-center 
+        <div className="w-12 h-12 flex items-center justify-center 
                         bg-gradient-to-br from-[rgba(255,255,255,0.15)] to-[rgba(255,255,255,0.05)]
                         border border-[rgba(255,255,255,0.2)] rounded-full
                         backdrop-blur-[15px] shadow-[0_4px_16px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.3)]
