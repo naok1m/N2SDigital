@@ -16,7 +16,7 @@ export default function GlassButton({ children }) {
       gsap.to(button, {
         scale: 1.1,
         rotationY: 5,
-        boxShadow: "0 12px 40px rgba(196,181,253,0.3), inset 0 1px 0 rgba(255,255,255,0.3)",
+        boxShadow: "0 12px 40px rgba(196,181,253,0.5), inset 0 1px 0 rgba(255,255,255,0.5)",
         duration: 0.3,
         ease: "power2.out"
       });
@@ -33,7 +33,7 @@ export default function GlassButton({ children }) {
       gsap.to(button, {
         scale: 1,
         rotationY: 0,
-        boxShadow: "0 8px 32px rgba(196,181,253,0.15), inset 0 1px 0 rgba(255,255,255,0.2)",
+        boxShadow: "0 8px 32px rgba(196,181,253,0.3), inset 0 1px 0 rgba(255,255,255,0.4)",
         duration: 0.3,
         ease: "power2.out"
       });
@@ -104,8 +104,8 @@ export default function GlassButton({ children }) {
     <button
       ref={buttonRef}
       className="flex items-center gap-3
-                 bg-gradient-to-r from-[rgba(196,181,253,0.2)] via-[rgba(196,181,253,0.1)] to-[rgba(196,181,253,0.2)]
-                 border border-[rgba(196,181,253,0.4)]
+                 bg-gradient-to-r from-[rgba(196,181,253,0.4)] via-[rgba(196,181,253,0.25)] to-[rgba(196,181,253,0.4)]
+                 border border-[rgba(196,181,253,0.6)]
                  backdrop-blur-[20px]
                  shadow-[0_8px_32px_rgba(196,181,253,0.15),inset_0_1px_0_rgba(255,255,255,0.2)]
                  rounded-full px-6 py-2
