@@ -68,18 +68,18 @@ export default function Hero() {
   useLayoutEffect(() => {
     if (!videoSectionRef.current || !tabletRef.current || !projectsSectionRef.current) return;
 
-    // Define a duração da cena de rolagem e os pinos
-    const scrollTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: videoSectionRef.current,
-        start: "top top", // Fixa a seção de vídeo no topo
-        end: "+=2000", // A animação dura 2000 pixels de rolagem
-        scrub: true, // Liga a animação ao scroll
-        pin: true, // Fixa a seção enquanto a animação ocorre
-        pinSpacing: false, 
-        // markers: true, // Descomente para ver os markers de debug
-      }
-    });
+     // Define a duração da cena de rolagem e os pinos
+     const scrollTl = gsap.timeline({
+       scrollTrigger: {
+         trigger: videoSectionRef.current,
+         start: "top -10%", // Só inicia quando o topo da seção está a 60% da tela (tablet visível)
+         end: "+=2000", // A animação dura 2000 pixels de rolagem
+         scrub: true, // Liga a animação ao scroll
+         pin: true, // Fixa a seção enquanto a animação ocorre
+         pinSpacing: false, 
+         // markers: true, // Descomente para ver os markers de debug
+       }
+     });
 
     // 1. Oculta o conteúdo do vídeo interno
     scrollTl.to(contentVideoRef.current, {
