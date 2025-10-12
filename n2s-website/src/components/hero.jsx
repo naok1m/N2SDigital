@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import GlassButton from './glassButton';
 import CustomCursor from './CustomCursor';
 import InteractiveProjectCard from './InteractiveProjectCard';
-
+import StackCarousel from './StackCarousel';
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
@@ -441,8 +441,11 @@ export default function Hero() {
         className="py-20 bg-[#0a0a0f] relative section-noise-blur flex items-center justify-center min-h-screen"
       >
         
+        {/* Carrossel de Stacks */}
+        <StackCarousel />
+        
         {/* Container do Tablet com a referência para a animação */}
-        <div ref={tabletRef} className="relative w-[95vw] max-w-6xl tablet-container element-to-animate">
+        <div ref={tabletRef} className="relative w-[95vw] max-w-6xl tablet-container element-to-animate z-10 mt-80">
           <div className="relative">
             {/* Tablet Frame com design profissional */}
             <div className="bg-black rounded-2xl p-3 shadow-2xl overflow-hidden border border-gray-800">
