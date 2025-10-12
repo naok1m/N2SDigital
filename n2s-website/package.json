@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "framer-motion": "^12.23.24",
+    "gsap": "^3.13.0",
     "interact.js": "^1.2.8",
     "lucide-react": "^0.545.0",
     "react": "^19.1.1",
