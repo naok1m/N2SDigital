@@ -3,9 +3,6 @@ import React from "react";
 export default function TechCarousel() {
   return (
     <section className="bg-gray-900 text-white flex flex-col items-center justify-center py-20 overflow-hidden">
-      <h2 className="text-4xl font-bold mb-16 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-        Tecnologias que eu uso
-      </h2>
 
       <div className="overflow-hidden w-full max-w-6xl">
         <div className="flex animate-scroll">
