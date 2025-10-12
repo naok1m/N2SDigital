@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import GlassButton from './glassButton';
@@ -19,6 +19,12 @@ export default function Hero() {
   const liquidosRef = useRef(null);
   const eclipseRef = useRef(null);
   const curveRef = useRef(null);
+  
+  // Refs para animação de scroll do tablet
+  const tabletRef = useRef(null);
+  const videoSectionRef = useRef(null);
+  const contentVideoRef = useRef(null);
+  const projectsSectionRef = useRef(null);
 
   // Função para iniciar animações constantes
   const startContinuousAnimations = () => {
@@ -58,6 +64,61 @@ export default function Hero() {
     });
   };
 
+  // Configuração da animação GSAP de scroll do tablet
+  useLayoutEffect(() => {
+    if (!videoSectionRef.current || !tabletRef.current || !projectsSectionRef.current) return;
+
+    // Define a duração da cena de rolagem e os pinos
+    const scrollTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: videoSectionRef.current,
+        start: "top top", // Fixa a seção de vídeo no topo
+        end: "+=2000", // A animação dura 2000 pixels de rolagem
+        scrub: true, // Liga a animação ao scroll
+        pin: true, // Fixa a seção enquanto a animação ocorre
+        pinSpacing: false, 
+        // markers: true, // Descomente para ver os markers de debug
+      }
+    });
+
+    // 1. Oculta o conteúdo do vídeo interno
+    scrollTl.to(contentVideoRef.current, {
+        opacity: 0,
+        duration: 0.3,
+      }, 0) 
+      
+      // 2. Zoom-in da moldura do tablet
+      .to(tabletRef.current, {
+        scale: 10, // Aumenta o tamanho do tablet (zoom)
+        transformOrigin: "center center", 
+        duration: 1, 
+        ease: "power2.inOut"
+      }, 0) 
+      
+      // 3. Garante que a seção de projetos esteja no topo (z-index)
+      .set(projectsSectionRef.current, {
+        zIndex: 50 // Um z-index alto para sobrepor o tablet
+      }, 0.3) // Ativa no início do zoom (t=0.3)
+
+      // 4. Revela a seção de projetos (fadeIn)
+      .to(projectsSectionRef.current, {
+        opacity: 1, 
+        duration: 0.7,
+      }, 0.3) // Começa o fade-in junto com o z-index
+
+      // 5. Oculta a moldura preta (bezel) do tablet no final da transição
+      .to(tabletRef.current, {
+        opacity: 0,
+        duration: 0.1,
+      }, 0.9); // Quase no fim da animação de zoom
+
+    // Limpeza do GSAP ao desmontar o componente
+    return () => {
+      scrollTl.kill();
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    };
+  }, []);
+
   useEffect(() => {
     const timeout = setTimeout(() => setShow(true), 100);
     
@@ -90,7 +151,7 @@ export default function Hero() {
       { 
         scale: 1, 
         rotation: 0, 
-        opacity: 0.3,
+        opacity: 0.7,
         y: 0,
         duration: 2,
         ease: "power3.out"
@@ -104,7 +165,7 @@ export default function Hero() {
       },
       {
         x: 0,
-        opacity: 0.4,
+        opacity: 0.8,
         scale: 1,
         duration: 1.5,
         ease: "power2.out"
@@ -118,7 +179,7 @@ export default function Hero() {
       },
       {
         x: 0,
-        opacity: 0.3,
+        opacity: 0.7,
         scale: 1,
         duration: 1.5,
         ease: "power2.out"
@@ -137,7 +198,7 @@ export default function Hero() {
       },
       {
         y: 0,
-        opacity: 0.5,
+        opacity: 0.9,
         scale: 1,
         rotationX: 0,
         duration: 1.2,
@@ -152,7 +213,7 @@ export default function Hero() {
       },
       {
         y: 0,
-        opacity: 0.4,
+        opacity: 0.8,
         scale: 1,
         duration: 1,
         ease: "power3.out"
@@ -167,7 +228,7 @@ export default function Hero() {
       },
       {
         y: 0,
-        opacity: 0.5,
+        opacity: 0.9,
         scale: 1,
         rotation: 0,
         duration: 0.8,
@@ -253,11 +314,11 @@ export default function Hero() {
           `
         }}></div>
         
-        {/* Efeito de blur sutil */}
-        <div className="absolute inset-0 backdrop-blur-[0.5px]"></div>
+        {/* Efeito de blur no background */}
+        <div className="absolute inset-0 backdrop-blur-[2px]"></div>
         
         {/* Noise texture visível */}
-        <div className="absolute inset-0 opacity-20" style={{
+        <div className="absolute inset-0 opacity-35" style={{
           backgroundImage: 'url("/noise.png")',
           backgroundSize: '256px 256px',
           backgroundRepeat: 'repeat',
@@ -265,14 +326,14 @@ export default function Hero() {
         }}></div>
         
         {/* Overlay sutil para escurecer */}
-        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="absolute inset-0 bg-black/10"></div>
         
         {/* Vignette effect refinado */}
-        <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/30"></div>
+        <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/15"></div>
         
         {/* Grid pattern muito sutil */}
-        <div className="absolute inset-0 opacity-[0.02]" style={{
-          backgroundImage: `radial-gradient(circle at 2px 2px, rgba(139, 92, 246, 0.4) 1px, transparent 0)`,
+        <div className="absolute inset-0 opacity-[0.05]" style={{
+          backgroundImage: `radial-gradient(circle at 2px 2px, rgba(139, 92, 246, 0.6) 1px, transparent 0)`,
           backgroundSize: '60px 60px'
         }}></div>
 
@@ -282,9 +343,9 @@ export default function Hero() {
             ref={liquidosRef}
             src="/liquidos.png" 
             alt="Líquidos" 
-            className="w-full h-full object-cover opacity-[0.3] background-image"
+            className="w-full h-full object-cover opacity-[0.9] background-image"
             style={{
-              filter: 'contrast(1.1) brightness(0.9)',
+              filter: 'contrast(1.3) brightness(1.1) blur(3px)',
               mixBlendMode: 'soft-light'
             }}
           />
@@ -296,9 +357,9 @@ export default function Hero() {
             ref={correntesRef}
             src="/correntes.png" 
             alt="Correntes" 
-            className="w-full h-full object-cover opacity-[0.4] background-image"
+            className="w-full h-full object-cover opacity-[0.95] background-image"
             style={{
-              filter: 'contrast(1.2) brightness(0.8)',
+              filter: 'contrast(1.4) brightness(1.0) blur(3px)',
               mixBlendMode: 'overlay',
               transform: 'translateX(-10%)',
               objectPosition: 'left center'
@@ -313,7 +374,7 @@ export default function Hero() {
             ref={eclipseRef}
             className="absolute pointer-events-none eclipse-glow"
             style={{
-              background: `radial-gradient(circle, rgba(196, 181, 253, 0.04) 0%, rgba(168, 85, 247, 0.03) 30%, rgba(139, 92, 246, 0.02) 60%, transparent 100%)`,
+              background: `radial-gradient(circle, rgba(196, 181, 253, 0.08) 0%, rgba(168, 85, 247, 0.06) 30%, rgba(139, 92, 246, 0.04) 60%, transparent 100%)`,
               width: '600px',
               height: '600px',
               borderRadius: '50%',
@@ -332,7 +393,10 @@ export default function Hero() {
             ref={planetaRef}
             src="/planeta.png" 
             alt="Planeta" 
-            className="w-[700px] h-[700px] md:w-[900px] md:h-[900px] lg:w-[1100px] lg:h-[1100px] opacity-30 object-contain mix-blend-mode-screen background-image"
+            className="w-[700px] h-[700px] md:w-[900px] md:h-[900px] lg:w-[1100px] lg:h-[1100px] opacity-90 object-contain mix-blend-mode-screen background-image"
+            style={{
+              filter: 'blur(2px)'
+            }}
           />
         </div>
 
@@ -350,7 +414,7 @@ export default function Hero() {
 
           {/* Descrição */}
           <div className="max-w-5xl mx-auto mb-8">
-            <p ref={subtitleRef} className="text-lg md:text-xl text-gray-400 leading-relaxed max-w-4xl mx-auto">
+            <p ref={subtitleRef} className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-4xl mx-auto">
               Criamos experiências digitais que conectam, inspiram e geram resultados extraordinários para o seu negócio
             </p>
           </div>
@@ -371,47 +435,106 @@ export default function Hero() {
         </div>
       </section>
 
-      {/* Segunda seção - Vídeo demonstrativo */}
-      <section id="video-section" className="py-20 bg-[#0a0a0f] relative section-noise-blur">
-        <div className="relative w-[95vw] max-w-6xl mx-auto z-10 animate-on-scroll">
-        <div className="relative">
+      {/* Segunda seção - Vídeo demonstrativo (Container para o ScrollTrigger) */}
+      <section 
+        ref={videoSectionRef} 
+        className="py-20 bg-[#0a0a0f] relative section-noise-blur flex items-center justify-center min-h-screen"
+      >
+        
+        {/* Container do Tablet com a referência para a animação */}
+        <div ref={tabletRef} className="relative w-[95vw] max-w-6xl tablet-container element-to-animate">
+          <div className="relative">
             {/* Tablet Frame com design profissional */}
             <div className="bg-black rounded-2xl p-3 shadow-2xl overflow-hidden border border-gray-800">
-            {/* Screen */}
-            <div className="bg-gray-900 rounded-xl overflow-hidden relative">
+              {/* Screen Content - O que será ocultado */}
+              <div ref={contentVideoRef} className="bg-gray-900 rounded-xl overflow-hidden relative">
                 {/* Browser Bar realista */}
-              <div className="bg-gray-800 px-6 py-4 flex items-center gap-3 border-b border-gray-700">
-                <div className="flex gap-3">
+                <div className="bg-gray-800 px-6 py-4 flex items-center gap-3 border-b border-gray-700">
+                  <div className="flex gap-3">
                     <div className="w-4 h-4 bg-red-500 rounded-full shadow-sm"></div>
                     <div className="w-4 h-4 bg-yellow-500 rounded-full shadow-sm"></div>
                     <div className="w-4 h-4 bg-green-500 rounded-full shadow-sm"></div>
-                </div>
-                <div className="flex-1 bg-gray-700 rounded-lg px-4 py-2 ml-6">
+                  </div>
+                  <div className="flex-1 bg-gray-700 rounded-lg px-4 py-2 ml-6">
                     <div className="text-gray-400 text-sm text-left">n2sdigital.com</div>
+                  </div>
                 </div>
-              </div>
-              
-              {/* Video Container - 16:9 Aspect Ratio */}
-              <div className="aspect-video bg-gray-900 relative">
-                <video
-                  src="/Noxus.mp4"
-                  autoPlay
-                  loop
-                  muted
+                
+                {/* Video Container - 16:9 Aspect Ratio */}
+                <div className="aspect-video bg-gray-900 relative">
+                  <video
+                    src="/Noxus.mp4"
+                    autoPlay
+                    loop
+                    muted
                     playsInline
-                  className="w-full h-full object-cover rounded-xl"
-                />
-
-                  {/* Overlay sutil para melhor contraste */}
-                <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                  <div className="text-white text-xl font-semibold bg-black/50 px-4 py-2 rounded">
+                    className="w-full h-full object-cover rounded-xl"
+                  />
+                  <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                    <div className="text-white text-xl font-semibold bg-black/50 px-4 py-2 rounded">
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        </div>
+
+        {/* Terceira Seção - Projetos (Inicialmente invisível e sobreposta) */}
+        <section 
+          ref={projectsSectionRef} 
+          className="absolute inset-0 opacity-0 bg-[#1a0b2e] flex flex-col items-center justify-center p-8 overflow-hidden projects-section"
+          style={{ 
+            background: `
+              linear-gradient(135deg, 
+                #1a0b2e 0%, 
+                #170e26 15%, 
+                #150d22 25%, 
+                #120c1e 40%, 
+                #0f0a1a 55%, 
+                #0d0d16 70%, 
+                #0b0b12 85%, 
+                #0a0a0f 100%
+              )
+            `
+          }}
+        >
+          <div className="max-w-7xl mx-auto w-full text-white text-center">
+            <h2 className="text-5xl font-extrabold mb-12 bg-gradient-to-r from-[#d8b4fe] to-[#a855f7] bg-clip-text text-transparent">
+              🚀 Nossos Projetos de Destaque
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Card de Projeto 1 */}
+              <div className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-gray-800 hover:border-[#a855f7] transition duration-300 transform hover:scale-[1.02] shadow-xl">
+                <h3 className="text-3xl font-bold mb-2 text-[#a855f7]">E-commerce Avançado</h3>
+                <p className="text-gray-300">Desenvolvimento de plataforma de vendas com microserviços e alta performance.</p>
+                <span className="text-sm text-gray-400 block mt-4">Tecnologias: React, Node.js, AWS</span>
+              </div>
+              
+              {/* Card de Projeto 2 */}
+              <div className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-gray-800 hover:border-[#a855f7] transition duration-300 transform hover:scale-[1.02] shadow-xl">
+                <h3 className="text-3xl font-bold mb-2 text-[#a855f7]">App Mobile para Saúde</h3>
+                <p className="text-gray-300">Aplicativo nativo para iOS/Android com integração de dispositivos IoT.</p>
+                <span className="text-sm text-gray-400 block mt-4">Tecnologias: React Native, Swift, Kotlin</span>
+              </div>
+
+              {/* Card de Projeto 3 */}
+              <div className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-gray-800 hover:border-[#a855f7] transition duration-300 transform hover:scale-[1.02] shadow-xl">
+                <h3 className="text-3xl font-bold mb-2 text-[#a855f7]">Landing Page Imersiva</h3>
+                <p className="text-gray-300">Design e desenvolvimento focado em conversão e SEO para captação de leads.</p>
+                <span className="text-sm text-gray-400 block mt-4">Tecnologias: Next.js, GSAP, Tailwind CSS</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </section>
+
+      {/* Seção pós-transição (para que a página continue a rolar) */}
+      <section className="bg-[#0a0a0f] min-h-screen py-32 flex items-center justify-center">
+        <h2 className="text-4xl text-gray-400">
+            Continue explorando o site...
+        </h2>
       </section>
     </>
   );
