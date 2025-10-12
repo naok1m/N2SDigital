@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import GlassButton from './glassButton';
 import CustomCursor from './CustomCursor';
+import StackCarousel from './StackCarousel';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -441,8 +442,11 @@ export default function Hero() {
         className="py-20 bg-[#0a0a0f] relative section-noise-blur flex items-center justify-center min-h-screen"
       >
         
+        {/* Carrossel de Stacks */}
+        <StackCarousel />
+        
         {/* Container do Tablet com a referência para a animação */}
-        <div ref={tabletRef} className="relative w-[95vw] max-w-6xl tablet-container element-to-animate">
+        <div ref={tabletRef} className="relative w-[95vw] max-w-6xl tablet-container element-to-animate z-10 mt-80">
           <div className="relative">
             {/* Tablet Frame com design profissional */}
             <div className="bg-black rounded-2xl p-3 shadow-2xl overflow-hidden border border-gray-800">
@@ -499,27 +503,27 @@ export default function Hero() {
             `
           }}
         >
-          <div className="max-w-7xl mx-auto w-full text-white text-center">
+          <div className="max-w-7xl mx-auto w-full text-white text-center flex flex-col items-center justify-center">
             <h2 className="text-5xl font-extrabold mb-12 bg-gradient-to-r from-[#d8b4fe] to-[#a855f7] bg-clip-text text-transparent">
               🚀 Nossos Projetos de Destaque
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center">
               {/* Card de Projeto 1 */}
-              <div className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-gray-800 hover:border-[#a855f7] transition duration-300 transform hover:scale-[1.02] shadow-xl">
+              <div className="w-full max-w-sm bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-gray-800 hover:border-[#a855f7] transition duration-300 transform hover:scale-[1.02] shadow-xl text-center">
                 <h3 className="text-3xl font-bold mb-2 text-[#a855f7]">E-commerce Avançado</h3>
                 <p className="text-gray-300">Desenvolvimento de plataforma de vendas com microserviços e alta performance.</p>
                 <span className="text-sm text-gray-400 block mt-4">Tecnologias: React, Node.js, AWS</span>
               </div>
               
               {/* Card de Projeto 2 */}
-              <div className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-gray-800 hover:border-[#a855f7] transition duration-300 transform hover:scale-[1.02] shadow-xl">
+              <div className="w-full max-w-sm bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-gray-800 hover:border-[#a855f7] transition duration-300 transform hover:scale-[1.02] shadow-xl text-center">
                 <h3 className="text-3xl font-bold mb-2 text-[#a855f7]">App Mobile para Saúde</h3>
                 <p className="text-gray-300">Aplicativo nativo para iOS/Android com integração de dispositivos IoT.</p>
                 <span className="text-sm text-gray-400 block mt-4">Tecnologias: React Native, Swift, Kotlin</span>
               </div>
 
               {/* Card de Projeto 3 */}
-              <div className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-gray-800 hover:border-[#a855f7] transition duration-300 transform hover:scale-[1.02] shadow-xl">
+              <div className="w-full max-w-sm bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-gray-800 hover:border-[#a855f7] transition duration-300 transform hover:scale-[1.02] shadow-xl text-center">
                 <h3 className="text-3xl font-bold mb-2 text-[#a855f7]">Landing Page Imersiva</h3>
                 <p className="text-gray-300">Design e desenvolvimento focado em conversão e SEO para captação de leads.</p>
                 <span className="text-sm text-gray-400 block mt-4">Tecnologias: Next.js, GSAP, Tailwind CSS</span>
