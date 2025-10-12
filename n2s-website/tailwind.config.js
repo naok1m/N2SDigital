@@ -19,6 +19,10 @@ export default {
           primary: "#0b0b0f",
           accent: "#00ffff",
         },
+        backdropFilter: {
+          none: 'none',
+          blur: 'blur(20px)',
+        },
   
         // 🔹 Animações personalizadas
         keyframes: {
