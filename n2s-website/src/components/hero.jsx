@@ -274,7 +274,7 @@ export default function Hero() {
           ease: "power3.out",
           scrollTrigger: {
             trigger: element,
-            start: "top 80%",
+            start: "top 30%",
             end: "bottom 20%",
             toggleActions: "play none none reverse",
             markers: false
@@ -445,23 +445,28 @@ export default function Hero() {
         <StackCarousel />
         
         {/* Container do Tablet com a referência para a animação */}
-        <div ref={tabletRef} className="relative w-[95vw] max-w-6xl tablet-container element-to-animate z-10 mt-30">
-          <div className="relative">
-            {/* Tablet Frame com design profissional */}
-            <div className="bg-black rounded-2xl p-3 shadow-2xl overflow-hidden border border-gray-800">
-              {/* Screen Content - O que será ocultado */}
-              <div ref={contentVideoRef} className="bg-gray-900 rounded-xl overflow-hidden relative">
-                {/* Browser Bar realista */}
-                <div className="bg-gray-800 px-6 py-4 flex items-center gap-3 border-b border-gray-700">
-                  <div className="flex gap-3">
-                    <div className="w-4 h-4 bg-red-500 rounded-full shadow-sm"></div>
-                    <div className="w-4 h-4 bg-yellow-500 rounded-full shadow-sm"></div>
-                    <div className="w-4 h-4 bg-green-500 rounded-full shadow-sm"></div>
-                  </div>
-                  <div className="flex-1 bg-gray-700 rounded-lg px-4 py-2 ml-6">
-                    <div className="text-gray-400 text-sm text-left">n2sdigital.com</div>
-                  </div>
-                </div>
+        <div
+  ref={tabletRef}
+  className="relative w-[90vw] max-w-6xl aspect-video mx-auto z-10 mt-30"
+  style={{
+    backgroundImage: `url('https://cdn.prod.website-files.com/6279077bf697b924fac6e205/63a436dd90ad1632be9b645b_pro-display%20full-bg.webp')`,
+    backgroundSize: "contain",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center",
+  }}
+>
+<div
+    ref={contentVideoRef}
+    className="absolute inset-0 flex items-center justify-center"
+    style={{
+      top: "7%",
+      left: "10%",
+      width: "80%",
+      height: "86%",
+      borderRadius: "12px",
+      overflow: "hidden",
+    }}
+  >
                 
                 {/* Video Container - 16:9 Aspect Ratio */}
                 <div className="aspect-video bg-gray-900 relative">
@@ -480,8 +485,8 @@ export default function Hero() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+
+    
 
         {/* Terceira Seção - Projetos (MODIFICADA) */}
 {/* Terceira Seção - Projetos (MODIFICADA PARA USAR O COMPONENTE INTERATIVO) */}
