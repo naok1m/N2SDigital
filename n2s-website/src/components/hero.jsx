@@ -72,7 +72,7 @@ export default function Hero() {
     const scrollTl = gsap.timeline({
       scrollTrigger: {
         trigger: videoSectionRef.current,
-        start: "top top", // Fixa a seção de vídeo no topo
+        start: "center center", // Fixa a seção de vídeo no topo
         end: "+=2000", // A animação dura 2000 pixels de rolagem
         scrub: true, // Liga a animação ao scroll
         pin: true, // Fixa a seção enquanto a animação ocorre
@@ -445,7 +445,7 @@ export default function Hero() {
         <StackCarousel />
         
         {/* Container do Tablet com a referência para a animação */}
-        <div ref={tabletRef} className="relative w-[95vw] max-w-6xl tablet-container element-to-animate z-10 mt-80">
+        <div ref={tabletRef} className="relative w-[95vw] max-w-6xl tablet-container element-to-animate z-10 mt-30">
           <div className="relative">
             {/* Tablet Frame com design profissional */}
             <div className="bg-black rounded-2xl p-3 shadow-2xl overflow-hidden border border-gray-800">
