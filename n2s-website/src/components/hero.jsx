@@ -3,14 +3,15 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import GlassButton from './glassButton';
 import CustomCursor from './CustomCursor';
-import InteractiveProjectCard from './InteractiveProjectCard';
 import StackCarousel from './StackCarousel';
+
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
   const [show, setShow] = useState(false);
   
   // Refs para animações GSAP
+  const heroRef = useRef(null);
   const titleRef = useRef(null);
   const subtitleRef = useRef(null);
   const buttonRef = useRef(null);
@@ -20,11 +21,8 @@ export default function Hero() {
   const eclipseRef = useRef(null);
   const curveRef = useRef(null);
   
-  // Refs para animação de scroll do tablet
+  // Refs para o tablet (sem animação)
   const tabletRef = useRef(null);
-  const videoSectionRef = useRef(null);
-  const contentVideoRef = useRef(null);
-  const projectsSectionRef = useRef(null);
 
   // Função para iniciar animações constantes
   const startContinuousAnimations = () => {
@@ -65,59 +63,6 @@ export default function Hero() {
   };
 
   // Configuração da animação GSAP de scroll do tablet
-  useLayoutEffect(() => {
-    if (!videoSectionRef.current || !tabletRef.current || !projectsSectionRef.current) return;
-
-     // Define a duração da cena de rolagem e os pinos
-     const scrollTl = gsap.timeline({
-       scrollTrigger: {
-         trigger: videoSectionRef.current,
-         start: "top -10%", // Só inicia quando o topo da seção está a 60% da tela (tablet visível)
-         end: "+=2000", // A animação dura 2000 pixels de rolagem
-         scrub: true, // Liga a animação ao scroll
-         pin: true, // Fixa a seção enquanto a animação ocorre
-         pinSpacing: false, 
-         // markers: true, // Descomente para ver os markers de debug
-       }
-     });
-
-    // 1. Oculta o conteúdo do vídeo interno
-    scrollTl.to(contentVideoRef.current, {
-        opacity: 0,
-        duration: 0.3,
-      }, 0) 
-      
-      // 2. Zoom-in da moldura do tablet
-      .to(tabletRef.current, {
-        scale: 10, // Aumenta o tamanho do tablet (zoom)
-        transformOrigin: "center center", 
-        duration: 1, 
-        ease: "power2.inOut"
-      }, 0) 
-      
-      // 3. Garante que a seção de projetos esteja no topo (z-index)
-      .set(projectsSectionRef.current, {
-        zIndex: 100 // Um z-index alto para sobrepor o tablet
-      }, 0.3) // Ativa no início do zoom (t=0.3)
-
-      // 4. Revela a seção de projetos (fadeIn)
-      .to(projectsSectionRef.current, {
-        opacity: 2, 
-        duration: 0.7,
-      }, 0.3) // Começa o fade-in junto com o z-index
-
-      // 5. Oculta a moldura preta (bezel) do tablet no final da transição
-      .to(tabletRef.current, {
-        opacity: 0,
-        duration: 0.1,
-      }, 0.9); // Quase no fim da animação de zoom
-
-    // Limpeza do GSAP ao desmontar o componente
-    return () => {
-      scrollTl.kill();
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-    };
-  }, []);
 
   useEffect(() => {
     const timeout = setTimeout(() => setShow(true), 100);
@@ -259,7 +204,7 @@ export default function Hero() {
     }, 0); // Inicia 3s antes da curva terminar (delay 2 + duration 1 = 3s total, então 0s para iniciar junto com as animações de entrada)
 
     // Scroll-triggered animations para elementos
-    gsap.utils.toArray(".animate-on-scroll").forEach((element) => {
+    gsap.utils.toArray(".animate-on-scroll").forEach((element, index) => {
       gsap.fromTo(element,
         {
           y: 100,
@@ -435,22 +380,21 @@ export default function Hero() {
         </div>
       </section>
 
-      {/* Segunda seção - Vídeo demonstrativo (Container para o ScrollTrigger) */}
-      <section 
-        ref={videoSectionRef} 
-        className="py-20 bg-[#0a0a0f] relative section-noise-blur flex items-center justify-center min-h-screen"
-      >
+      {/* Segunda seção - Tablet demonstrativo */}
+      <section className="py-20 bg-[#0a0a0f] relative section-noise-blur flex flex-col items-center justify-center min-h-screen">
         
         {/* Carrossel de Stacks */}
-        <StackCarousel />
+        <div className="w-full mb-16">
+          <StackCarousel />
+        </div>
         
-        {/* Container do Tablet com a referência para a animação */}
-        <div ref={tabletRef} className="relative w-[95vw] max-w-6xl tablet-container element-to-animate z-10 mt-80">
+        {/* Container do Tablet */}
+        <div ref={tabletRef} className="relative w-[95vw] max-w-6xl tablet-container element-to-animate z-10">
           <div className="relative">
             {/* Tablet Frame com design profissional */}
             <div className="bg-black rounded-2xl p-3 shadow-2xl overflow-hidden border border-gray-800">
-              {/* Screen Content - O que será ocultado */}
-              <div ref={contentVideoRef} className="bg-gray-900 rounded-xl overflow-hidden relative">
+              {/* Screen Content */}
+              <div className="bg-gray-900 rounded-xl overflow-hidden relative">
                 {/* Browser Bar realista */}
                 <div className="bg-gray-800 px-6 py-4 flex items-center gap-3 border-b border-gray-700">
                   <div className="flex gap-3">
@@ -483,59 +427,55 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Terceira Seção - Projetos (MODIFICADA) */}
-{/* Terceira Seção - Projetos (MODIFICADA PARA USAR O COMPONENTE INTERATIVO) */}
-<section 
-  ref={projectsSectionRef} 
-  className="absolute inset-0 opacity-0 flex flex-col items-center justify-center p-8 overflow-hidden projects-section"
-  style={{ 
-    background: `
-      linear-gradient(135deg, 
-rgb(61, 0, 66) 0%, 
-rgb(37, 2, 58) 50%, 
-rgb(30, 3, 48) 100%
-      )
-    `
-  }}
->
-  <div className="max-w-7xl mx-auto w-full text-center">
-    <h2 className="text-5xl font-extrabold mb-16 bg-gradient-to-r from-[#8b5cf6] to-[#6d28d9] bg-clip-text text-transparent">
-      🚀 Nossos Projetos de Destaque
-    </h2>
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-      
-      {/* Card de Projeto 1 */}
-      <InteractiveProjectCard 
-        title="E-commerce Avançado"
-        description="Desenvolvimento de plataforma de vendas com microserviços e alta performance."
-        technologies="React, Node.js, AWS"
-      />
-      
-      {/* Card de Projeto 2 */}
-      <InteractiveProjectCard 
-        title="App Mobile para Saúde"
-        description="Aplicativo nativo para iOS/Android com integração de dispositivos IoT."
-        technologies="React Native, Swift, Kotlin"
-      />
-
-      {/* Card de Projeto 3 */}
-      <InteractiveProjectCard 
-        title="Landing Page Imersiva"
-        description="Design e desenvolvimento focado em conversão e SEO para captação de leads."
-        technologies="Next.js, GSAP, Tailwind CSS"
-      />
-
-    </div>
-  </div>
-</section>
       </section>
 
-      {/* Seção pós-transição (para que a página continue a rolar) */}
-      <section className="bg-[#0a0a0f] min-h-screen py-32 flex items-center justify-center">
-        <h2 className="text-4xl text-gray-400">
-            Continue explorando o site...
-        </h2>
+      {/* Terceira seção - Projetos */}
+      <section 
+        className="py-20 bg-[#1a0b2e] relative flex flex-col items-center justify-center min-h-screen"
+        style={{ 
+          background: `
+            linear-gradient(135deg, 
+              #1a0b2e 0%, 
+              #170e26 15%, 
+              #150d22 25%, 
+              #120c1e 40%, 
+              #0f0a1a 55%, 
+              #0d0d16 70%, 
+              #0b0b12 85%, 
+              #0a0a0f 100%
+            )
+          `
+        }}
+      >
+        <div className="max-w-7xl mx-auto w-full text-white text-center flex flex-col items-center justify-center px-8">
+          <h2 className="text-5xl font-extrabold mb-12 bg-gradient-to-r from-[#d8b4fe] to-[#a855f7] bg-clip-text text-transparent">
+            🚀 Nossos Projetos de Destaque
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center">
+            {/* Card de Projeto 1 */}
+            <div className="w-full max-w-sm bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-gray-800 hover:border-[#a855f7] transition duration-300 transform hover:scale-[1.02] shadow-xl">
+              <h3 className="text-3xl font-bold mb-2 text-[#a855f7]">E-commerce Avançado</h3>
+              <p className="text-gray-300">Desenvolvimento de plataforma de vendas com microserviços e alta performance.</p>
+              <span className="text-sm text-gray-400 block mt-4">Tecnologias: React, Node.js, AWS</span>
+            </div>
+            
+            {/* Card de Projeto 2 */}
+            <div className="w-full max-w-sm bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-gray-800 hover:border-[#a855f7] transition duration-300 transform hover:scale-[1.02] shadow-xl">
+              <h3 className="text-3xl font-bold mb-2 text-[#a855f7]">App Mobile para Saúde</h3>
+              <p className="text-gray-300">Aplicativo nativo para iOS/Android com integração de dispositivos IoT.</p>
+              <span className="text-sm text-gray-400 block mt-4">Tecnologias: React Native, Swift, Kotlin</span>
+            </div>
+
+            {/* Card de Projeto 3 */}
+            <div className="w-full max-w-sm bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-gray-800 hover:border-[#a855f7] transition duration-300 transform hover:scale-[1.02] shadow-xl">
+              <h3 className="text-3xl font-bold mb-2 text-[#a855f7]">Landing Page Imersiva</h3>
+              <p className="text-gray-300">Design e desenvolvimento focado em conversão e SEO para captação de leads.</p>
+              <span className="text-sm text-gray-400 block mt-4">Tecnologias: Next.js, GSAP, Tailwind CSS</span>
+            </div>
+          </div>
+        </div>
       </section>
+
     </>
   );
 }
