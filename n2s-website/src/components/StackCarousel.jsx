@@ -139,7 +139,7 @@ const StackCarousel = () => {
     return (
       <div 
         ref={ref}
-        className={`fixed ${isTopBand ? 'top-[8vh]' : 'top-[12vh]'} left-0 w-[300vw] h-20 flex items-center overflow-hidden pointer-events-none z-[60]`}
+        className={`relative w-full h-20 flex items-center overflow-hidden pointer-events-none z-[60] ${isTopBand ? 'mb-4' : 'mt-4'}`}
         style={{
           transform: isTopBand ? 'skewY(-2deg)' : 'skewY(2deg)',
           background: '#0A0A0F',
@@ -190,7 +190,7 @@ const StackCarousel = () => {
   };
 
   return (
-    <div ref={containerRef}>
+    <div ref={containerRef} className="w-full flex flex-col items-center justify-center mb-8">
       {renderBand('top')}
       {renderBand('bottom')}
     </div>
