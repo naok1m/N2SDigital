@@ -1,8 +1,248 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Header from '../../components/header';
 
 gsap.registerPlugin(ScrollTrigger);
+
+// Custom Cursor Component
+const CustomCursor = () => {
+  const cursorRef = useRef(null);
+  const [isHovering, setIsHovering] = useState(false);
+
+  useEffect(() => {
+    const cursor = cursorRef.current;
+    if (!cursor) return;
+
+    gsap.set(cursor, { opacity: 0 });
+
+    const enterTl = gsap.timeline({ delay: 1 });
+    enterTl.to(cursor, { opacity: 0.8, duration: 0.5, ease: "power2.out" });
+
+    let mouseX = 0;
+    let mouseY = 0;
+
+    const updateCursor = (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      
+      gsap.set(cursor, { opacity: 0.4 });
+      
+      gsap.to(cursor, {
+        x: mouseX - 8,
+        y: mouseY - 8,
+        duration: 0.1,
+        ease: "power2.out"
+      });
+    };
+
+    const handleMouseEnter = (e) => {
+      const element = e.target;
+      
+      if (element.tagName === 'IMG' || 
+          element.classList.contains('background-image') ||
+          element.parentElement?.classList.contains('background-image')) {
+        return;
+      }
+      
+      gsap.set(cursor, { opacity: 0.4 });
+      
+      if (element.tagName === 'BUTTON' || 
+          element.classList.contains('glass-button') ||
+          element.classList.contains('interactive-element')) {
+        
+        setIsHovering(true);
+        gsap.to(cursor, { scale: 2, duration: 0.3, ease: "back.out(1.7)" });
+      }
+      else if (element.tagName === 'A') {
+        setIsHovering(true);
+        gsap.to(cursor, { scale: 1.5, rotation: 45, duration: 0.3, ease: "power2.out" });
+      }
+    };
+
+    const handleMouseLeave = (e) => {
+      const element = e.target;
+      
+      if (element.tagName === 'IMG' || 
+          element.classList.contains('background-image') ||
+          element.parentElement?.classList.contains('background-image')) {
+        return;
+      }
+      
+      setIsHovering(false);
+      gsap.to(cursor, { 
+        scale: 1, 
+        rotation: 0, 
+        duration: 0.3, 
+        ease: "power2.out" 
+      });
+      
+      gsap.set(cursor, { opacity: 0.4 });
+    };
+
+    const handleMouseDown = () => {
+      gsap.to(cursor, { scale: 0.8, duration: 0.1, ease: "power2.out" });
+    };
+
+    const handleMouseUp = () => {
+      gsap.to(cursor, { scale: isHovering ? 2 : 1, duration: 0.2, ease: "back.out(1.7)" });
+    };
+
+    document.addEventListener('mousemove', updateCursor);
+    document.addEventListener('mouseenter', handleMouseEnter, true);
+    document.addEventListener('mouseleave', handleMouseLeave, true);
+    document.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('mouseup', handleMouseUp);
+
+    const style = document.createElement('style');
+    style.textContent = `
+      * {
+        cursor: none !important;
+      }
+    `;
+    document.head.appendChild(style);
+
+    return () => {
+      document.removeEventListener('mousemove', updateCursor);
+      document.removeEventListener('mouseenter', handleMouseEnter, true);
+      document.removeEventListener('mouseleave', handleMouseLeave, true);
+      document.removeEventListener('mousedown', handleMouseDown);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.head.removeChild(style);
+    };
+  }, [isHovering]);
+
+  return (
+    <div
+      ref={cursorRef}
+      className="fixed top-0 left-0 w-4 h-4 bg-white rounded-full mix-blend-difference pointer-events-none z-[9999]"
+      style={{
+        background: 'rgba(255, 255, 255, 0.4)',
+        boxShadow: '0 0 15px rgba(168, 85, 247, 0.3)',
+        filter: 'blur(0.8px)'
+      }}
+    />
+  );
+};
+
+// Glass Button Component
+const GlassButton = ({ children, onClick }) => {
+  const buttonRef = useRef(null);
+  const rippleRef = useRef(null);
+
+  useEffect(() => {
+    const button = buttonRef.current;
+    const ripple = rippleRef.current;
+
+    if (!button || !ripple) return;
+
+    const handleMouseEnter = () => {
+      gsap.to(button, {
+        scale: 1.05,
+        rotationY: 5,
+        boxShadow: "0 12px 40px rgba(196,181,253,0.5), inset 0 1px 0 rgba(255,255,255,0.5)",
+        duration: 0.3,
+        ease: "power2.out"
+      });
+
+      gsap.to(ripple, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.3,
+        ease: "power2.out"
+      });
+    };
+
+    const handleMouseLeave = () => {
+      gsap.to(button, {
+        scale: 1,
+        rotationY: 0,
+        boxShadow: "0 8px 32px rgba(196,181,253,0.3), inset 0 1px 0 rgba(255,255,255,0.4)",
+        duration: 0.3,
+        ease: "power2.out"
+      });
+
+      gsap.to(ripple, {
+        opacity: 0,
+        scale: 0.8,
+        duration: 0.3,
+        ease: "power2.out"
+      });
+    };
+
+    const handleClick = (e) => {
+      const rect = button.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const clickRipple = document.createElement('div');
+      clickRipple.style.position = 'absolute';
+      clickRipple.style.left = x + 'px';
+      clickRipple.style.top = y + 'px';
+      clickRipple.style.width = '0px';
+      clickRipple.style.height = '0px';
+      clickRipple.style.borderRadius = '50%';
+      clickRipple.style.background = 'rgba(255, 255, 255, 0.3)';
+      clickRipple.style.transform = 'translate(-50%, -50%)';
+      clickRipple.style.pointerEvents = 'none';
+      clickRipple.style.zIndex = '1';
+
+      button.appendChild(clickRipple);
+
+      gsap.fromTo(clickRipple,
+        { width: '0px', height: '0px', opacity: 1 },
+        { 
+          width: '200px', 
+          height: '200px', 
+          opacity: 0,
+          duration: 0.6,
+          ease: "power2.out",
+          onComplete: () => button.removeChild(clickRipple)
+        }
+      );
+
+      gsap.to(button, {
+        scale: 0.95,
+        duration: 0.1,
+        yoyo: true,
+        repeat: 1,
+        ease: "power2.inOut"
+      });
+    };
+
+    button.addEventListener('mouseenter', handleMouseEnter);
+    button.addEventListener('mouseleave', handleMouseLeave);
+    button.addEventListener('click', handleClick);
+
+    return () => {
+      button.removeEventListener('mouseenter', handleMouseEnter);
+      button.removeEventListener('mouseleave', handleMouseLeave);
+      button.removeEventListener('click', handleClick);
+    };
+  }, []);
+
+  return (
+    <button
+      ref={buttonRef}
+      onClick={onClick}
+      className="flex items-center gap-3 glass-button interactive-element
+                 bg-gradient-to-r from-[rgba(196,181,253,0.4)] via-[rgba(196,181,253,0.25)] to-[rgba(196,181,253,0.4)]
+                 border border-[rgba(196,181,253,0.6)]
+                 backdrop-blur-[20px]
+                 shadow-[0_8px_32px_rgba(196,181,253,0.15),inset_0_1px_0_rgba(255,255,255,0.2)]
+                 rounded-full px-8 py-3
+                 relative overflow-hidden
+                 text-white font-semibold text-lg
+                 cursor-none"
+    >
+      <div 
+        ref={rippleRef}
+        className="absolute inset-0 bg-gradient-to-r from-transparent via-[rgba(196,181,253,0.15)] to-transparent opacity-0 scale-75"
+      />
+      <span className="relative z-10">{children}</span>
+    </button>
+  );
+};
 
 const ServiceCard = ({ icon, title, description, features, delay, index, image }) => {
   const cardRef = useRef(null);
@@ -103,15 +343,44 @@ const ServiceCard = ({ icon, title, description, features, delay, index, image }
   };
 
   const handleImageClick = () => {
+    // Animação de bounce no botão
+    gsap.to(cardRef.current, {
+      scale: 0.98,
+      duration: 0.1,
+      yoyo: true,
+      repeat: 1,
+      ease: "power2.inOut"
+    });
+
     setShowImage(!showImage);
+    
     if (!showImage) {
       gsap.fromTo(imageRef.current,
-        { scale: 0, opacity: 0, rotation: -180 },
-        { scale: 1, opacity: 1, rotation: 0, duration: 0.5, ease: "back.out(1.7)" }
+        { 
+          scale: 0, 
+          opacity: 0, 
+          rotation: -10,
+          y: -20
+        },
+        { 
+          scale: 1, 
+          opacity: 1, 
+          rotation: 0,
+          y: 0,
+          duration: 0.6, 
+          ease: "back.out(1.7)" 
+        }
       );
     } else {
       gsap.to(imageRef.current,
-        { scale: 0, opacity: 0, rotation: 180, duration: 0.3, ease: "power2.in" }
+        { 
+          scale: 0.8, 
+          opacity: 0, 
+          rotation: 10,
+          y: -10,
+          duration: 0.3, 
+          ease: "power2.in" 
+        }
       );
     }
   };
@@ -201,42 +470,6 @@ const ServiceCard = ({ icon, title, description, features, delay, index, image }
   );
 };
 
-// Header Component
-const Header = () => {
-  return (
-    <header className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 max-w-3xl px-2 md:px-4 opacity-90">
-      <nav className="flex items-center justify-center gap-2 md:gap-3
-                      bg-gradient-to-r from-[rgba(255,255,255,0.25)] via-[rgba(255,255,255,0.18)] to-[rgba(255,255,255,0.25)]
-                      border border-[rgba(255,255,255,0.3)]
-                      backdrop-blur-[20px] shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.2)]
-                      rounded-full px-3 md:px-8 py-1.5 relative overflow-hidden">
-        
-        <a href="/" className="text-white font-medium hover:text-white transition-all duration-300 transform hover:scale-105 px-2 md:px-3 py-1 md:py-1.5 rounded-full hover:bg-[rgba(255,255,255,0.2)] text-sm md:text-base">
-          Início
-        </a>
-        <a href="#servicos" className="text-white font-medium hover:text-white transition-all duration-300 transform hover:scale-105 px-2 md:px-3 py-1 md:py-1.5 rounded-full hover:bg-[rgba(255,255,255,0.2)] text-sm md:text-base">
-          Serviços
-        </a>
-        
-        <a href="/" className="w-8 md:w-10 h-6 md:h-8 flex items-center justify-center 
-                        bg-gradient-to-br from-[rgba(255,255,255,0.3)] to-[rgba(255,255,255,0.15)]
-                        border border-[rgba(255,255,255,0.4)] rounded-full
-                        backdrop-blur-[15px] shadow-[0_4px_16px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.3)]
-                        relative z-10 hover:scale-105 transition-all duration-300">
-          <span className="text-white font-bold text-xs md:text-sm">N2S</span>
-        </a>
-        
-        <a href="#sobre" className="text-white font-medium hover:text-white transition-all duration-300 transform hover:scale-105 px-2 md:px-3 py-1 md:py-1.5 rounded-full hover:bg-[rgba(255,255,255,0.2)] text-sm md:text-base">
-          Sobre
-        </a>
-        <a href="#contato" className="text-white font-medium hover:text-white transition-all duration-300 transform hover:scale-105 px-2 md:px-3 py-1 md:py-1.5 rounded-full hover:bg-[rgba(255,255,255,0.2)] text-sm md:text-base">
-          Contato
-        </a>
-      </nav>
-    </header>
-  );
-};
-
 // Footer Component
 const Footer = () => {
   return (
@@ -296,6 +529,61 @@ export default function Services() {
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
   const subtitleRef = useRef(null);
+  const [showContactForm, setShowContactForm] = useState(false);
+  const formRef = useRef(null);
+  const overlayRef = useRef(null);
+
+  const handleOpenForm = () => {
+    setShowContactForm(true);
+    
+    // Animação do overlay
+    gsap.fromTo(overlayRef.current,
+      { opacity: 0 },
+      { opacity: 1, duration: 0.3, ease: "power2.out" }
+    );
+    
+    // Animação do formulário
+    gsap.fromTo(formRef.current,
+      { 
+        scale: 0.5, 
+        opacity: 0, 
+        y: 100,
+        rotationX: -30
+      },
+      { 
+        scale: 1, 
+        opacity: 1, 
+        y: 0,
+        rotationX: 0,
+        duration: 0.6, 
+        ease: "back.out(1.5)",
+        delay: 0.1
+      }
+    );
+  };
+
+  const handleCloseForm = () => {
+    // Animação de saída do formulário
+    gsap.to(formRef.current,
+      { 
+        scale: 0.8, 
+        opacity: 0, 
+        y: 50,
+        duration: 0.3, 
+        ease: "power2.in" 
+      }
+    );
+    
+    // Animação de saída do overlay
+    gsap.to(overlayRef.current,
+      { 
+        opacity: 0, 
+        duration: 0.3, 
+        ease: "power2.out",
+        onComplete: () => setShowContactForm(false)
+      }
+    );
+  };
 
   useEffect(() => {
     // Animação do título com efeito de letras
@@ -425,6 +713,7 @@ export default function Services() {
 
   return (
     <>
+      <CustomCursor />
       <Header />
       
       <section
@@ -498,13 +787,89 @@ export default function Services() {
               <p className="text-gray-300 mb-4 text-sm">
                 Entre em contato e descubra como podemos transformar sua presença digital
               </p>
-              <button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-xl hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105">
+              <GlassButton onClick={handleOpenForm}>
                 Fale Conosco Agora
-              </button>
+              </GlassButton>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Contact Form Modal */}
+      {showContactForm && (
+        <div 
+          ref={overlayRef}
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
+          onClick={handleCloseForm}
+        >
+          <div 
+            ref={formRef}
+            className="bg-gradient-to-br from-gray-900/95 to-gray-800/95 backdrop-blur-xl rounded-2xl p-8 max-w-md w-full border border-purple-500/30 relative"
+            onClick={(e) => e.stopPropagation()}
+            style={{ transformStyle: 'preserve-3d' }}
+          >
+            {/* Close Button */}
+            <button
+              onClick={handleCloseForm}
+              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-800/50 hover:bg-purple-600/50 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:rotate-90"
+            >
+              <span className="text-white text-xl">×</span>
+            </button>
+
+            <h3 className="text-3xl font-bold text-white mb-2">
+              Vamos conversar! 💬
+            </h3>
+            <p className="text-gray-400 mb-6 text-sm">
+              Preencha o formulário e entraremos em contato
+            </p>
+
+            <form className="space-y-4">
+              <div>
+                <label className="block text-gray-300 mb-2 text-sm font-medium">Nome</label>
+                <input
+                  type="text"
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors duration-300"
+                  placeholder="Seu nome completo"
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-300 mb-2 text-sm font-medium">Email</label>
+                <input
+                  type="email"
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors duration-300"
+                  placeholder="seu@email.com"
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-300 mb-2 text-sm font-medium">Telefone</label>
+                <input
+                  type="tel"
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors duration-300"
+                  placeholder="(00) 00000-0000"
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-300 mb-2 text-sm font-medium">Mensagem</label>
+                <textarea
+                  rows="4"
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors duration-300 resize-none"
+                  placeholder="Conte-nos sobre seu projeto..."
+                ></textarea>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105"
+              >
+                Enviar Mensagem 🚀
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </>
