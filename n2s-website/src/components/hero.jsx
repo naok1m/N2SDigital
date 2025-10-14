@@ -3,7 +3,6 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import GlassButton from './glassButton';
 import CustomCursor from './CustomCursor';
-import StackCarousel from './StackCarousel';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -382,11 +381,6 @@ export default function Hero() {
 
       {/* Segunda seção - Tablet demonstrativo */}
       <section className="py-20 bg-[#0a0a0f] relative section-noise-blur flex flex-col items-center justify-center min-h-screen">
-        
-        {/* Carrossel de Stacks */}
-        <div className="w-full mb-16">
-          <StackCarousel />
-        </div>
         
         {/* Container do Tablet */}
         <div ref={tabletRef} className="relative w-[95vw] max-w-6xl tablet-container element-to-animate z-10">

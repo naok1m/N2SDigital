@@ -17,6 +17,8 @@ export default function Contact() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
+  const [showProjectModal, setShowProjectModal] = useState(false);
+  const [selectedServices, setSelectedServices] = useState([]);
 
   // Refs para animações
   const sectionRef = useRef(null);
@@ -71,6 +73,44 @@ export default function Contact() {
       ...prev,
       [name]: value
     }));
+  };
+
+  const handleServiceToggle = (service) => {
+    setSelectedServices(prev => 
+      prev.includes(service) 
+        ? prev.filter(s => s !== service)
+        : [...prev, service]
+    );
+  };
+
+  const generateProjectSummary = () => {
+    const summary = `
+🚀 OLÁ! QUERO INICIAR UM NOVO PROJETO
+
+SERVIÇOS QUE PRECISO:
+${selectedServices.map(service => `✅ ${service}`).join('\n')}
+
+TOTAL: ${selectedServices.length} serviço(s)
+
+MEUS DADOS:
+👤 Nome: ${formData.name || '[Não informado]'}
+📧 Email: ${formData.email || '[Não informado]'}
+📱 Telefone: ${formData.phone || '[Não informado]'}
+
+AGUARDO SEU RETORNO PARA CONVERSARMOS SOBRE O PROJETO!
+    `.trim();
+
+    return summary;
+  };
+
+  const handleProjectSubmission = () => {
+    const summary = generateProjectSummary();
+    const whatsappMessage = encodeURIComponent(summary);
+    const whatsappUrl = `https://wa.me/5585996941119?text=${whatsappMessage}`;
+    
+    window.open(whatsappUrl, '_blank');
+    setShowProjectModal(false);
+    setSelectedServices([]);
   };
 
   const handleSubmit = async (e) => {
@@ -133,6 +173,19 @@ export default function Contact() {
     'Marketing Digital',
     'Consultoria',
     'Outro'
+  ];
+
+  const projectServices = [
+    { id: 'website', name: 'Website Institucional', description: 'Site profissional para sua empresa' },
+    { id: 'ecommerce', name: 'E-commerce/Loja Virtual', description: 'Loja online para vender produtos' },
+    { id: 'app', name: 'Aplicativo Mobile', description: 'App para iOS e Android' },
+    { id: 'sistema', name: 'Sistema Web', description: 'Sistema personalizado para gestão' },
+    { id: 'design', name: 'Design & Branding', description: 'Identidade visual e materiais' },
+    { id: 'marketing', name: 'Marketing Digital', description: 'Estratégias de crescimento online' },
+    { id: 'seo', name: 'SEO & Otimização', description: 'Aparecer no Google' },
+    { id: 'consultoria', name: 'Consultoria Digital', description: 'Análise e estratégias' },
+    { id: 'redes', name: 'Redes Sociais', description: 'Gestão e conteúdo' },
+    { id: 'automatizacao', name: 'Automação', description: 'Automatizar processos' }
   ];
 
   return (
@@ -206,7 +259,7 @@ export default function Contact() {
         </div>
 
         {/* Conteúdo principal */}
-        <div className="relative z-10 container mx-auto px-4">
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
           {/* Cabeçalho da seção */}
           <div className="text-center mb-16">
             <h2 
@@ -220,18 +273,18 @@ export default function Contact() {
             
             <p 
               ref={subtitleRef}
-              className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed"
+              className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed px-4"
             >
               Pronto para transformar sua ideia em realidade? Vamos conversar sobre seu projeto e descobrir como podemos ajudar seu negócio a crescer no mundo digital.
             </p>
           </div>
 
           {/* Grid principal */}
-          <div className="grid lg:grid-cols-2 gap-12 max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 max-w-7xl mx-auto">
             
             {/* Formulário de contato */}
             <div ref={formRef} className="space-y-8">
-              <div className="bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/10 shadow-2xl">
+              <div className="bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-xl rounded-3xl p-4 md:p-8 border border-white/10 shadow-2xl">
                 <h3 className="text-2xl font-bold text-white mb-6">Envie sua mensagem</h3>
                 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -404,11 +457,14 @@ export default function Contact() {
                   Pronto para começar?
                 </h3>
                 <p className="text-gray-300 mb-6">
-                  Vamos agendar uma conversa para discutir seu projeto em detalhes.
+                  Inicie seu projeto conosco e vamos transformar sua ideia em realidade.
                 </p>
-                <GlassButton>
-                  Agendar Reunião
-                </GlassButton>
+                <button
+                  onClick={() => setShowProjectModal(true)}
+                  className="w-full py-4 px-8 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/25"
+                >
+                  Iniciar Meu Projeto
+                </button>
               </div>
 
               {/* Redes sociais */}
@@ -470,6 +526,104 @@ export default function Contact() {
           </div>
         </div>
       </section>
+
+      {/* Modal do Checklist de Projeto */}
+      {showProjectModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4">
+          <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-white/20 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-4 sm:p-6 lg:p-8">
+              {/* Header do Modal */}
+              <div className="flex justify-between items-center mb-8">
+                <div>
+                  <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+                    Iniciar Meu Projeto
+                  </h2>
+                  <p className="text-gray-300 text-sm sm:text-base">
+                    Selecione os serviços que você precisa para seu projeto
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowProjectModal(false)}
+                  className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition-colors"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Checklist de Serviços */}
+              <div className="grid md:grid-cols-2 gap-4 mb-8">
+                {projectServices.map((service) => (
+                  <div
+                    key={service.id}
+                    onClick={() => handleServiceToggle(service.name)}
+                    className={`p-4 rounded-xl border cursor-pointer transition-all duration-300 ${
+                      selectedServices.includes(service.name)
+                        ? 'bg-purple-500/20 border-purple-500/50 scale-105'
+                        : 'bg-white/5 border-white/20 hover:border-white/40 hover:bg-white/10'
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className={`w-5 h-5 rounded border-2 flex items-center justify-center mt-0.5 ${
+                        selectedServices.includes(service.name)
+                          ? 'bg-purple-500 border-purple-500'
+                          : 'border-white/40'
+                      }`}>
+                        {selectedServices.includes(service.name) && (
+                          <span className="text-white text-xs">✓</span>
+                        )}
+                      </div>
+                      <div>
+                        <h3 className="text-white font-semibold mb-1">
+                          {service.name}
+                        </h3>
+                        <p className="text-gray-400 text-sm">
+                          {service.description}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Resumo */}
+              {selectedServices.length > 0 && (
+                <div className="bg-white/5 rounded-xl p-6 mb-8 border border-white/10">
+                  <h3 className="text-white font-semibold mb-3">
+                    Serviços Selecionados ({selectedServices.length})
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedServices.map((service) => (
+                      <span
+                        key={service}
+                        className="bg-purple-500/20 text-purple-300 px-3 py-1 rounded-full text-sm border border-purple-500/30"
+                      >
+                        {service}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Botões de Ação */}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button
+                  onClick={() => setShowProjectModal(false)}
+                  className="flex-1 py-3 px-6 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleProjectSubmission}
+                  disabled={selectedServices.length === 0}
+                  className="flex-1 py-3 px-6 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 disabled:from-gray-600 disabled:to-gray-700 text-white font-semibold rounded-xl transition-all duration-300 disabled:cursor-not-allowed"
+                >
+                  Enviar Briefing
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

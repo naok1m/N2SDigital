@@ -3,22 +3,12 @@ import logo from "../assets/logoN2S.png";
 import LinkPadrao from "./LinkPadrao";
 
 const linksEsquerda = [
-<<<<<<< Updated upstream
-  { href: "/", label: "Início" },           // Mudou de "#inicio" para "/"
-  { href: "/services", label: "Serviços" }, // Mudou de "#servicos" para "/services"
-];
-
-const linksDireita = [
-  // Você precisará criar essas rotas e páginas depois
-  { href: "/sobre", label: "Sobre" },     
-=======
   { href: "/", label: "Início" },
   { href: "#servicos", label: "Serviços" },
 ];
 
 const linksDireita = [
   { href: "#sobre", label: "Sobre" },
->>>>>>> Stashed changes
   { href: "/contato", label: "Contato" },
 ];
 

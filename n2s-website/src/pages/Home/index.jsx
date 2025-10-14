@@ -7,7 +7,7 @@ function Home() {
         <>
             <Header/>
             <Hero/>
-            {/* Other components and     content can be added here */}
+            {/* Other components and content can be added here */}
         </>
     )
 }
