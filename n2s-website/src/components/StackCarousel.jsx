@@ -23,7 +23,6 @@ import {
   faBootstrap,
   faWordpress
 } from '@fortawesome/free-brands-svg-icons';
-import { faCode, faDatabase, faCloud, faMobile } from '@fortawesome/free-solid-svg-icons';
 
 const StackCarousel = () => {
   const topBandRef = useRef(null);
@@ -53,10 +52,10 @@ const StackCarousel = () => {
   ];
 
   const separators = [
-    { icon: faCode, color: '#a855f7' },
-    { icon: faDatabase, color: '#c084fc' },
-    { icon: faCloud, color: '#d8b4fe' },
-    { icon: faMobile, color: '#e9d5ff' }
+    { icon: 'circle', color: '#a0a0a0' },
+    { icon: 'circle', color: '#a0a0a0' },
+    { icon: 'circle', color: '#a0a0a0' },
+    { icon: 'circle', color: '#a0a0a0' }
   ];
 
   useEffect(() => {
@@ -173,10 +172,9 @@ const StackCarousel = () => {
                       </span>
                     </div>
                     <div className="flex items-center justify-center w-6">
-                      <FontAwesomeIcon 
-                        icon={separator.icon} 
-                        className="text-lg opacity-60"
-                        style={{ color: separator.color }}
+                      <div 
+                        className="w-1.5 h-1.5 rounded-full"
+                        style={{ backgroundColor: separator.color }}
                       />
                     </div>
                   </React.Fragment>
