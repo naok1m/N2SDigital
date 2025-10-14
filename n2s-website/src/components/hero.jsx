@@ -4,6 +4,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import GlassButton from './glassButton';
 import CustomCursor from './CustomCursor';
 import StackCarousel from './StackCarousel';
+import Card3D from './Card3D';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShoppingCart, faHospital, faRocket } from '@fortawesome/free-solid-svg-icons';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -23,6 +26,115 @@ export default function Hero() {
   
   // Refs para o tablet (sem animação)
   const tabletRef = useRef(null);
+  
+  // Refs para a seção de projetos
+  const estelaRef = useRef(null);
+  const asteroidesRef = useRef(null);
+  const projectsTitleRef = useRef(null);
+  const projectsCardsRef = useRef(null);
+  const projectsShapeRef = useRef(null);
+  const projectsIndicatorsRef = useRef(null);
+  
+  // Estado para controlar se a animação já foi executada
+  const [projectsAnimationPlayed, setProjectsAnimationPlayed] = useState(false);
+  
+  // Estado para controlar o carousel de projetos
+  const [currentPage, setCurrentPage] = useState(0);
+  const totalPages = 4;
+  const [carouselCanStart, setCarouselCanStart] = useState(false);
+  const [carouselPaused, setCarouselPaused] = useState(false);
+
+  // Funções para controlar pausa do carousel
+  const pauseCarousel = () => {
+    setCarouselPaused(true);
+  };
+
+  const resumeCarousel = () => {
+    setCarouselPaused(false);
+  };
+
+  // Função para animação de transição horizontal (simplificada)
+  const animatePageTransition = (isManual = false) => {
+    if (projectsCardsRef.current) {
+      const cardsContainer = projectsCardsRef.current;
+      
+      // Animação simples de fade
+      gsap.to(cardsContainer, {
+        opacity: 0,
+        duration: 0.2,
+        ease: "power2.inOut",
+        onComplete: () => {
+          gsap.fromTo(cardsContainer, 
+            {
+              opacity: 0
+            },
+            {
+              opacity: 1,
+              duration: 0.3,
+              ease: "power2.out"
+            }
+          );
+        }
+      });
+    }
+  };
+
+  // Função para mudança manual de página com animação
+  const handlePageChange = (newPage) => {
+    if (newPage !== currentPage) {
+      // Animação especial para clique manual
+      if (projectsIndicatorsRef.current) {
+        const indicators = projectsIndicatorsRef.current.children;
+        
+        // Animação de "bounce" para o indicador clicado
+        gsap.to(indicators[newPage], {
+          scale: 1.4,
+          duration: 0.15,
+          ease: "power2.out",
+          yoyo: true,
+          repeat: 1
+        });
+      }
+
+      // Executa animação de transição
+      animatePageTransition(true);
+      
+      setCurrentPage(newPage);
+    }
+  };
+  
+  // Carousel automático - só inicia após animação de entrada
+  useEffect(() => {
+    if (!carouselCanStart || carouselPaused) return;
+
+    const interval = setInterval(() => {
+      // Executa animação de transição antes de mudar a página
+      animatePageTransition(false);
+      
+      // Muda a página após um pequeno delay para sincronizar com a animação
+      setTimeout(() => {
+        setCurrentPage((prevPage) => (prevPage + 1) % totalPages);
+      }, 50);
+    }, 3000); // Muda a cada 3 segundos
+
+    return () => clearInterval(interval);
+  }, [totalPages, carouselCanStart, carouselPaused]);
+
+  // Animação dos indicadores apenas (otimizada)
+  useEffect(() => {
+    if (projectsIndicatorsRef.current) {
+      const indicators = projectsIndicatorsRef.current.children;
+      
+      // Apenas animação de pulse simples (sem breathing contínuo)
+      gsap.to(indicators[currentPage], {
+        scale: 1.1,
+        duration: 0.15,
+        ease: "power2.out",
+        yoyo: true,
+        repeat: 1
+      });
+    }
+  }, [currentPage]);
 
   // Função para iniciar animações constantes
   const startContinuousAnimations = () => {
@@ -60,6 +172,19 @@ export default function Hero() {
       repeat: -1,
       yoyo: true
     });
+
+    // Animação constante da estela - rotação lenta como o planeta
+    if (estelaRef.current) {
+      gsap.to(estelaRef.current, {
+        rotation: "+=360",
+        duration: 120, // 2 minutos para uma rotação completa (mais rápido que o planeta)
+        ease: "none",
+        repeat: -1
+      });
+    }
+
+    // Asteroides ficam estáticos (sem animação)
+
   };
 
   // Configuração da animação GSAP de scroll do tablet
@@ -202,6 +327,118 @@ export default function Hero() {
     const continuousTimeout = setTimeout(() => {
       startContinuousAnimations();
     }, 0); // Inicia 3s antes da curva terminar (delay 2 + duration 1 = 3s total, então 0s para iniciar junto com as animações de entrada)
+
+    // ScrollTrigger para animações da seção de projetos
+    ScrollTrigger.create({
+      trigger: ".projects-section",
+      start: "top 80%",
+      end: "bottom 20%",
+      once: true, // Executa apenas uma vez
+      onEnter: () => {
+        // Verifica se a animação já foi executada
+        if (projectsAnimationPlayed) return;
+        
+        // Marca que a animação foi executada
+        setProjectsAnimationPlayed(true);
+        
+        // Timeline de animações da seção de projetos
+        const projectsTl = gsap.timeline();
+        
+        projectsTl
+        // Animação do shape divider - entrada de cima
+        .fromTo(projectsShapeRef.current,
+          {
+            y: -50,
+            opacity: 0,
+            scaleY: 0.5
+          },
+          {
+            y: 0,
+            opacity: 1,
+            scaleY: 1,
+            duration: 1.2,
+            ease: "power2.out"
+          }
+        )
+        // Animação da estela - entrada suave
+        .fromTo(estelaRef.current,
+          {
+            y: -20,
+            opacity: 0,
+            scale: 0.7
+          },
+          {
+            y: 0,
+            opacity: 0.8,
+            scale: 1,
+            duration: 1.5,
+            ease: "power2.out"
+          }, "-=0.8"
+        )
+        // Animação dos asteroides - efeitos visuais avançados
+        .fromTo(asteroidesRef.current,
+          {
+            opacity: 0,
+            filter: "blur(10px) brightness(0.3) contrast(0.5)"
+          },
+          {
+            opacity: 0.6,
+            filter: "blur(1px) brightness(1.1) contrast(1.3)",
+            duration: 2.5,
+            ease: "power2.out"
+          }, "-=1.0"
+        )
+        // Animação do título dos projetos - entrada de cima
+        .fromTo(projectsTitleRef.current,
+          {
+            y: -50,
+            opacity: 0,
+            scale: 0.9
+          },
+          {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            duration: 1.8,
+            ease: "power2.out"
+          }, "-=1.5"
+        )
+        // Animação dos cards 3D - entrada escalonada
+        .fromTo(projectsCardsRef.current,
+          {
+            y: 80,
+            opacity: 0,
+            scale: 0.8
+          },
+          {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            duration: 1.2,
+            ease: "power2.out"
+          }, "-=2.5"
+        )
+        // Animação dos indicadores de slider - entrada suave
+        .fromTo(projectsIndicatorsRef.current,
+          {
+            y: 30,
+            opacity: 0,
+            scale: 0.8
+          },
+          {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            duration: 0.6,
+            ease: "power2.out",
+            onComplete: () => {
+              // Ativa o carousel imediatamente após a animação de entrada terminar
+              setCarouselCanStart(true);
+            }
+          },
+        );
+      }
+    });
 
     // Scroll-triggered animations para elementos
     gsap.utils.toArray(".animate-on-scroll").forEach((element, index) => {
@@ -360,7 +597,7 @@ export default function Hero() {
           {/* Descrição */}
           <div className="max-w-5xl mx-auto mb-8">
             <p ref={subtitleRef} className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-4xl mx-auto">
-              Criamos experiências digitais que conectam, inspiram e geram resultados extraordinários para o seu negócio
+            Criamos soluções digitais personalizadas que conectam pessoas, fortalecem marcas e impulsionam o crescimento por meio de estratégias tecnológicas inovadoras.
             </p>
           </div>
 
@@ -374,7 +611,7 @@ export default function Hero() {
 
         {/* Shape divider curve */}
         <div ref={curveRef} className="custom-shape-divider-bottom relative z-[5]">
-          <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+          <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" className="h-[60px] md:h-[80px] lg:h-[100px]">
             <path d="M0,0V7.23C0,65.52,268.63,112.77,600,112.77S1200,65.52,1200,7.23V0Z" className="shape-fill"></path>
           </svg>
         </div>
@@ -430,49 +667,227 @@ export default function Hero() {
       </section>
 
       {/* Terceira seção - Projetos */}
-      <section 
-        className="py-20 bg-[#1a0b2e] relative flex flex-col items-center justify-center min-h-screen"
-        style={{ 
-          background: `
-            linear-gradient(135deg, 
-              #1a0b2e 0%, 
-              #170e26 15%, 
-              #150d22 25%, 
-              #120c1e 40%, 
-              #0f0a1a 55%, 
-              #0d0d16 70%, 
-              #0b0b12 85%, 
-              #0a0a0f 100%
-            )
-          `
-        }}
-      >
-        <div className="max-w-7xl mx-auto w-full text-white text-center flex flex-col items-center justify-center px-8">
-          <h2 className="text-5xl font-extrabold mb-12 bg-gradient-to-r from-[#d8b4fe] to-[#a855f7] bg-clip-text text-transparent">
-            🚀 Nossos Projetos de Destaque
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center">
-            {/* Card de Projeto 1 */}
-            <div className="w-full max-w-sm bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-gray-800 hover:border-[#a855f7] transition duration-300 transform hover:scale-[1.02] shadow-xl">
-              <h3 className="text-3xl font-bold mb-2 text-[#a855f7]">E-commerce Avançado</h3>
-              <p className="text-gray-300">Desenvolvimento de plataforma de vendas com microserviços e alta performance.</p>
-              <span className="text-sm text-gray-400 block mt-4">Tecnologias: React, Node.js, AWS</span>
-            </div>
-            
-            {/* Card de Projeto 2 */}
-            <div className="w-full max-w-sm bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-gray-800 hover:border-[#a855f7] transition duration-300 transform hover:scale-[1.02] shadow-xl">
-              <h3 className="text-3xl font-bold mb-2 text-[#a855f7]">App Mobile para Saúde</h3>
-              <p className="text-gray-300">Aplicativo nativo para iOS/Android com integração de dispositivos IoT.</p>
-              <span className="text-sm text-gray-400 block mt-4">Tecnologias: React Native, Swift, Kotlin</span>
-            </div>
+      <section className="projects-section py-20 relative section-noise-blur flex flex-col items-center justify-center min-h-screen">
+        
+        {/* Background com arco.png e efeitos */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: `
+              linear-gradient(rgba(10, 10, 15, 0.8), rgba(10, 10, 15, 0.8)),
+              url('/arco.png')
+            `,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            filter: 'blur(1px) brightness(0.7) contrast(1.1)'
+          }}
+        />
+        
+        {/* Vignette effect */}
+        <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/20 pointer-events-none" />
+        
+        {/* Sombra interna para profundidade */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-transparent pointer-events-none" />
+        
+        {/* Shape divider curve no topo */}
+        <div ref={projectsShapeRef} className="absolute top-0 left-0 w-full overflow-hidden leading-none z-[20]" style={{ marginTop: '-1px' }}>
+          <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" className="relative block w-full h-[60px] md:h-[80px] lg:h-[100px]" style={{ width: 'calc(100% + 1.3px)' }}>
+            <path d="M0,0V7.23C0,65.52,268.63,112.77,600,112.77S1200,65.52,1200,7.23V0Z" className="shape-fill" fill="#0A0A0F" fillOpacity="1"></path>
+          </svg>
+        </div>
+        
+        {/* Pattern.png como camada sobre o background - Layer 1 */}
+        <div className="absolute inset-0 pointer-events-none z-[1]">
+          <img 
+            src="/pattern.png" 
+            alt="Pattern" 
+            className="w-full h-full object-cover opacity-[0.4]"
+            style={{
+              filter: 'blur(1px) brightness(0.7) contrast(1.1)',
+              mixBlendMode: 'overlay'
+            }}
+          />
+        </div>
 
-            {/* Card de Projeto 3 */}
-            <div className="w-full max-w-sm bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-gray-800 hover:border-[#a855f7] transition duration-300 transform hover:scale-[1.02] shadow-xl">
-              <h3 className="text-3xl font-bold mb-2 text-[#a855f7]">Landing Page Imersiva</h3>
-              <p className="text-gray-300">Design e desenvolvimento focado em conversão e SEO para captação de leads.</p>
-              <span className="text-sm text-gray-400 block mt-4">Tecnologias: Next.js, GSAP, Tailwind CSS</span>
-            </div>
+        {/* Asteroides no background - Layer 2 */}
+        <div className="absolute bottom-0 left-0 right-0 h-1/3 pointer-events-none z-[50]">
+          <img 
+            ref={asteroidesRef}
+            src="/asteroides.png" 
+            alt="Asteroides" 
+            className="w-full h-full object-cover opacity-[0.6]"
+            style={{
+              filter: 'contrast(1.3) brightness(1.1) blur(1px)',
+              mixBlendMode: 'soft-light'
+            }}
+          />
+        </div>
+        
+        <div className="max-w-7xl mx-auto w-full text-white text-center flex flex-col items-center justify-center px-8 relative z-10">
+          {/* Estela pequena em cima do título */}
+          <div className="relative mb-8">
+            <img 
+              ref={estelaRef}
+              src="/estela.png" 
+              alt="Estela" 
+              className="w-[60px] h-[60px] md:w-[80px] md:h-[80px] opacity-[0.8] object-contain mix-blend-mode-screen"
+              style={{
+                filter: 'contrast(1.3) brightness(1.1) blur(0.5px)'
+              }}
+            />
           </div>
+          
+          <h2 ref={projectsTitleRef} className="text-5xl font-extrabold mb-12 bg-gradient-to-r from-[#d8b4fe] to-[#a855f7] bg-clip-text text-transparent leading-tight py-4">
+            Nossos Projetos
+          </h2>
+            <div ref={projectsCardsRef} className="relative overflow-hidden py-16">
+              {/* Página 1 - E-commerce */}
+              {currentPage === 0 && (
+                <div 
+                  className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center animate-fade-in px-8"
+                  onMouseEnter={pauseCarousel}
+                  onMouseLeave={resumeCarousel}
+                >
+                  <Card3D
+                    icon={faShoppingCart}
+                    title="E-commerce Avançado"
+                    description="Plataforma completa de vendas online com microserviços, pagamentos integrados e dashboard administrativo avançado."
+                    technologies="React, Node.js, AWS, Stripe"
+                    image="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    tag="E-Commerce"
+                  />
+                  <Card3D
+                    icon={faShoppingCart}
+                    title="Marketplace Digital"
+                    description="Plataforma de marketplace com sistema de comissões, gestão de vendedores e pagamentos automatizados."
+                    technologies="Next.js, PostgreSQL, Stripe"
+                    image="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    tag="Marketplace"
+                  />
+                  <Card3D
+                    icon={faShoppingCart}
+                    title="Loja Virtual Premium"
+                    description="E-commerce de luxo com experiência imersiva, realidade aumentada e personalização avançada."
+                    technologies="React, Three.js, AI"
+                    image="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    tag="Luxury E-commerce"
+                  />
+                </div>
+              )}
+
+              {/* Página 2 - Apps Mobile */}
+              {currentPage === 1 && (
+                <div 
+                  className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center animate-fade-in px-8"
+                  onMouseEnter={pauseCarousel}
+                  onMouseLeave={resumeCarousel}
+                >
+                  <Card3D
+                    icon={faHospital}
+                    title="App Mobile para Saúde"
+                    description="Aplicativo nativo para iOS/Android com integração IoT, telemedicina e monitoramento em tempo real."
+                    technologies="React Native, Swift, Kotlin, IoT"
+                    image="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    tag="App Mobile"
+                  />
+                  <Card3D
+                    icon={faHospital}
+                    title="Telemedicina Avançada"
+                    description="Plataforma completa de consultas online com IA para diagnóstico e integração com dispositivos médicos."
+                    technologies="Flutter, AI, WebRTC"
+                    image="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    tag="Telemedicine"
+                  />
+                  <Card3D
+                    icon={faHospital}
+                    title="Monitoramento IoT"
+                    description="Sistema de monitoramento de pacientes com dispositivos IoT e alertas em tempo real."
+                    technologies="React Native, IoT, Cloud"
+                    image="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    tag="IoT Health"
+                  />
+                </div>
+              )}
+
+              {/* Página 3 - Landing Pages */}
+              {currentPage === 2 && (
+                <div 
+                  className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center animate-fade-in px-8"
+                  onMouseEnter={pauseCarousel}
+                  onMouseLeave={resumeCarousel}
+                >
+                  <Card3D
+                    icon={faRocket}
+                    title="Landing Page Imersiva"
+                    description="Design responsivo focado em conversão com animações avançadas e otimização para SEO e performance."
+                    technologies="Next.js, GSAP, Tailwind CSS"
+                    image="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    tag="Landing Page"
+                  />
+                  <Card3D
+                    icon={faRocket}
+                    title="SaaS Dashboard"
+                    description="Interface moderna para SaaS com métricas em tempo real, gráficos interativos e gestão de usuários."
+                    technologies="React, D3.js, Chart.js"
+                    image="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    tag="SaaS Platform"
+                  />
+                  <Card3D
+                    icon={faRocket}
+                    title="Portfolio Criativo"
+                    description="Portfolio interativo com animações 3D, galeria dinâmica e integração com redes sociais."
+                    technologies="Three.js, GSAP, CMS"
+                    image="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    tag="Creative Portfolio"
+                  />
+                </div>
+              )}
+
+              {/* Página 4 - Banner */}
+              {currentPage === 3 && (
+                <div 
+                  className="animate-fade-in w-full"
+                  onMouseEnter={pauseCarousel}
+                  onMouseLeave={resumeCarousel}
+                >
+                  <a 
+                    href="#contact" 
+                    className="block cursor-pointer"
+                  >
+                    <div 
+                      className="relative rounded-2xl overflow-hidden w-full border border-white/20 shadow-2xl"
+                      style={{
+                        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+                      }}
+                    >
+                      <img 
+                        src="/banner-cta.png" 
+                        alt="Banner CTA - Clique para entrar em contato" 
+                        className="w-full h-auto object-cover"
+                      />
+                      {/* Sombra interna para profundidade */}
+                      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/15 to-black/40 pointer-events-none" />
+                    </div>
+                  </a>
+                </div>
+              )}
+            </div>
+          
+            {/* Indicadores de slider */}
+            <div ref={projectsIndicatorsRef} className="mt-12 flex justify-center gap-3 items-center">
+              {Array.from({ length: totalPages }, (_, index) => (
+                <button
+                  key={index}
+                  onClick={() => handlePageChange(index)}
+                  className={`transition-all duration-500 ease-out rounded-full cursor-pointer relative ${
+                    currentPage === index
+                      ? 'w-5 h-2 bg-gradient-to-r from-[#d8b4fe] to-[#a855f7] shadow-lg shadow-purple-500/50'
+                      : 'w-2 h-2 bg-white/20 hover:bg-white/40'
+                  }`}
+                />
+              ))}
+            </div>
         </div>
       </section>
 
