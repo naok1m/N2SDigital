@@ -92,6 +92,47 @@
   }
 }
 
+<<<<<<< Updated upstream
+=======
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-200px * 8 - 2.5rem * 8));
+  }
+}
+
+.animate-scroll {
+  animation: scroll 30s linear infinite;
+}
+
+.hover\:pause:hover {
+  animation-play-state: paused;
+}
+
+@media (max-width: 768px) {
+  .min-w-\[200px\] {
+    min-width: 150px;
+  }
+
+  .h-\[200px\] {
+    height: 150px;
+  }
+
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(calc(-150px * 8 - 2.5rem * 8));
+    }
+  }
+}
+
+
+
+>>>>>>> Stashed changes
 .bounce-soft {
   animation: bounce-soft 2s ease-in-out infinite;
 }
