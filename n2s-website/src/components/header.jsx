@@ -3,13 +3,14 @@ import logo from "../assets/logoN2S.png";
 import LinkPadrao from "./LinkPadrao";
 
 const linksEsquerda = [
-  { href: "#inicio", label: "Início" },
-  { href: "#servicos", label: "Serviços" },
+  { href: "/", label: "Início" },           // Mudou de "#inicio" para "/"
+  { href: "/services", label: "Serviços" }, // Mudou de "#servicos" para "/services"
 ];
 
 const linksDireita = [
-  { href: "#sobre", label: "Sobre" },
-  { href: "#contato", label: "Contato" },
+  // Você precisará criar essas rotas e páginas depois
+  { href: "/sobre", label: "Sobre" },     
+  { href: "/contato", label: "Contato" },
 ];
 
 export default function Header() {

@@ -456,7 +456,7 @@ export default function Hero() {
           ease: "power3.out",
           scrollTrigger: {
             trigger: element,
-            start: "top 80%",
+            start: "top 30%",
             end: "bottom 20%",
             toggleActions: "play none none reverse",
             markers: false
