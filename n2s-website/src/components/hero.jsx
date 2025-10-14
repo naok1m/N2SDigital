@@ -115,7 +115,7 @@ export default function Hero() {
       setTimeout(() => {
         setCurrentPage((prevPage) => (prevPage + 1) % totalPages);
       }, 50);
-    }, 4000); // Muda a cada 4 segundos
+    }, 3000); // Muda a cada 3 segundos
 
     return () => clearInterval(interval);
   }, [totalPages, carouselCanStart, carouselPaused]);
@@ -414,9 +414,9 @@ export default function Hero() {
             y: 0,
             opacity: 1,
             scale: 1,
-            duration: 2.2,
+            duration: 1.2,
             ease: "power2.out"
-          }, "-=1.8"
+          }, "-=2.5"
         )
         // Animação dos indicadores de slider - entrada suave
         .fromTo(projectsIndicatorsRef.current,
@@ -429,7 +429,7 @@ export default function Hero() {
             y: 0,
             opacity: 1,
             scale: 1,
-            duration: 1.5,
+            duration: 0.6,
             ease: "power2.out",
             onComplete: () => {
               // Ativa o carousel imediatamente após a animação de entrada terminar
@@ -855,12 +855,19 @@ export default function Hero() {
                     href="#contact" 
                     className="block cursor-pointer"
                   >
-                    <div className="relative rounded-2xl overflow-hidden w-full border border-white/20 shadow-2xl">
+                    <div 
+                      className="relative rounded-2xl overflow-hidden w-full border border-white/20 shadow-2xl"
+                      style={{
+                        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+                      }}
+                    >
                       <img 
                         src="/banner-cta.png" 
                         alt="Banner CTA - Clique para entrar em contato" 
                         className="w-full h-auto object-cover"
                       />
+                      {/* Sombra interna para profundidade */}
+                      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/15 to-black/40 pointer-events-none" />
                     </div>
                   </a>
                 </div>
