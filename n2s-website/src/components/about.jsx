@@ -75,6 +75,7 @@ export default function AboutSection() {
       );
     });
 
+
   }, []);
 
   const stats = [
