@@ -226,15 +226,15 @@ const GlassButton = ({ children, onClick }) => {
     <button
       ref={buttonRef}
       onClick={onClick}
-      className="flex items-center gap-3 glass-button interactive-element
+      className="flex items-center justify-center gap-2 sm:gap-3 glass-button interactive-element
                  bg-gradient-to-r from-[rgba(196,181,253,0.4)] via-[rgba(196,181,253,0.25)] to-[rgba(196,181,253,0.4)]
                  border border-[rgba(196,181,253,0.6)]
                  backdrop-blur-[20px]
                  shadow-[0_8px_32px_rgba(196,181,253,0.15),inset_0_1px_0_rgba(255,255,255,0.2)]
-                 rounded-full px-8 py-3
+                 rounded-full px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3
                  relative overflow-hidden
-                 text-white font-semibold text-lg
-                 cursor-none"
+                 text-white font-semibold text-sm sm:text-base md:text-lg
+                 cursor-none w-full sm:w-auto"
     >
       <div 
         ref={rippleRef}
@@ -423,9 +423,10 @@ const ServiceCard = ({ icon, title, description, features, delay, index, image }
             </div>
             <button 
               onClick={handleImageClick}
-              className="px-3 py-1 bg-purple-600/30 hover:bg-purple-600/50 rounded-lg text-white text-sm font-medium transition-all duration-300 hover:scale-105 border border-purple-500/30"
+              className="px-2 sm:px-3 py-1 bg-purple-600/30 hover:bg-purple-600/50 rounded-lg text-white text-xs sm:text-sm font-medium transition-all duration-300 hover:scale-105 border border-purple-500/30"
             >
-              {showImage ? '✕ Fechar' : '🖼️ Ver Exemplo'}
+              {showImage ? '✕' : '🖼️'}
+              <span className="hidden sm:inline ml-1">{showImage ? 'Fechar' : 'Ver Exemplo'}</span>
             </button>
           </div>
 
@@ -445,19 +446,19 @@ const ServiceCard = ({ icon, title, description, features, delay, index, image }
           )}
 
           {/* Title */}
-          <h3 className="text-2xl font-bold mb-3 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+          <h3 className="text-xl sm:text-2xl font-bold mb-3 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
             {title}
           </h3>
 
           {/* Description */}
-          <p className="text-gray-300 mb-4 leading-relaxed text-sm">
+          <p className="text-gray-300 mb-4 leading-relaxed text-xs sm:text-sm">
             {description}
           </p>
 
           {/* Features */}
           <ul className="space-y-2 mb-4">
             {features.map((feature, idx) => (
-              <li key={idx} className="flex items-start gap-2 text-gray-400 text-sm">
+              <li key={idx} className="flex items-start gap-2 text-gray-400 text-xs sm:text-sm">
                 <span className="text-purple-400 mt-1">✦</span>
                 <span className="flex-1">{feature}</span>
               </li>
@@ -465,7 +466,7 @@ const ServiceCard = ({ icon, title, description, features, delay, index, image }
           </ul>
 
           {/* CTA Button */}
-          <button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-2 px-4 rounded-lg hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105 text-sm">
+          <button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-2 sm:py-2.5 px-4 rounded-lg hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105 text-xs sm:text-sm">
             Saiba Mais
           </button>
         </div>
@@ -664,10 +665,11 @@ export default function Services() {
     <>
       <CustomCursor />
       <Header />
+      
       <section
         ref={sectionRef}
         id="servicos"
-        className="flex flex-col justify-between min-h-screen py-24 overflow-hidden"
+        className="relative min-h-screen py-10 overflow-hidden"
         style={{
           background: 'linear-gradient(135deg, #0a0a0f 0%, #1a0b2e 50%, #2d1b69 100%)'
         }}
@@ -698,16 +700,16 @@ export default function Services() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 pt-20">
           {/* Header */}
-          <div className="text-center mb-16">
+          <div className="text-center mb-12 sm:mb-16">
             <h2
               ref={titleRef}
-              className="text-5xl md:text-6xl font-black mb-6 text-white"
+              className="text-4xl sm:text-5xl md:text-6xl font-black mb-4 sm:mb-6 text-white px-4"
             >
               Nossos Serviços
             </h2>
             <p
               ref={subtitleRef}
-              className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed"
+              className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed px-4"
             >
               Soluções digitais completas para transformar seu negócio e 
               conquistar resultados extraordinários
@@ -715,7 +717,7 @@ export default function Services() {
           </div>
 
           {/* Services Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 max-w-5xl mx-auto">
             {services.map((service, index) => (
               <ServiceCard
                 key={index}
@@ -727,12 +729,12 @@ export default function Services() {
           </div>
 
           {/* CTA Section */}
-          <div className="mt-16 text-center">
-            <div className="inline-block bg-gradient-to-r from-purple-900/50 to-pink-900/50 backdrop-blur-xl rounded-2xl p-6 border border-purple-500/30">
-              <h3 className="text-2xl font-bold text-white mb-3">
+          <div className="mt-12 sm:mt-16 text-center px-4">
+            <div className="inline-block bg-gradient-to-r from-purple-900/50 to-pink-900/50 backdrop-blur-xl rounded-2xl p-6 sm:p-8 border border-purple-500/30 max-w-lg w-full">
+              <h3 className="text-xl sm:text-2xl font-bold text-white mb-3">
                 Pronto para decolar? 🚀
               </h3>
-              <p className="text-gray-300 mb-4 text-sm">
+              <p className="text-gray-300 mb-4 sm:mb-6 text-xs sm:text-sm">
                 Entre em contato e descubra como podemos transformar sua presença digital
               </p>
               <GlassButton onClick={handleOpenForm}>
@@ -741,85 +743,85 @@ export default function Services() {
             </div>
           </div>
         </div>
-        <Footer />
+      <Footer></Footer>
       </section>
-
-      {/* Contact Form Modal */}
-      {showContactForm && (
-        <div 
-          ref={overlayRef}
-          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
-          onClick={handleCloseForm}
-        >
-          <div 
-            ref={formRef}
-            className="bg-gradient-to-br from-gray-900/95 to-gray-800/95 backdrop-blur-xl rounded-2xl p-8 max-w-md w-full border border-purple-500/30 relative"
-            onClick={(e) => e.stopPropagation()}
-            style={{ transformStyle: 'preserve-3d' }}
-          >
-            {/* Close Button */}
-            <button
-              onClick={handleCloseForm}
-              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-800/50 hover:bg-purple-600/50 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:rotate-90"
-            >
-              <span className="text-white text-xl">×</span>
-            </button>
-
-            <h3 className="text-3xl font-bold text-white mb-2">
-              Vamos conversar! 💬
-            </h3>
-            <p className="text-gray-400 mb-6 text-sm">
-              Preencha o formulário e entraremos em contato
-            </p>
-
-            <form className="space-y-4">
-              <div>
-                <label className="block text-gray-300 mb-2 text-sm font-medium">Nome</label>
-                <input
-                  type="text"
-                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors duration-300"
-                  placeholder="Seu nome completo"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-300 mb-2 text-sm font-medium">Email</label>
-                <input
-                  type="email"
-                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors duration-300"
-                  placeholder="seu@email.com"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-300 mb-2 text-sm font-medium">Telefone</label>
-                <input
-                  type="tel"
-                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors duration-300"
-                  placeholder="(00) 00000-0000"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-300 mb-2 text-sm font-medium">Mensagem</label>
-                <textarea
-                  rows="4"
-                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors duration-300 resize-none"
-                  placeholder="Conte-nos sobre seu projeto..."
-                ></textarea>
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105"
-              >
-                Enviar Mensagem 🚀
-              </button>
-            </form>
             
-          </div>
+      {/* Contact Form Modal */}
+      {/* Contact Form Modal */}
+{showContactForm && (
+  <div 
+    ref={overlayRef}
+    className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
+    onClick={handleCloseForm}
+  >
+    <div 
+      ref={formRef}
+      className="bg-gradient-to-br from-gray-900/95 to-gray-800/95 backdrop-blur-xl rounded-2xl p-6 sm:p-8 max-w-md w-full border border-purple-500/30 relative mx-4"
+      onClick={(e) => e.stopPropagation()}
+      style={{ transformStyle: 'preserve-3d' }}
+    >
+      {/* Close Button */}
+      <button
+        onClick={handleCloseForm}
+        className="absolute top-3 right-3 sm:top-4 sm:right-4 w-8 h-8 rounded-full bg-gray-800/50 hover:bg-purple-600/50 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:rotate-90"
+      >
+        <span className="text-white text-xl">×</span>
+      </button>
+
+      <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+        Vamos conversar! 💬
+      </h3>
+      <p className="text-gray-400 mb-6 text-xs sm:text-sm">
+        Preencha o formulário e entraremos em contato
+      </p>
+
+      <form className="space-y-3 sm:space-y-4">
+        <div>
+          <label className="block text-gray-300 mb-2 text-xs sm:text-sm font-medium">Nome</label>
+          <input
+            type="text"
+            className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors duration-300 text-sm"
+            placeholder="Seu nome completo"
+          />
         </div>
-      )}
+
+        <div>
+          <label className="block text-gray-300 mb-2 text-xs sm:text-sm font-medium">Email</label>
+          <input
+            type="email"
+            className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors duration-300 text-sm"
+            placeholder="seu@email.com"
+          />
+        </div>
+
+        <div>
+          <label className="block text-gray-300 mb-2 text-xs sm:text-sm font-medium">Telefone</label>
+          <input
+            type="tel"
+            className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors duration-300 text-sm"
+            placeholder="(00) 00000-0000"
+          />
+        </div>
+
+        <div>
+          <label className="block text-gray-300 mb-2 text-xs sm:text-sm font-medium">Mensagem</label>
+          <textarea
+            rows="4"
+            className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors duration-300 resize-none text-sm"
+            placeholder="Conte-nos sobre seu projeto..."
+          ></textarea>
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
+        >
+          Enviar Mensagem 🚀
+        </button>
+      </form>
+    </div>
+  </div>
+)}
     </>
   );
 }
