@@ -5,11 +5,15 @@ import LinkPadrao from "./LinkPadrao";
 const linksEsquerda = [
   { href: "/", label: "Início" },           
   { href: "/services", label: "Serviços" }, 
+  { href: "/", label: "Início" },
+  { href: "#servicos", label: "Serviços" },
 ];
 
 const linksDireita = [
   { href: "#sobre", label: "Sobre" },     
   { href: "#contato", label: "Contato" },
+  { href: "#sobre", label: "Sobre" },
+  { href: "/contato", label: "Contato" },
 ];
 
 export default function Header() {

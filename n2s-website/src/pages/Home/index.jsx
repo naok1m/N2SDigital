@@ -4,6 +4,7 @@ import Hero from '../../components/hero';
 import Services from '../../components/services';
 import AboutSection from '../../components/about';
 import Footer from '../../components/footer';
+import Contact from '../../components/contact';
 
 function Home() {
     return (
@@ -12,7 +13,9 @@ function Home() {
             <Hero/>
             <Services/>
             <AboutSection/>
-            <Footer/>
+            <Contact>
+            </Contact>
+            
         </>
     )
 }
