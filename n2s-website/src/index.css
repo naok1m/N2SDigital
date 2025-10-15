@@ -109,8 +109,6 @@
   }
 }
 
-<<<<<<< Updated upstream
-=======
 @keyframes scroll {
   0% {
     transform: translateX(0);
@@ -146,10 +144,6 @@
     }
   }
 }
-
-
-
->>>>>>> Stashed changes
 .bounce-soft {
   animation: bounce-soft 2s ease-in-out infinite;
 }
