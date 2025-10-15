@@ -201,8 +201,7 @@ export default function Services() {
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
   const subtitleRef = useRef(null);
-  const asteroidesRef = useRef(null);
-  const planetaRef = useRef(null);
+  const nuvensRef = useRef(null);
   const [showContactForm, setShowContactForm] = useState(false);
   const formRef = useRef(null);
   const overlayRef = useRef(null);
@@ -311,32 +310,7 @@ export default function Services() {
       );
     });
 
-    // Animação dos asteroides - seguindo padrão da seção Hero
-    gsap.fromTo(asteroidesRef.current,
-      {
-        opacity: 0,
-        filter: "blur(10px) brightness(0.3) contrast(0.5)"
-      },
-      {
-        opacity: 1,
-        filter: "blur(0px) brightness(1.1) contrast(1.3)",
-        duration: 2,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 70%",
-          toggleActions: "play none none none"
-        }
-      }
-    );
 
-    // Animação do planeta - rotação constante como na seção Hero
-    gsap.to(planetaRef.current, {
-      rotation: "+=360",
-      duration: 180, // 3 minutos para uma rotação completa
-      ease: "none",
-      repeat: -1
-    });
   }, []);
 
   const services = [
@@ -402,30 +376,32 @@ export default function Services() {
           background: 'linear-gradient(135deg, #0a0a0f 0%, #1a0b2e 50%, #2d1b69 100%)'
         }}
       >
-        {/* Asteroides invertidos no background - Layer 2 */}
+        {/* Nuvens invertidas no background - Layer 2 */}
         <div className="absolute top-0 left-0 right-0 h-1/3 pointer-events-none z-[5]">
           <img 
-            ref={asteroidesRef}
-            src="/asteroides.png" 
-            alt="Asteroides" 
-            className="w-full h-full object-cover opacity-[0.6]"
+            ref={nuvensRef}
+            src="/nuvens.png" 
+            alt="Nuvens" 
+            className="w-full h-full object-cover opacity-[0.5]"
             style={{
-              filter: 'contrast(1.3) brightness(1.1) blur(1px)',
-              mixBlendMode: 'soft-light',
+              filter: 'contrast(1.4) brightness(0.6) blur(3px)',
+              mixBlendMode: 'multiply',
               transform: 'scaleY(-1)' // Inversão vertical
             }}
           />
         </div>
 
-        {/* Planeta no background - Layer 3 */}
-        <div className="absolute inset-0 pointer-events-none z-[3] flex items-center justify-center">
+
+        {/* Nuvens na parte inferior - Layer 4 */}
+        <div className="absolute bottom-0 left-0 right-0 h-1/3 pointer-events-none z-[6]">
           <img 
-            ref={planetaRef}
-            src="/planeta.png" 
-            alt="Planeta" 
-            className="w-[700px] h-[700px] md:w-[900px] md:h-[900px] lg:w-[1100px] lg:h-[1100px] opacity-90 object-contain mix-blend-mode-screen background-image"
+            ref={nuvensRef}
+            src="/nuvens.png" 
+            alt="Nuvens" 
+            className="w-full h-full object-cover opacity-[0.5]"
             style={{
-              filter: 'blur(2px)'
+              filter: 'contrast(1.4) brightness(0.6) blur(3px)',
+              mixBlendMode: 'multiply'
             }}
           />
         </div>

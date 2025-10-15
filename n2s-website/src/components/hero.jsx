@@ -40,7 +40,7 @@ export default function Hero() {
   
   // Estado para controlar o carousel de projetos
   const [currentPage, setCurrentPage] = useState(0);
-  const totalPages = 4;
+  const totalPages = 5;
   const [carouselCanStart, setCarouselCanStart] = useState(false);
   const [carouselPaused, setCarouselPaused] = useState(false);
 
@@ -194,33 +194,6 @@ export default function Hero() {
       });
     }
 
-    // Animação do glow effect do tablet - pulso suave
-    if (tabletRef.current) {
-      const glow1 = tabletRef.current.querySelector('.tablet-glow-1');
-      const glow2 = tabletRef.current.querySelector('.tablet-glow-2');
-      
-      if (glow1) {
-        gsap.to(glow1, {
-          scale: 1.15,
-          opacity: 0.8,
-          duration: 4,
-          ease: "power1.inOut",
-          repeat: -1,
-          yoyo: true
-        });
-      }
-      
-      if (glow2) {
-        gsap.to(glow2, {
-          scale: 1.1,
-          opacity: 0.6,
-          duration: 3,
-          ease: "power1.inOut",
-          repeat: -1,
-          yoyo: true
-        });
-      }
-    }
 
   };
 
@@ -650,11 +623,8 @@ export default function Hero() {
         </div>
         
         {/* Container do Tablet */}
-        <div ref={tabletRef} className="relative w-[95vw] max-w-6xl tablet-container element-to-animate z-10">
+        <div ref={tabletRef} className="relative w-[95vw] max-w-6xl tablet-container z-10">
           <div className="relative">
-            {/* Glow Effect */}
-            <div className="tablet-glow-1 absolute -inset-4 bg-gradient-to-r from-purple-500/20 via-blue-500/20 to-purple-500/20 rounded-3xl blur-xl opacity-60"></div>
-            <div className="tablet-glow-2 absolute -inset-2 bg-gradient-to-r from-purple-400/30 via-blue-400/30 to-purple-400/30 rounded-2xl blur-lg opacity-40"></div>
             
             {/* Tablet Frame com design profissional */}
             <div className="relative bg-black rounded-2xl p-3 shadow-2xl overflow-hidden border border-gray-800">
@@ -753,18 +723,53 @@ export default function Hero() {
             />
           </div>
           
-          <h2 ref={projectsTitleRef} className="text-5xl font-extrabold mb-12 bg-gradient-to-r from-[#d8b4fe] to-[#a855f7] bg-clip-text text-transparent leading-tight py-4">
+          <h2 ref={projectsTitleRef} className="text-5xl font-extrabold mb-6 bg-gradient-to-r from-[#d8b4fe] to-[#a855f7] bg-clip-text text-transparent leading-tight py-4">
             Nossos Projetos
           </h2>
           
+          {/* Subtítulo e descrição */}
+          <div className="text-center mb-12 max-w-4xl mx-auto">
+            <p className="text-xl text-gray-300 mb-8 leading-relaxed">
+              Transformamos ideias em soluções digitais inovadoras que impulsionam negócios e conectam pessoas ao futuro da tecnologia.
+            </p>
+            
+            {/* Estatísticas dos projetos */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+              <div className="text-center">
+                <div className="text-3xl font-bold bg-gradient-to-r from-[#d8b4fe] to-[#a855f7] bg-clip-text text-transparent mb-2">
+                  50+
+                </div>
+                <div className="text-sm text-gray-400">Projetos Entregues</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold bg-gradient-to-r from-[#d8b4fe] to-[#a855f7] bg-clip-text text-transparent mb-2">
+                  98%
+                </div>
+                <div className="text-sm text-gray-400">Satisfação</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold bg-gradient-to-r from-[#d8b4fe] to-[#a855f7] bg-clip-text text-transparent mb-2">
+                  15+
+                </div>
+                <div className="text-sm text-gray-400">Tecnologias</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold bg-gradient-to-r from-[#d8b4fe] to-[#a855f7] bg-clip-text text-transparent mb-2">
+                  24/7
+                </div>
+                <div className="text-sm text-gray-400">Suporte</div>
+              </div>
+            </div>
+          </div>
+          
           {/* Setas de navegação */}
-          <div className="relative w-full max-w-6xl mx-auto">
+          <div className="relative w-full max-w-6xl mx-auto flex items-center">
             {/* Seta esquerda */}
             <button
               onClick={handlePreviousPage}
               onMouseEnter={pauseCarousel}
               onMouseLeave={resumeCarousel}
-              className="project-nav-arrow absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full flex items-center justify-center group"
+              className="project-nav-arrow flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center group mr-6"
             >
               <FontAwesomeIcon 
                 icon={faChevronLeft} 
@@ -772,21 +777,9 @@ export default function Hero() {
               />
             </button>
 
-            {/* Seta direita */}
-            <button
-              onClick={handleNextPage}
-              onMouseEnter={pauseCarousel}
-              onMouseLeave={resumeCarousel}
-              className="project-nav-arrow absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full flex items-center justify-center group"
-            >
-              <FontAwesomeIcon 
-                icon={faChevronRight} 
-                className="text-white text-lg group-hover:text-purple-200 transition-colors duration-300" 
-              />
-            </button>
-          </div>
-
-            <div ref={projectsCardsRef} className="relative overflow-hidden py-16">
+            {/* Container dos cards */}
+            <div className="flex-1">
+              <div ref={projectsCardsRef} className="relative overflow-hidden py-16">
               {/* Página 1 - E-commerce */}
               {currentPage === 0 && (
                 <div 
@@ -917,6 +910,40 @@ export default function Hero() {
                   </a>
                 </div>
               )}
+
+              {/* Página 5 - Design & UX */}
+              {currentPage === 4 && (
+                <div 
+                  className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center animate-fade-in px-8"
+                  onMouseEnter={pauseCarousel}
+                  onMouseLeave={resumeCarousel}
+                >
+                  <Card3D
+                    icon={faHospital}
+                    title="Design System"
+                    description="Sistema de design completo com componentes reutilizáveis, guias de estilo e documentação interativa."
+                    technologies="Figma, Storybook, React"
+                    image="https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    tag="Design System"
+                  />
+                  <Card3D
+                    icon={faRocket}
+                    title="UX Research"
+                    description="Pesquisa de usuário completa com personas, jornadas e insights que direcionam decisões de produto."
+                    technologies="Figma, Miro, Analytics"
+                    image="https://images.unsplash.com/photo-1558655146-9f40138edfeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    tag="UX Research"
+                  />
+                  <Card3D
+                    icon={faShoppingCart}
+                    title="Prototipagem"
+                    description="Protótipos interativos de alta fidelidade que validam conceitos antes do desenvolvimento."
+                    technologies="Figma, Principle, Framer"
+                    image="https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    tag="Prototipagem"
+                  />
+                </div>
+              )}
             </div>
           
             {/* Indicadores de slider */}
@@ -933,7 +960,22 @@ export default function Hero() {
                 />
               ))}
             </div>
+          </div>
+
+          {/* Seta direita */}
+          <button
+            onClick={handleNextPage}
+            onMouseEnter={pauseCarousel}
+            onMouseLeave={resumeCarousel}
+            className="project-nav-arrow flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center group ml-6"
+          >
+            <FontAwesomeIcon 
+              icon={faChevronRight} 
+              className="text-white text-lg group-hover:text-purple-200 transition-colors duration-300" 
+            />
+          </button>
         </div>
+      </div>
       </section>
 
     </>

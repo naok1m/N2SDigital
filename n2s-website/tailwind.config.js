@@ -19,6 +19,10 @@ export default {
           primary: "#0b0b0f",
           accent: "#00ffff",
         },
+        // Gradientes personalizados
+        backgroundImage: {
+          'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        },
         backdropFilter: {
           none: 'none',
           blur: 'blur(20px)',
