@@ -484,7 +484,7 @@ Enviado através do formulario de contato do site N2S Digital
               </div>
 
               {/* Call to action */}
-              <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-xl flex justify-center mt-16 rounded-2xl p-8 border border-purple-500/20 text-center">
+              <div className="bg-gradient-to-br from-purple-500/10  item-center to-pink-500/10 backdrop-blur-xl justify-center rounded-2xl p-8 border border-purple-500/20">
                 <h3 className="text-2xl font-bold text-white mb-4">
                   Pronto para começar?
                 </h3>
@@ -493,8 +493,8 @@ Enviado através do formulario de contato do site N2S Digital
                 </p>
                 <GlassButton 
     onClick={() => setShowProjectModal(true)}
-    className="w-full sm:w-auto py-4 px-8 transition-all duration-300 transform hover:scale-105"
-  >
+    className="mx-auto justify-center mt-10"
+    >
     Iniciar meu projeto
   </GlassButton>
                 
