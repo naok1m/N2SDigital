@@ -7,6 +7,7 @@ import StackCarousel from './StackCarousel';
 import Card3D from './Card3D';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart, faHospital, faRocket } from '@fortawesome/free-solid-svg-icons';
+import Footer from './footer';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -889,6 +890,7 @@ export default function Hero() {
               ))}
             </div>
         </div>
+        <Footer />
       </section>
 
     </>
