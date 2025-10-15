@@ -1,0 +1,285 @@
+[33mcommit de7e314ee890b850ee036097862b4303dc557673[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mlandingpage[m[33m)[m
+Merge: 0c51689 0cf07c3
+Author: Nícolas Queiroga <nicolasqueirogapaix@gmail.com>
+Date:   Wed Oct 15 00:37:58 2025 -0300
+
+    nvodsvn
+
+[33mcommit 0cf07c3ece4fd3779400eb92e777b1c513a5c918[m[33m ([m[1;31morigin/contato[m[33m)[m
+Author: Nícolas Queiroga <nicolasqueirogapaix@gmail.com>
+Date:   Wed Oct 15 00:31:39 2025 -0300
+
+    tentativa de acerto, vamos que vamos
+
+[33mcommit 79bb668607c9be5b3345664fde41d60c59bac3f6[m
+Author: Nícolas Queiroga <nicolasqueirogapaix@gmail.com>
+Date:   Wed Oct 15 00:29:39 2025 -0300
+
+    Resolve merge conflicts: remove duplicate routes and code
+
+[33mcommit 0c51689eb0f4b4c7700dac3d1ba47b631f2ba23e[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/landingpage[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Wed Oct 15 00:18:10 2025 -0300
+
+    AJEITEI O FOOTER GUYS
+
+[33mcommit aad84ae4bc91f16f0d08ffeff37f10f97d683339[m
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Wed Oct 15 00:15:21 2025 -0300
+
+    services section
+
+[33mcommit 5a7022afc4304d862643ad6f2754e1e9562927cc[m[33m ([m[1;32mservices[m[33m)[m
+Merge: 364caba 4518620
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Tue Oct 14 22:52:28 2025 -0300
+
+    Merge branch 'main' of https://github.com/naok1m/N2SDigital into services
+
+[33mcommit 9a8a5cb5e6bc535b206d8f5ecb5fefa91a240a24[m
+Merge: 237e6a7 1ba2edc
+Author: Nícolas Queiroga <nicolasqueirogapaix@gmail.com>
+Date:   Tue Oct 14 20:27:29 2025 -0300
+
+    Resolve merge conflicts - keep clean hero component
+
+[33mcommit 237e6a7787595c2c5277e324970022905a95e3be[m
+Author: Nícolas Queiroga <nicolasqueirogapaix@gmail.com>
+Date:   Tue Oct 14 20:19:21 2025 -0300
+
+    teste
+
+[33mcommit 45186209b46183a218c34b60edac8bc173adca0d[m[33m ([m[1;31morigin/feature/footer[m[33m, [m[1;32mfeature/footer[m[33m)[m
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Tue Oct 14 20:06:03 2025 -0300
+
+    footer transparente v1.0
+
+[33mcommit dc7ac2d5463acf49d94ed27febb735d43360c161[m
+Author: Nícolas Queiroga <nicolasqueirogapaix@gmail.com>
+Date:   Tue Oct 14 19:35:38 2025 -0300
+
+    .
+
+[33mcommit 1c2f2a429ce7e45ecbfe16a8686b5bd6f9e015da[m
+Author: Nícolas Queiroga <nicolasqueirogapaix@gmail.com>
+Date:   Tue Oct 14 19:32:18 2025 -0300
+
+    criação da pagina contato
+
+[33mcommit 1ba2edc3d8fa3d8f966cb017193465a272bd6646[m[33m ([m[1;31morigin/souzadev[m[33m, [m[1;32msouzadev[m[33m)[m
+Merge: 759271e 7fec3b7
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Tue Oct 14 18:49:49 2025 -0300
+
+    Merge branch 'main' into souzadev
+
+[33mcommit 364caba063a8d31493fa0aa092208182d642c2cc[m[33m ([m[1;31morigin/services[m[33m)[m
+Merge: 7fec3b7 759271e
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Tue Oct 14 18:25:47 2025 -0300
+
+    Merge branch 'souzadev' of https://github.com/naok1m/N2SDigital into services
+
+[33mcommit 759271e14e74031f5fe9c588a8bd439b15b885dc[m
+Author: Souza <souza.devv@gmail.com>
+Date:   Tue Oct 14 13:36:24 2025 -0300
+
+    feat: cards entrando mais cedo na animação de entrada da seção de projetos
+
+[33mcommit cced6de405b7add98f438a69949e3ebc6e0a53ad[m
+Author: Souza <souza.devv@gmail.com>
+Date:   Tue Oct 14 00:37:07 2025 -0300
+
+    feat: nova seção de Projetos
+
+[33mcommit 7fec3b70f2be37fb00dffc512870762c1948c042[m
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Mon Oct 13 21:59:56 2025 -0300
+
+    importação do header e form cta
+
+[33mcommit 39c09ba31c8795c8d5ec57d6f0a6ec0ee87e425c[m
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Mon Oct 13 21:50:44 2025 -0300
+
+    criacao da seção
+
+[33mcommit 36447b09ed76498f900231b3a44e51639f46127a[m
+Merge: f95fbae ec63d74
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Mon Oct 13 21:00:10 2025 -0300
+
+    feat: remoção da animação + seção projetos
+
+[33mcommit ec63d74121d51ef71ee00705040765aa2aace1a6[m
+Author: Souza <souza.devv@gmail.com>
+Date:   Mon Oct 13 20:42:01 2025 -0300
+
+    feat: removemos a animação do tablet e invertemos o lado do carrossel de stacks
+
+[33mcommit f95fbae66cdbef30dfce3fb04af5329370fefe9e[m
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Mon Oct 13 20:05:25 2025 -0300
+
+    ajuste tablet
+
+[33mcommit 15b70f91eaab5dfb43873332a07dbea95afdaccc[m
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Sun Oct 12 21:35:41 2025 -0300
+
+    mudança alinhamento do tablet
+
+[33mcommit 57f7ba61502d1f91a7989e37a5871b2674f2b0c6[m
+Author: Souza <souza.devv@gmail.com>
+Date:   Sun Oct 12 20:13:52 2025 -0300
+
+    fix: bug no trigger que fazia o tablet ser cortado no meio
+
+[33mcommit 410a9ebcd472b27be4fa9de71d656d404733d3d1[m
+Merge: 1c6f970 a3d4b31
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Sun Oct 12 20:04:36 2025 -0300
+
+    merge das features
+
+[33mcommit 1c6f9702c987ff50d7c1c1b5c51fff68d06778ce[m
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Sun Oct 12 19:56:22 2025 -0300
+
+    transicao+secao projetos
+
+[33mcommit a3d4b316491e40ec410429072cd3af4a42b7410c[m
+Author: Souza <souza.devv@gmail.com>
+Date:   Sun Oct 12 19:55:25 2025 -0300
+
+    feat: carrossel de stacks
+
+[33mcommit c065472ea6b1295b4d2e263ca4f10cc25c90426e[m
+Merge: 33fc303 09944e5
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Sun Oct 12 18:54:40 2025 -0300
+
+    Merge remote-tracking branch 'origin/souzadev'
+
+[33mcommit 33fc303947eaea2c8c9c3ef655087916411d9346[m
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Sun Oct 12 18:50:04 2025 -0300
+
+    ajuste carrosel
+
+[33mcommit 09944e593952b86461174fd00570288cd8496f46[m
+Author: Souza <souza.devv@gmail.com>
+Date:   Sun Oct 12 18:47:32 2025 -0300
+
+    feat: blur nos assets, novo efeito no tablet e aumento da opacidade nos elementos
+
+[33mcommit fc93cc7cc6da3a996405b33302e4da1bf488efef[m
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Sun Oct 12 17:39:23 2025 -0300
+
+    herosection assets, gsap!!
+
+[33mcommit a05371de0a2d419b6107cde8785984edd85b4174[m
+Merge: 8781a48 48f66e6
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Sun Oct 12 17:26:50 2025 -0300
+
+    Merge remote-tracking branch 'origin/souzadev'
+
+[33mcommit 8781a480f4cb60450641fff72dfbd8a71dbdc23c[m
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Sun Oct 12 17:26:40 2025 -0300
+
+    gsap install
+
+[33mcommit 48f66e6c0f841b341c0b8f94b21c05185eaac356[m
+Author: Souza <souza.devv@gmail.com>
+Date:   Sun Oct 12 17:17:17 2025 -0300
+
+    feat: novos assets no background, nova opacidade nos elementos, novo cursor, novo scrollbar e animações com gsap.
+
+[33mcommit 26aae694aefa6792fd059eb72ca88989b151c615[m
+Author: Souza <souza.devv@gmail.com>
+Date:   Sun Oct 12 16:03:49 2025 -0300
+
+    feat: mudanças gerais na hero section
+
+[33mcommit fd2b82a1099ba4e03f15c4010410084fc28baf22[m
+Author: Nícolas Queiroga <nicolasqueirogapaix@gmail.com>
+Date:   Sun Oct 12 15:23:17 2025 -0300
+
+    Update Carousel.jsx
+
+[33mcommit 38c80bf83168dcda5bf7e71899743c6dfcd7fd29[m
+Author: Nícolas Queiroga <nicolasqueirogapaix@gmail.com>
+Date:   Sun Oct 12 15:21:55 2025 -0300
+
+    carousel
+
+[33mcommit f907879f1cb645785278ef8d68d48585865966d9[m
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Sun Oct 12 14:40:19 2025 -0300
+
+    tablet mockup
+
+[33mcommit 5c6d7466915fc04aa8d211ab0a8b101ae299d630[m
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Sun Oct 12 14:03:43 2025 -0300
+
+    ajuste header 2.0
+
+[33mcommit ab238ab9f5cba7213c69f3072c11d92ce09a8d7e[m
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Sun Oct 12 13:57:57 2025 -0300
+
+    ajuste header
+
+[33mcommit ae8877e364b5bf17098205adecbb2ea200c60d33[m
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Sun Oct 12 13:51:22 2025 -0300
+
+    background changes
+
+[33mcommit 64fe5b2ffba1f749d130d3b65f34ddf31644660f[m
+Merge: d6fd2a8 8c6b732
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Fri Oct 10 21:35:29 2025 -0300
+
+    Merge branch 'feat/herosection'
+
+[33mcommit 8c6b7324d3e49fba6431543d63f62ee871869a95[m[33m ([m[1;31morigin/feat/herosection[m[33m)[m
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Fri Oct 10 21:33:00 2025 -0300
+
+    hoverscale bug fix
+
+[33mcommit d6fd2a82e0c86e019fab6e7248d72ee068dcdc62[m
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Fri Oct 10 21:30:07 2025 -0300
+
+    hover scale bug
+
+[33mcommit d1b438c03dcb55992685e56ede5fab25b6f46dd2[m
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Fri Oct 10 21:22:02 2025 -0300
+
+    feat: padronizar estilos, esqueleto hero
+
+[33mcommit 3689734c56216b74b9e26fb7f0e36f4ab6ff1de6[m[33m ([m[1;31morigin/feature/headercomponent[m[33m)[m
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Fri Oct 10 20:11:03 2025 -0300
+
+    header v1
+
+[33mcommit e184682a10360c61223a0ba0254290d67cab09bb[m
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Thu Oct 9 20:17:08 2025 -0300
+
+    first commit
+
+[33mcommit 043b8254297a3a4ee29182ef21bc222a95eecbed[m
+Author: naok1m <thiagonaoki2013@gmail.com>
+Date:   Wed Oct 1 20:31:14 2025 -0300
+
+    first commit
