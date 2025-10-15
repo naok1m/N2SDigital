@@ -1,6 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faEnvelope, 
+  faPhone, 
+  faMapMarkerAlt, 
+  faClock,
+  faPaperPlane,
+  faRocket
+} from '@fortawesome/free-solid-svg-icons';
 import GlassButton from './glassButton';
 import CustomCursor from './CustomCursor';
 import Footer from './footer';
@@ -173,25 +182,25 @@ Enviado através do formulario de contato do site N2S Digital
 
   const contactInfo = [
     {
-      icon: '📧',
+      icon: faEnvelope,
       title: 'Email',
       value: 'contato@n2sdigital.com',
       link: 'mailto:contato@n2sdigital.com'
     },
     {
-      icon: '📱',
+      icon: faPaperPlane,
       title: 'WhatsApp',
       value: '+55 (85) 9 9694-1119',
       link: 'https://wa.me/5585996941119'
     },
     {
-      icon: '📍',
+      icon: faMapMarkerAlt,
       title: 'Localização',
       value: 'Fortaleza, CE - Brasil',
       link: '#'
     },
     {
-      icon: '🕒',
+      icon: faClock,
       title: 'Horário',
       value: 'Seg - Sex: 9h às 18h',
       link: '#'
@@ -299,7 +308,7 @@ Enviado através do formulario de contato do site N2S Digital
               className="text-5xl md:text-7xl font-black leading-tight mb-6"
             >
               <span className="bg-gradient-to-r from-[#d8b4fe] via-[#c084fc] to-[#a855f7] bg-clip-text text-transparent">
-                ENTRE EM CONTATO
+                Entre em contato
               </span>
             </h2>
             
@@ -434,11 +443,11 @@ Enviado através do formulario de contato do site N2S Digital
                   )}
 
                   {/* Botão de envio */}
-                  <div className="pt-4">
-                    <button
-                      type="submit"
+                  <div className="pt-4 flex justify-center">
+                    <GlassButton
+                      onClick={handleSubmit}
                       disabled={isSubmitting}
-                      className="w-full py-4 px-8 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 disabled:from-gray-600 disabled:to-gray-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed shadow-lg hover:shadow-purple-500/25"
+                      className="py-4 px-8 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed shadow-lg hover:shadow-purple-500/25"
                     >
                       {isSubmitting ? (
                         <span className="flex items-center justify-center gap-2">
@@ -446,9 +455,12 @@ Enviado através do formulario de contato do site N2S Digital
                           Preparando...
                         </span>
                       ) : (
-                        '📱 Enviar via WhatsApp'
+                        <span className="flex items-center gap-2">
+                          <FontAwesomeIcon icon={faPaperPlane} className="text-lg" />
+                          Enviar via WhatsApp
+                        </span>
                       )}
-                    </button>
+                    </GlassButton>
                   </div>
                 </form>
               </div>
@@ -464,8 +476,11 @@ Enviado através do formulario de contato do site N2S Digital
                     className="group bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/10 hover:border-purple-500/30 transition-all duration-300 hover:transform hover:scale-105"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="text-3xl group-hover:scale-110 transition-transform duration-300">
-                        {info.icon}
+                      <div className="w-12 h-12 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <FontAwesomeIcon 
+                          icon={info.icon} 
+                          className="text-xl text-purple-400" 
+                        />
                       </div>
                       <div className="flex-1">
                         <h4 className="text-lg font-semibold text-white mb-1">
@@ -484,20 +499,25 @@ Enviado através do formulario de contato do site N2S Digital
               </div>
 
               {/* Call to action */}
-              <div className="bg-gradient-to-br from-purple-500/10  item-center to-pink-500/10 backdrop-blur-xl justify-center rounded-2xl p-8 border border-purple-500/20">
-                <h3 className="text-2xl font-bold text-white mb-4">
-                  Pronto para começar?
-                </h3>
-                <p className="text-gray-300 mb-6">
-                  Inicie seu projeto conosco e vamos transformar sua ideia em realidade.
-                </p>
-                <GlassButton 
-    onClick={() => setShowProjectModal(true)}
-    className="mx-auto justify-center mt-10"
-    >
-    Iniciar meu projeto
-  </GlassButton>
-                
+              <div className="bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-xl rounded-3xl p-4 md:p-8 border border-white/10 shadow-2xl">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <FontAwesomeIcon icon={faRocket} className="text-2xl text-purple-400" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-4">
+                    Pronto para começar?
+                  </h3>
+                  <p className="text-gray-300 mb-6">
+                    Inicie seu projeto conosco e vamos transformar sua ideia em realidade.
+                  </p>
+                  <div className="flex justify-center">
+                    <GlassButton 
+                      onClick={() => setShowProjectModal(true)}
+                    >
+                      Iniciar meu projeto
+                    </GlassButton>
+                  </div>
+                </div>
               </div>
 
             </div>
@@ -593,13 +613,13 @@ Enviado através do formulario de contato do site N2S Digital
                 >
                   Cancelar
                 </button>
-                <button
+                <GlassButton
                   onClick={handleProjectSubmission}
                   disabled={selectedServices.length === 0}
-                  className="flex-1 py-3 px-6 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 disabled:from-gray-600 disabled:to-gray-700 text-white font-semibold rounded-xl transition-all duration-300 disabled:cursor-not-allowed"
+                  className="flex-1 py-3 px-6 text-white font-semibold rounded-xl transition-all duration-300 disabled:cursor-not-allowed"
                 >
                   Enviar Briefing
-                </button>
+                </GlassButton>
               </div>
             </div>
           </div>

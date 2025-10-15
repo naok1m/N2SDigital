@@ -41,10 +41,16 @@ export default function CustomCursor() {
     const handleMouseEnter = (e) => {
       const element = e.target;
       
+      // Verificar se o elemento existe e tem classList
+      if (!element || !element.classList) {
+        gsap.set(cursor, { opacity: 0.4 });
+        return;
+      }
+      
       // Ignorar imagens de background
       if (element.tagName === 'IMG' || 
           element.classList.contains('background-image') ||
-          element.parentElement?.classList.contains('background-image')) {
+          (element.parentElement && element.parentElement.classList && element.parentElement.classList.contains('background-image'))) {
         return;
       }
       
@@ -103,10 +109,23 @@ export default function CustomCursor() {
     const handleMouseLeave = (e) => {
       const element = e.target;
       
+      // Verificar se o elemento existe e tem classList
+      if (!element || !element.classList) {
+        setIsHovering(false);
+        gsap.to(cursor, { 
+          scale: 1, 
+          rotation: 0, 
+          duration: 0.3, 
+          ease: "power2.out" 
+        });
+        gsap.set(cursor, { opacity: 0.4 });
+        return;
+      }
+      
       // Ignorar imagens de background
       if (element.tagName === 'IMG' || 
           element.classList.contains('background-image') ||
-          element.parentElement?.classList.contains('background-image')) {
+          (element.parentElement && element.parentElement.classList && element.parentElement.classList.contains('background-image'))) {
         return;
       }
       
