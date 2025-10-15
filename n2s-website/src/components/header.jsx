@@ -3,6 +3,7 @@ import logo from "../assets/logoN2S.png";
 import LinkPadrao from "./LinkPadrao";
 
 const linksEsquerda = [
+<<<<<<< HEAD
   { href: "/", label: "Início" },
   { href: "#servicos", label: "Serviços" },
 ];
@@ -10,6 +11,15 @@ const linksEsquerda = [
 const linksDireita = [
   { href: "#sobre", label: "Sobre" },
   { href: "/contato", label: "Contato" },
+=======
+  { href: "/", label: "Início" },           
+  { href: "/services", label: "Serviços" }, 
+];
+
+const linksDireita = [
+  { href: "#sobre", label: "Sobre" },     
+  { href: "#contato", label: "Contato" },
+>>>>>>> origin/souzadev2
 ];
 
 export default function Header() {
