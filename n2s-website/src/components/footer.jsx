@@ -3,7 +3,7 @@ import logo from '../assets/logoN2S.png';
 
 export default function Footer() {
   return (
-    <footer className="relative py-2 mt-30" style={{ background: 'transparent' }}>
+    <footer className="flex py-2 mt-30" style={{ background: 'transparent' }}>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Top section: Logo e redes sociais */}
