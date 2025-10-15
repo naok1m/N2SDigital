@@ -8,11 +8,17 @@ import Card3D from './Card3D';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart, faHospital, faRocket, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import Footer from './footer';
+import { OptimizedImage, preloadImages } from '../utils/imageOptimization.jsx';
+import { usePerformanceMonitoring, useScrollTracking, PerformanceMonitor } from '../hooks/usePerformance';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
   const [show, setShow] = useState(false);
+  
+  // Performance monitoring
+  usePerformanceMonitoring();
+  useScrollTracking();
   
   // Refs para animações GSAP
   const heroRef = useRef(null);
@@ -201,6 +207,16 @@ export default function Hero() {
 
   useEffect(() => {
     const timeout = setTimeout(() => setShow(true), 100);
+    
+    // Preload de imagens críticas
+    preloadImages([
+      '/liquidos.png',
+      '/correntes.png', 
+      '/planeta.png',
+      '/estela.png',
+      '/pattern.png',
+      '/arco.png'
+    ]);
     
     // Timeline principal para animações de entrada
     const tl = gsap.timeline({ delay: 0.5 });
@@ -518,7 +534,7 @@ export default function Hero() {
 
         {/* Líquidos no background - Layer 1 */}
         <div className="absolute inset-0 pointer-events-none z-[1]">
-          <img 
+          <OptimizedImage 
             ref={liquidosRef}
             src="/liquidos.png" 
             alt="Líquidos" 
@@ -527,12 +543,14 @@ export default function Hero() {
               filter: 'contrast(1.3) brightness(1.1) blur(3px)',
               mixBlendMode: 'soft-light'
             }}
+            loading="eager"
+            placeholder={false}
           />
         </div>
 
         {/* Correntes no background - Layer 2 (reposicionadas à esquerda) */}
         <div className="absolute inset-0 pointer-events-none z-[2]">
-          <img 
+          <OptimizedImage 
             ref={correntesRef}
             src="/correntes.png" 
             alt="Correntes" 
@@ -543,6 +561,8 @@ export default function Hero() {
               transform: 'translateX(-10%)',
               objectPosition: 'left center'
             }}
+            loading="eager"
+            placeholder={false}
           />
         </div>
 
@@ -568,7 +588,7 @@ export default function Hero() {
 
         {/* Planeta no background - Layer 4 */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[4]">
-          <img 
+          <OptimizedImage 
             ref={planetaRef}
             src="/planeta.png" 
             alt="Planeta" 
@@ -576,6 +596,8 @@ export default function Hero() {
             style={{
               filter: 'blur(2px)'
             }}
+            loading="eager"
+            placeholder={false}
           />
         </div>
 
@@ -692,7 +714,7 @@ export default function Hero() {
         
         {/* Pattern.png como camada sobre o background - Layer 1 */}
         <div className="absolute inset-0 pointer-events-none z-[1]">
-          <img 
+          <OptimizedImage 
             src="/pattern.png" 
             alt="Pattern" 
             className="w-full h-full object-cover opacity-[0.4]"
@@ -700,6 +722,7 @@ export default function Hero() {
               filter: 'blur(1px) brightness(0.7) contrast(1.1)',
               mixBlendMode: 'overlay'
             }}
+            loading="lazy"
           />
         </div>
 
@@ -707,7 +730,7 @@ export default function Hero() {
         <div className="max-w-7xl mx-auto w-full text-white text-center flex flex-col items-center justify-center px-8 relative z-10">
           {/* Estela pequena em cima do título */}
           <div className="relative mb-8">
-            <img 
+            <OptimizedImage 
               ref={estelaRef}
               src="/estela.png" 
               alt="Estela" 
@@ -715,6 +738,7 @@ export default function Hero() {
               style={{
                 filter: 'contrast(1.3) brightness(1.1) blur(0.5px)'
               }}
+              loading="lazy"
             />
           </div>
           
@@ -894,10 +918,11 @@ export default function Hero() {
                         boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
                       }}
                     >
-                      <img 
+                      <OptimizedImage 
                         src="/banner-cta.png" 
                         alt="Banner CTA - Clique para entrar em contato" 
                         className="w-full h-auto object-cover"
+                        loading="lazy"
                       />
                       {/* Sombra interna para profundidade */}
                       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/15 to-black/40 pointer-events-none" />

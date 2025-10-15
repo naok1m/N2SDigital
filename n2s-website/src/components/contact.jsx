@@ -13,6 +13,9 @@ import {
 import GlassButton from './glassButton';
 import CustomCursor from './CustomCursor';
 import Footer from './footer';
+import SEO from './SEO';
+import { organizationSchema } from '../utils/schema';
+import { trackWhatsAppClick, trackFormSubmit, trackProjectModalOpen } from '../utils/analytics';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -114,9 +117,15 @@ ${selectedServices.map(service => `- ${service}`).join('\n')}
   };
 
   const handleProjectSubmission = () => {
+    // Tracking do envio do briefing
+    trackFormSubmit('project_briefing');
+    
     const summary = generateProjectSummary();
     const whatsappMessage = encodeURIComponent(summary);
     const whatsappUrl = `https://wa.me/5585996941119?text=${whatsappMessage}`;
+    
+    // Tracking do clique no WhatsApp
+    trackWhatsAppClick();
     
     window.open(whatsappUrl, '_blank');
     setShowProjectModal(false);
@@ -127,6 +136,9 @@ ${selectedServices.map(service => `- ${service}`).join('\n')}
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus(null);
+
+    // Tracking do envio do formulário
+    trackFormSubmit('contact_form');
 
     try {
       // Preparar mensagem para WhatsApp
@@ -155,6 +167,9 @@ Enviado através do formulario de contato do site N2S Digital
       // Número do WhatsApp da N2S Digital
       const whatsappNumber = '5585996941119';
       const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+      
+      // Tracking do clique no WhatsApp
+      trackWhatsAppClick();
       
       // Abrir WhatsApp
       window.open(whatsappUrl, '_blank');
@@ -231,6 +246,13 @@ Enviado através do formulario de contato do site N2S Digital
 
   return (
     <>
+      <SEO 
+        title="Contato - Entre em Contato com a N2S Digital"
+        description="Entre em contato com a N2S Digital para transformar sua ideia em realidade digital. WhatsApp: (85) 9 9694-1119 | Email: contato@n2sdigital.com"
+        keywords="contato N2S Digital, WhatsApp Fortaleza, agência digital Fortaleza, desenvolvimento web Fortaleza, orçamento site"
+        url="https://n2sdigital.com/contato"
+        structuredData={organizationSchema}
+      />
       <CustomCursor />
       
       <section 
@@ -512,7 +534,10 @@ Enviado através do formulario de contato do site N2S Digital
                   </p>
                   <div className="flex justify-center">
                     <GlassButton 
-                      onClick={() => setShowProjectModal(true)}
+                      onClick={() => {
+                        trackProjectModalOpen();
+                        setShowProjectModal(true);
+                      }}
                     >
                       Iniciar meu projeto
                     </GlassButton>
