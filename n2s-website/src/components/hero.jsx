@@ -6,7 +6,7 @@ import CustomCursor from './CustomCursor';
 import StackCarousel from './StackCarousel';
 import Card3D from './Card3D';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShoppingCart, faHospital, faRocket } from '@fortawesome/free-solid-svg-icons';
+import { faShoppingCart, faHospital, faRocket, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import Footer from './footer';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -30,7 +30,6 @@ export default function Hero() {
   
   // Refs para a seção de projetos
   const estelaRef = useRef(null);
-  const asteroidesRef = useRef(null);
   const projectsTitleRef = useRef(null);
   const projectsCardsRef = useRef(null);
   const projectsShapeRef = useRef(null);
@@ -102,6 +101,17 @@ export default function Hero() {
       
       setCurrentPage(newPage);
     }
+  };
+
+  // Funções para navegação com setas
+  const handlePreviousPage = () => {
+    const newPage = currentPage === 0 ? totalPages - 1 : currentPage - 1;
+    handlePageChange(newPage);
+  };
+
+  const handleNextPage = () => {
+    const newPage = (currentPage + 1) % totalPages;
+    handlePageChange(newPage);
   };
   
   // Carousel automático - só inicia após animação de entrada
@@ -184,7 +194,33 @@ export default function Hero() {
       });
     }
 
-    // Asteroides ficam estáticos (sem animação)
+    // Animação do glow effect do tablet - pulso suave
+    if (tabletRef.current) {
+      const glow1 = tabletRef.current.querySelector('.tablet-glow-1');
+      const glow2 = tabletRef.current.querySelector('.tablet-glow-2');
+      
+      if (glow1) {
+        gsap.to(glow1, {
+          scale: 1.15,
+          opacity: 0.8,
+          duration: 4,
+          ease: "power1.inOut",
+          repeat: -1,
+          yoyo: true
+        });
+      }
+      
+      if (glow2) {
+        gsap.to(glow2, {
+          scale: 1.1,
+          opacity: 0.6,
+          duration: 3,
+          ease: "power1.inOut",
+          repeat: -1,
+          yoyo: true
+        });
+      }
+    }
 
   };
 
@@ -375,19 +411,6 @@ export default function Hero() {
             duration: 1.5,
             ease: "power2.out"
           }, "-=0.8"
-        )
-        // Animação dos asteroides - efeitos visuais avançados
-        .fromTo(asteroidesRef.current,
-          {
-            opacity: 0,
-            filter: "blur(10px) brightness(0.3) contrast(0.5)"
-          },
-          {
-            opacity: 0.6,
-            filter: "blur(1px) brightness(1.1) contrast(1.3)",
-            duration: 2.5,
-            ease: "power2.out"
-          }, "-=1.0"
         )
         // Animação do título dos projetos - entrada de cima
         .fromTo(projectsTitleRef.current,
@@ -629,8 +652,12 @@ export default function Hero() {
         {/* Container do Tablet */}
         <div ref={tabletRef} className="relative w-[95vw] max-w-6xl tablet-container element-to-animate z-10">
           <div className="relative">
+            {/* Glow Effect */}
+            <div className="tablet-glow-1 absolute -inset-4 bg-gradient-to-r from-purple-500/20 via-blue-500/20 to-purple-500/20 rounded-3xl blur-xl opacity-60"></div>
+            <div className="tablet-glow-2 absolute -inset-2 bg-gradient-to-r from-purple-400/30 via-blue-400/30 to-purple-400/30 rounded-2xl blur-lg opacity-40"></div>
+            
             {/* Tablet Frame com design profissional */}
-            <div className="bg-black rounded-2xl p-3 shadow-2xl overflow-hidden border border-gray-800">
+            <div className="relative bg-black rounded-2xl p-3 shadow-2xl overflow-hidden border border-gray-800">
               {/* Screen Content */}
               <div className="bg-gray-900 rounded-xl overflow-hidden relative">
                 {/* Browser Bar realista */}
@@ -711,19 +738,6 @@ export default function Hero() {
           />
         </div>
 
-        {/* Asteroides no background - Layer 2 */}
-        <div className="absolute bottom-0 left-0 right-0 h-1/3 pointer-events-none z-[50]">
-          <img 
-            ref={asteroidesRef}
-            src="/asteroides.png" 
-            alt="Asteroides" 
-            className="w-full h-full object-cover opacity-[0.6]"
-            style={{
-              filter: 'contrast(1.3) brightness(1.1) blur(1px)',
-              mixBlendMode: 'soft-light'
-            }}
-          />
-        </div>
         
         <div className="max-w-7xl mx-auto w-full text-white text-center flex flex-col items-center justify-center px-8 relative z-10">
           {/* Estela pequena em cima do título */}
@@ -742,6 +756,36 @@ export default function Hero() {
           <h2 ref={projectsTitleRef} className="text-5xl font-extrabold mb-12 bg-gradient-to-r from-[#d8b4fe] to-[#a855f7] bg-clip-text text-transparent leading-tight py-4">
             Nossos Projetos
           </h2>
+          
+          {/* Setas de navegação */}
+          <div className="relative w-full max-w-6xl mx-auto">
+            {/* Seta esquerda */}
+            <button
+              onClick={handlePreviousPage}
+              onMouseEnter={pauseCarousel}
+              onMouseLeave={resumeCarousel}
+              className="project-nav-arrow absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full flex items-center justify-center group"
+            >
+              <FontAwesomeIcon 
+                icon={faChevronLeft} 
+                className="text-white text-lg group-hover:text-purple-200 transition-colors duration-300" 
+              />
+            </button>
+
+            {/* Seta direita */}
+            <button
+              onClick={handleNextPage}
+              onMouseEnter={pauseCarousel}
+              onMouseLeave={resumeCarousel}
+              className="project-nav-arrow absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full flex items-center justify-center group"
+            >
+              <FontAwesomeIcon 
+                icon={faChevronRight} 
+                className="text-white text-lg group-hover:text-purple-200 transition-colors duration-300" 
+              />
+            </button>
+          </div>
+
             <div ref={projectsCardsRef} className="relative overflow-hidden py-16">
               {/* Página 1 - E-commerce */}
               {currentPage === 0 && (

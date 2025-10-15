@@ -2,6 +2,7 @@ import React from 'react';
 import Header from '../../components/header';
 import Hero from '../../components/hero';
 import Services from '../../components/services';
+import AboutSection from '../../components/about';
 import Footer from '../../components/footer';
 
 function Home() {
@@ -10,7 +11,8 @@ function Home() {
             <Header/>
             <Hero/>
             <Services/>
-            {/* Other components and     content can be added here */}
+            <AboutSection/>
+            <Footer/>
         </>
     )
 }

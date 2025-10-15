@@ -7,7 +7,7 @@ import './index.css';
 
 // Importe suas páginas
 import Home from './pages/Home';
-import Services from './pages/Services'; // Supondo que você tenha a página Services
+import Services from './pages/Services';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -19,7 +19,7 @@ createRoot(document.getElementById('root')).render(
         {/* Rota para a página Services */}
         <Route path="/services" element={<Services />} />
 
-        {/* Adicione outras rotas aqui no futuro, como "/sobre", "/contato", etc. */}
+        {/* Adicione outras rotas aqui no futuro, como "/contato", etc. */}
       </Routes>
     </BrowserRouter>
   </StrictMode>

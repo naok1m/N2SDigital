@@ -277,3 +277,213 @@ video {
   transform-style: preserve-3d;
   backface-visibility: hidden;
 }
+
+/* Estilos para a seção About - Landing Page */
+.stat-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(15px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stat-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(156, 83, 227, 0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(156, 83, 227, 0.1);
+}
+
+.value-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.value-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(156, 83, 227, 0.1), transparent);
+  transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.value-card:hover::before {
+  left: 100%;
+}
+
+.value-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(156, 83, 227, 0.3);
+  transform: translateY(-6px);
+  box-shadow: 0 15px 30px rgba(156, 83, 227, 0.15);
+}
+
+/* Otimizações para performance */
+.stat-card,
+.value-card {
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .value-card:hover {
+    transform: translateY(-3px);
+  }
+}
+
+/* Estilos para as setas de navegação dos projetos */
+.project-nav-arrow {
+  background: rgba(156, 83, 227, 0.1);
+  border: 1px solid rgba(156, 83, 227, 0.3);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(156, 83, 227, 0.1);
+}
+
+.project-nav-arrow:hover {
+  background: rgba(156, 83, 227, 0.2);
+  border-color: rgba(156, 83, 227, 0.5);
+  box-shadow: 0 8px 25px rgba(156, 83, 227, 0.2);
+  transform: scale(1.1);
+}
+
+.project-nav-arrow:active {
+  transform: scale(0.95);
+}
+
+/* Responsividade para setas */
+@media (max-width: 768px) {
+  .project-nav-arrow {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  
+  .project-nav-arrow:hover {
+    transform: scale(1.05);
+  }
+}
+
+/* Estilos avançados para a seção Services */
+.service-card-advanced {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.service-card-advanced:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(156, 83, 227, 0.3);
+  transform: translateY(-8px) rotateX(5deg);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(156, 83, 227, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.service-icon-container {
+  background: linear-gradient(135deg, rgba(156, 83, 227, 0.2) 0%, rgba(168, 85, 247, 0.1) 100%);
+  border: 1px solid rgba(156, 83, 227, 0.3);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.service-card-advanced:hover .service-icon-container {
+  border-color: rgba(156, 83, 227, 0.6);
+  box-shadow: 0 0 20px rgba(156, 83, 227, 0.4);
+  transform: scale(1.05);
+}
+
+.service-feature-item {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.service-card-advanced:hover .service-feature-item {
+  transform: translateX(4px);
+  color: #e5e7eb;
+}
+
+.service-cta-button {
+  background: linear-gradient(135deg, rgba(156, 83, 227, 0.8) 0%, rgba(168, 85, 247, 0.8) 100%);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.service-cta-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.service-cta-button:hover::before {
+  left: 100%;
+}
+
+.service-cta-button:hover {
+  background: linear-gradient(135deg, rgba(156, 83, 227, 1) 0%, rgba(168, 85, 247, 1) 100%);
+  box-shadow: 0 10px 25px rgba(156, 83, 227, 0.4);
+}
+
+.stats-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(15px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stats-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(156, 83, 227, 0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(156, 83, 227, 0.1);
+}
+
+.stats-icon-container {
+  background: linear-gradient(135deg, rgba(156, 83, 227, 0.2) 0%, rgba(168, 85, 247, 0.1) 100%);
+  border: 1px solid rgba(156, 83, 227, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stats-card:hover .stats-icon-container {
+  border-color: rgba(156, 83, 227, 0.6);
+  box-shadow: 0 0 15px rgba(156, 83, 227, 0.3);
+  transform: scale(1.1);
+}
+
+/* Otimizações para performance */
+.service-card-advanced,
+.stats-card {
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* Responsividade avançada */
+@media (max-width: 768px) {
+  .service-card-advanced:hover {
+    transform: translateY(-4px);
+  }
+  
+  .service-card-advanced:hover .service-feature-item {
+    transform: translateX(2px);
+  }
+  
+  .stats-card:hover {
+    transform: translateY(-2px);
+  }
+}
