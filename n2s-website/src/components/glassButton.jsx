@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 
-export default function GlassButton({ children }) {
+export default function GlassButton({ children, onClick }) {
   const buttonRef = useRef(null);
   const rippleRef = useRef(null);
 
@@ -87,6 +87,11 @@ export default function GlassButton({ children }) {
         repeat: 1,
         ease: "power2.inOut"
       });
+
+      // Executar função onClick se fornecida
+      if (onClick) {
+        onClick(e);
+      }
     };
 
     button.addEventListener('mouseenter', handleMouseEnter);

@@ -147,6 +147,17 @@ export default function Hero() {
     }
   }, [currentPage]);
 
+  // Função para abrir WhatsApp
+  const handleWhatsAppClick = () => {
+    const whatsappMessage = `Olá! Tenho interesse nos serviços da N2S Digital. Gostaria de saber mais sobre como vocês podem me ajudar.`;
+
+    const encodedMessage = encodeURIComponent(whatsappMessage);
+    const whatsappNumber = '5585996941119';
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+    
+    window.open(whatsappUrl, '_blank');
+  };
+
   // Função para iniciar animações constantes
   const startContinuousAnimations = () => {
     // Animação constante do planeta - rotação muito lenta
@@ -601,7 +612,7 @@ export default function Hero() {
           {/* Botão de ação */}
           <div className="flex justify-center">
             <div ref={buttonRef} className="interactive-element">
-              <GlassButton>Comece Sua Jornada</GlassButton>
+              <GlassButton onClick={handleWhatsAppClick}>Comece Sua Jornada</GlassButton>
             </div>
           </div>
       </div>

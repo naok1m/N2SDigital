@@ -20,7 +20,7 @@ import CustomCursor from './CustomCursor';
 gsap.registerPlugin(ScrollTrigger);
 
 // Componente de Card de Serviço Avançado
-const ServiceCard = ({ icon, title, description, features, index, category }) => {
+const ServiceCard = ({ icon, title, description, features, index, category, onLearnMore }) => {
   const cardRef = useRef(null);
   const contentRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -133,7 +133,10 @@ const ServiceCard = ({ icon, title, description, features, index, category }) =>
           </div>
 
           {/* CTA Button */}
-          <button className="service-cta-button w-full text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 group">
+          <button 
+            onClick={() => onLearnMore && onLearnMore({ icon, title, description, features, category })}
+            className="service-cta-button w-full text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 group"
+          >
             <span>Saiba Mais</span>
             <FontAwesomeIcon 
               icon={faArrowRight} 
@@ -203,8 +206,12 @@ export default function Services() {
   const subtitleRef = useRef(null);
   const nuvensRef = useRef(null);
   const [showContactForm, setShowContactForm] = useState(false);
+  const [showServiceModal, setShowServiceModal] = useState(false);
+  const [selectedService, setSelectedService] = useState(null);
   const formRef = useRef(null);
   const overlayRef = useRef(null);
+  const serviceModalRef = useRef(null);
+  const serviceOverlayRef = useRef(null);
 
   const handleOpenForm = () => {
     setShowContactForm(true);
@@ -250,6 +257,58 @@ export default function Services() {
         duration: 0.3, 
         ease: "power2.out",
         onComplete: () => setShowContactForm(false)
+      }
+    );
+  };
+
+  const handleOpenServiceModal = (service) => {
+    setSelectedService(service);
+    setShowServiceModal(true);
+    
+    gsap.fromTo(serviceOverlayRef.current,
+      { opacity: 0 },
+      { opacity: 1, duration: 0.3, ease: "power2.out" }
+    );
+    
+    gsap.fromTo(serviceModalRef.current,
+      { 
+        scale: 0.5, 
+        opacity: 0, 
+        y: 100,
+        rotationX: -30
+      },
+      { 
+        scale: 1, 
+        opacity: 1, 
+        y: 0,
+        rotationX: 0,
+        duration: 0.6, 
+        ease: "back.out(1.5)",
+        delay: 0.1
+      }
+    );
+  };
+
+  const handleCloseServiceModal = () => {
+    gsap.to(serviceModalRef.current,
+      { 
+        scale: 0.8, 
+        opacity: 0, 
+        y: 50,
+        duration: 0.3, 
+        ease: "power2.in" 
+      }
+    );
+    
+    gsap.to(serviceOverlayRef.current,
+      { 
+        opacity: 0, 
+        duration: 0.3, 
+        ease: "power2.out",
+        onComplete: () => {
+          setShowServiceModal(false);
+          setSelectedService(null);
+        }
       }
     );
   };
@@ -436,6 +495,7 @@ export default function Services() {
                 key={index}
                 {...service}
                 index={index}
+                onLearnMore={handleOpenServiceModal}
               />
             ))}
           </div>
@@ -461,6 +521,112 @@ export default function Services() {
         </div>
         </div>
       </section>
+
+      {/* Service Details Modal */}
+      {showServiceModal && selectedService && (
+        <div 
+          ref={serviceOverlayRef}
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
+          onClick={handleCloseServiceModal}
+        >
+          <div 
+            ref={serviceModalRef}
+            className="bg-gradient-to-br from-[rgba(255,255,255,0.05)] to-[rgba(255,255,255,0.02)] backdrop-blur-xl rounded-2xl p-8 max-w-4xl w-full border border-purple-500/30 relative mx-4 max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+            style={{ transformStyle: 'preserve-3d' }}
+          >
+            {/* Close Button */}
+            <button
+              onClick={handleCloseServiceModal}
+              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-800/50 hover:bg-purple-600/50 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:rotate-90"
+            >
+              <span className="text-white text-xl">×</span>
+            </button>
+
+            {/* Header */}
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500/20 to-purple-600/20 flex items-center justify-center">
+                <FontAwesomeIcon 
+                  icon={selectedService.icon} 
+                  className="text-2xl text-purple-400" 
+                />
+              </div>
+              <div>
+                <h2 className="text-3xl font-bold text-white mb-1">
+                  {selectedService.title}
+                </h2>
+                <div className="text-sm text-purple-400 bg-purple-500/10 px-3 py-1 rounded-full border border-purple-500/20 inline-block">
+                  {selectedService.category}
+                </div>
+              </div>
+            </div>
+
+            {/* Description */}
+            <p className="text-gray-300 text-lg leading-relaxed mb-8">
+              {selectedService.description}
+            </p>
+
+            {/* Features */}
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold text-white mb-4">O que está incluído:</h3>
+              <div className="grid md:grid-cols-2 gap-4">
+                {selectedService.features.map((feature, idx) => (
+                  <div key={idx} className="flex items-center gap-3 text-gray-300">
+                    <div className="w-5 h-5 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                      <FontAwesomeIcon icon={faCheck} className="text-xs text-white" />
+                    </div>
+                    <span>{feature}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Additional Info */}
+            <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-xl p-6 mb-8 border border-purple-500/20">
+              <h3 className="text-lg font-semibold text-white mb-6 text-center">Por que escolher este serviço?</h3>
+              <div className="grid md:grid-cols-3 gap-6 text-sm">
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <FontAwesomeIcon icon={faRocket} className="text-xl text-purple-400" />
+                  </div>
+                  <div className="text-gray-300">Entrega rápida</div>
+                </div>
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <FontAwesomeIcon icon={faCheck} className="text-xl text-purple-400" />
+                  </div>
+                  <div className="text-gray-300">Foco em resultados</div>
+                </div>
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <FontAwesomeIcon icon={faGlobe} className="text-xl text-purple-400" />
+                  </div>
+                  <div className="text-gray-300">Suporte completo</div>
+                </div>
+              </div>
+            </div>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button
+                onClick={handleCloseServiceModal}
+                className="flex-1 py-3 px-6 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors"
+              >
+                Fechar
+              </button>
+              <button
+                onClick={() => {
+                  handleCloseServiceModal();
+                  handleOpenForm();
+                }}
+                className="flex-1 py-3 px-6 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105"
+              >
+                Solicitar Orçamento
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
             
       {/* Contact Form Modal */}
 {showContactForm && (
