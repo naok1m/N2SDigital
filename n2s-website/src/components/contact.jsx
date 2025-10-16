@@ -88,17 +88,10 @@ export default function Contact() {
     const summary = `
 *OLA! QUERO INICIAR UM NOVO PROJETO*
 
-*SERVICOS QUE PRECISO:*
+*SERVICOS:*
 ${selectedServices.map(service => `- ${service}`).join('\n')}
 
-*TOTAL:* ${selectedServices.length} servico(s)
-
-*MEUS DADOS:*
-- Nome: ${formData.name || '[Nao informado]'}
-- Email: ${formData.email || '[Nao informado]'}
-- Telefone: ${formData.phone || '[Nao informado]'}
-
-*AGUARDO SEU RETORNO PARA CONVERSARMOS SOBRE O PROJETO!*
+*AGUARDO SEU CONTATO!*
     `.trim();
 
     return summary;
@@ -199,25 +192,27 @@ Enviado através do formulario de contato do site N2S Digital
   ];
 
   const services = [
-    'Desenvolvimento Web',
-    'Aplicativos Mobile',
-    'Design UI/UX',
-    'Marketing Digital',
-    'Consultoria',
-    'Outro'
+    'Website Institucional',
+    'E-commerce/Loja Virtual',
+    'Landing Page',
+    'Aplicativo Mobile',
+    'Sistema Web',
+    'Linktree',
+    'SEO & Otimização',
+    'Automação',
+    'Outros'
   ];
 
   const projectServices = [
     { id: 'website', name: 'Website Institucional', description: 'Site profissional para sua empresa' },
     { id: 'ecommerce', name: 'E-commerce/Loja Virtual', description: 'Loja online para vender produtos' },
+    { id: 'landing', name: 'Landing Page', description: 'Página de alta conversão para capturar leads' },
     { id: 'app', name: 'Aplicativo Mobile', description: 'App para iOS e Android' },
     { id: 'sistema', name: 'Sistema Web', description: 'Sistema personalizado para gestão' },
-    { id: 'design', name: 'Design & Branding', description: 'Identidade visual e materiais' },
-    { id: 'marketing', name: 'Marketing Digital', description: 'Estratégias de crescimento online' },
+    { id: 'linktree', name: 'Linktree', description: 'Página de links para redes sociais' },
     { id: 'seo', name: 'SEO & Otimização', description: 'Aparecer no Google' },
-    { id: 'consultoria', name: 'Consultoria Digital', description: 'Análise e estratégias' },
-    { id: 'redes', name: 'Redes Sociais', description: 'Gestão e conteúdo' },
-    { id: 'automatizacao', name: 'Automação', description: 'Automatizar processos' }
+    { id: 'automatizacao', name: 'Automação', description: 'Automatizar processos' },
+    { id: 'outros', name: 'Outros', description: 'Solução personalizada para sua necessidade' }
   ];
 
   return (
