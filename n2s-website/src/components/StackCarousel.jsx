@@ -11,7 +11,6 @@ import {
   faCss3Alt, 
   faGitAlt, 
   faDocker,
-  faAws,
   faGoogle,
   faFigma,
   faGithub,
@@ -24,10 +23,8 @@ import {
   faWordpress
 } from '@fortawesome/free-brands-svg-icons';
 
-const StackCarousel = () => {
-  const topBandRef = useRef(null);
-  const bottomBandRef = useRef(null);
-  const containerRef = useRef(null);
+const StackCarousel = ({ position = 'top' }) => {
+  const bandRef = useRef(null);
 
   // Stacks com ícones do Font Awesome
   const stacks = [
@@ -39,7 +36,6 @@ const StackCarousel = () => {
     { name: 'CSS3', icon: faCss3Alt, color: '#1572B6' },
     { name: 'GIT', icon: faGitAlt, color: '#F05032' },
     { name: 'DOCKER', icon: faDocker, color: '#2496ED' },
-    { name: 'AWS', icon: faAws, color: '#FF9900' },
     { name: 'GITHUB', icon: faGithub, color: '#181717' },
     { name: 'PHP', icon: faPhp, color: '#777BB4' },
     { name: 'LARAVEL', icon: faLaravel, color: '#FF2D20' },
@@ -59,37 +55,23 @@ const StackCarousel = () => {
   ];
 
   useEffect(() => {
-    if (!topBandRef.current || !bottomBandRef.current) return;
+    if (!bandRef.current) return;
 
-    // Aguarda o DOM ser completamente renderizado
     const timer = setTimeout(() => {
-      const topBandInner = topBandRef.current.querySelector('.stack-band-inner');
-      const bottomBandInner = bottomBandRef.current.querySelector('.stack-band-inner');
+      const bandInner = bandRef.current.querySelector('.stack-band-inner');
 
-      if (!topBandInner || !bottomBandInner) return;
+      if (!bandInner) return;
 
-      const firstStackSet = topBandInner.querySelector('.stack-set');
+      const firstStackSet = bandInner.querySelector('.stack-set');
       if (!firstStackSet) return;
       
       const stackSetWidth = firstStackSet.offsetWidth;
-
       const moveDistance = stackSetWidth;
 
-      // Animação da banda superior (movimento da direita para esquerda) - REACT
-      gsap.set(topBandInner, { x: 0 });
-      gsap.to(topBandInner, {
+      gsap.set(bandInner, { x: 0 });
+      gsap.to(bandInner, {
         x: -moveDistance,
-        duration: 25, // 25 segundos para movimento suave e contínuo
-        ease: 'none',
-        repeat: -1,
-        immediateRender: true
-      });
-
-      // Animação da banda inferior (movimento da direita para esquerda - INVERTIDA) - VUE.JS
-      gsap.set(bottomBandInner, { x: 0 });
-      gsap.to(bottomBandInner, {
-        x: -moveDistance, // INVERTIDO: movimento da direita para esquerda
-        duration: 25, // 25 segundos para movimento suave e contínuo
+        duration: 25,
         ease: 'none',
         repeat: -1,
         immediateRender: true
@@ -97,7 +79,6 @@ const StackCarousel = () => {
 
     }, 200);
 
-    // ScrollTrigger para fade out das faixas conforme o usuário scrolla
     ScrollTrigger.create({
       trigger: "body",
       start: "top top",
@@ -105,21 +86,19 @@ const StackCarousel = () => {
       scrub: true,
       onUpdate: (self) => {
         const progress = self.progress;
-        // As faixas começam a sumir quando o usuário scrolla 30% da página
         const fadeStart = 0.3;
         const fadeEnd = 0.6;
         
         let opacity = 1;
         if (progress >= fadeStart) {
-          // Calcula a opacidade baseada no progresso do scroll
           const fadeProgress = (progress - fadeStart) / (fadeEnd - fadeStart);
           opacity = Math.max(0, 1 - fadeProgress);
         }
         
-        if (topBandRef.current && bottomBandRef.current) {
-          gsap.set([topBandRef.current, bottomBandRef.current], {
+        if (bandRef.current) {
+          gsap.set(bandRef.current, {
             opacity: opacity,
-            y: progress * -50 // Movimento sutil para cima conforme scrolla
+            y: progress * -50
           });
         }
       }
@@ -131,66 +110,53 @@ const StackCarousel = () => {
     };
   }, []);
 
-  const renderBand = (direction) => {
-    const isTopBand = direction === 'top';
-    const ref = isTopBand ? topBandRef : bottomBandRef;
-    
-    return (
-      <div 
-        ref={ref}
-        className={`relative w-full h-20 flex items-center overflow-hidden pointer-events-none z-[60] ${isTopBand ? 'mb-4' : 'mt-4'}`}
-        style={{
-          transform: isTopBand ? 'skewY(-2deg)' : 'skewY(2deg)',
-          background: '#0A0A0F',
-          borderTop: '1px solid rgba(255, 255, 255, 0.3)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.3)',
-          backdropFilter: 'blur(2px)'
-        }}
-      >
-        <div className="flex items-center whitespace-nowrap stack-band-inner">
-          {/* MÉTODO AVANÇADO: Cria um loop infinito perfeito */}
-          {[...Array(4)].map((_, copyIndex) => (
-            <div key={copyIndex} className={`flex items-center gap-8 stack-set ${!isTopBand ? 'flex-row-reverse' : ''}`}>
-              {stacks.map((stack, index) => {
-                const separator = separators[index % separators.length];
-                return (
-                  <React.Fragment key={`${copyIndex}-${index}`}>
-                    <div className="flex items-center gap-3 px-4 py-2 stack-item">
-                      <FontAwesomeIcon 
-                        icon={stack.icon} 
-                        className="text-2xl"
-                        style={{ color: stack.color }}
-                      />
-                      <span 
-                        className="text-white font-bold text-lg tracking-wider"
-                        style={{ 
-                          fontFamily: 'Clash Grotesk, sans-serif',
-                          textShadow: '0 0 20px rgba(255, 255, 255, 0.3)'
-                        }}
-                      >
-                        {stack.name}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-center w-6">
-                      <div 
-                        className="w-1.5 h-1.5 rounded-full"
-                        style={{ backgroundColor: separator.color }}
-                      />
-                    </div>
-                  </React.Fragment>
-                );
-              })}
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  };
-
   return (
-    <div ref={containerRef} className="w-full flex flex-col items-center justify-center mb-8">
-      {renderBand('top')}
-      {renderBand('bottom')}
+    <div 
+      ref={bandRef}
+      className="relative w-full h-20 flex items-center overflow-hidden pointer-events-none z-[60]"
+      style={{
+        background: '#0A0A0F',
+        borderTop: '1px solid rgba(255, 255, 255, 0.3)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.3)',
+        backdropFilter: 'blur(2px)',
+        transform: position === 'top' ? 'skewY(-1deg)' : 'skewY(1deg)'
+      }}
+    >
+      <div className="flex items-center whitespace-nowrap stack-band-inner">
+        {[...Array(2)].map((_, copyIndex) => (
+          <div key={copyIndex} className={`flex items-center gap-8 stack-set ${position === 'bottom' ? 'flex-row-reverse' : ''}`}>
+            {stacks.map((stack, index) => {
+              const separator = separators[index % separators.length];
+              return (
+                <React.Fragment key={`${copyIndex}-${index}`}>
+                  <div className="flex items-center gap-3 px-4 py-2 stack-item">
+                    <FontAwesomeIcon 
+                      icon={stack.icon} 
+                      className="text-2xl"
+                      style={{ color: stack.color }}
+                    />
+                    <span 
+                      className="text-white font-bold text-lg tracking-wider"
+                      style={{ 
+                        fontFamily: 'Clash Grotesk, sans-serif',
+                        textShadow: '0 0 20px rgba(255, 255, 255, 0.3)'
+                      }}
+                    >
+                      {stack.name}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-center w-6">
+                    <div 
+                      className="w-1.5 h-1.5 rounded-full"
+                      style={{ backgroundColor: separator.color }}
+                    />
+                  </div>
+                </React.Fragment>
+              );
+            })}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
