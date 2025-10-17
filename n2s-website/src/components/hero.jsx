@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef, useMemo, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import GlassButton from './glassButton';
@@ -7,9 +7,13 @@ import StackCarousel from './StackCarousel';
 import Card3D from './Card3D';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart, faHospital, faRocket, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+<<<<<<< HEAD
 import Footer from './footer';
 import { OptimizedImage, preloadImages } from '../utils/imageOptimization.jsx';
 import { usePerformanceMonitoring, useScrollTracking, PerformanceMonitor } from '../hooks/usePerformance';
+=======
+import { useDebounce } from '../hooks/useDebounce';
+>>>>>>> origin/souzadev
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -50,21 +54,21 @@ export default function Hero() {
   const [carouselCanStart, setCarouselCanStart] = useState(false);
   const [carouselPaused, setCarouselPaused] = useState(false);
 
-  // Funções para controlar pausa do carousel
-  const pauseCarousel = () => {
+  // Funções para controlar pausa do carousel (otimizadas com useCallback)
+  const pauseCarousel = useCallback(() => {
     setCarouselPaused(true);
-  };
+  }, []);
 
-  const resumeCarousel = () => {
+  const resumeCarousel = useCallback(() => {
     setCarouselPaused(false);
-  };
+  }, []);
 
-  // Função para animação de transição horizontal (simplificada)
-  const animatePageTransition = (isManual = false) => {
+  // Função para animação de transição horizontal (otimizada com useCallback)
+  const animatePageTransition = useCallback((isManual = false) => {
     if (projectsCardsRef.current) {
       const cardsContainer = projectsCardsRef.current;
       
-      // Animação simples de fade
+      // Animação simples de fade otimizada
       gsap.to(cardsContainer, {
         opacity: 0,
         duration: 0.2,
@@ -83,10 +87,10 @@ export default function Hero() {
         }
       });
     }
-  };
+  }, []);
 
-  // Função para mudança manual de página com animação
-  const handlePageChange = (newPage) => {
+  // Função para mudança manual de página com animação (otimizada)
+  const handlePageChange = useCallback((newPage) => {
     if (newPage !== currentPage) {
       // Animação especial para clique manual
       if (projectsIndicatorsRef.current) {
@@ -107,20 +111,20 @@ export default function Hero() {
       
       setCurrentPage(newPage);
     }
-  };
+  }, [currentPage, animatePageTransition]);
 
-  // Funções para navegação com setas
-  const handlePreviousPage = () => {
+  // Funções para navegação com setas (otimizadas)
+  const handlePreviousPage = useCallback(() => {
     const newPage = currentPage === 0 ? totalPages - 1 : currentPage - 1;
     handlePageChange(newPage);
-  };
+  }, [currentPage, handlePageChange]);
 
-  const handleNextPage = () => {
+  const handleNextPage = useCallback(() => {
     const newPage = (currentPage + 1) % totalPages;
     handlePageChange(newPage);
-  };
+  }, [currentPage, handlePageChange]);
   
-  // Carousel automático - só inicia após animação de entrada
+  // Carousel automático - só inicia após animação de entrada (otimizado)
   useEffect(() => {
     if (!carouselCanStart || carouselPaused) return;
 
@@ -135,7 +139,7 @@ export default function Hero() {
     }, 3000); // Muda a cada 3 segundos
 
     return () => clearInterval(interval);
-  }, [totalPages, carouselCanStart, carouselPaused]);
+  }, [carouselCanStart, carouselPaused, animatePageTransition]);
 
   // Animação dos indicadores apenas (otimizada)
   useEffect(() => {
@@ -219,6 +223,7 @@ export default function Hero() {
   useEffect(() => {
     const timeout = setTimeout(() => setShow(true), 100);
     
+<<<<<<< HEAD
     // Preload de imagens críticas
     preloadImages([
       '/liquidos.png',
@@ -228,6 +233,13 @@ export default function Hero() {
       '/pattern.png',
       '/arco.png'
     ]);
+=======
+    // Configurar GSAP para melhor performance
+    gsap.set([eclipseRef.current, planetaRef.current, correntesRef.current, liquidosRef.current], {
+      force3D: true,
+      willChange: "transform, opacity"
+    });
+>>>>>>> origin/souzadev
     
     // Timeline principal para animações de entrada
     const tl = gsap.timeline({ delay: 0.5 });
@@ -293,6 +305,12 @@ export default function Hero() {
       }, "-=1.5"
     );
 
+    // Configurar elementos de texto para melhor performance
+    gsap.set([titleRef.current, subtitleRef.current, buttonRef.current], {
+      force3D: true,
+      willChange: "transform, opacity"
+    });
+    
     // Animação dos elementos de texto
     const textTl = gsap.timeline({ delay: 1 });
     
@@ -343,22 +361,6 @@ export default function Hero() {
       }, "-=0.6"
     );
 
-    // Animação da curva
-    gsap.fromTo(curveRef.current,
-      {
-        y: 100,
-        opacity: 0,
-        scaleY: 0
-      },
-      {
-        y: 0,
-        opacity: 1,
-        scaleY: 1,
-        duration: 1,
-        ease: "power2.out",
-        delay: 2
-      }
-    );
 
     // Iniciar animações constantes antes das animações de entrada terminarem
     const continuousTimeout = setTimeout(() => {
@@ -382,21 +384,6 @@ export default function Hero() {
         const projectsTl = gsap.timeline();
         
         projectsTl
-        // Animação do shape divider - entrada de cima
-        .fromTo(projectsShapeRef.current,
-          {
-            y: -50,
-            opacity: 0,
-            scaleY: 0.5
-          },
-          {
-            y: 0,
-            opacity: 1,
-            scaleY: 1,
-            duration: 1.2,
-            ease: "power2.out"
-          }
-        )
         // Animação da estela - entrada suave
         .fromTo(estelaRef.current,
           {
@@ -548,11 +535,15 @@ export default function Hero() {
           <OptimizedImage 
             ref={liquidosRef}
             src="/liquidos.png" 
-            alt="Líquidos" 
+            alt="Efeito visual líquido no background" 
             className="w-full h-full object-cover opacity-[0.9] background-image"
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
             style={{
               filter: 'contrast(1.3) brightness(1.1) blur(3px)',
-              mixBlendMode: 'soft-light'
+              mixBlendMode: 'soft-light',
+              willChange: 'transform'
             }}
             loading="eager"
             placeholder={false}
@@ -564,13 +555,16 @@ export default function Hero() {
           <OptimizedImage 
             ref={correntesRef}
             src="/correntes.png" 
-            alt="Correntes" 
+            alt="Efeito visual de correntes no background" 
             className="w-full h-full object-cover opacity-[0.95] background-image"
+            loading="lazy"
+            decoding="async"
             style={{
               filter: 'contrast(1.4) brightness(1.0) blur(3px)',
               mixBlendMode: 'overlay',
               transform: 'translateX(-10%)',
-              objectPosition: 'left center'
+              objectPosition: 'left center',
+              willChange: 'transform'
             }}
             loading="eager"
             placeholder={false}
@@ -602,10 +596,14 @@ export default function Hero() {
           <OptimizedImage 
             ref={planetaRef}
             src="/planeta.png" 
-            alt="Planeta" 
+            alt="Planeta estilizado no background" 
             className="w-[700px] h-[700px] md:w-[900px] md:h-[900px] lg:w-[1100px] lg:h-[1100px] opacity-90 object-contain mix-blend-mode-screen background-image"
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
             style={{
-              filter: 'blur(2px)'
+              filter: 'blur(2px)',
+              willChange: 'transform'
             }}
             loading="eager"
             placeholder={false}
@@ -619,14 +617,14 @@ export default function Hero() {
           <div className="mb-8">
             <h1 ref={titleRef} className="text-6xl md:text-8xl lg:text-9xl font-black leading-none tracking-tight">
               <span className="bg-gradient-to-r from-[#d8b4fe] via-[#c084fc] to-[#a855f7] bg-clip-text text-transparent">
-                N2S DIGITAL
+                N2S GROUP
               </span>
             </h1>
           </div>
 
           {/* Descrição */}
           <div className="max-w-5xl mx-auto mb-8">
-            <p ref={subtitleRef} className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-4xl mx-auto">
+            <p ref={subtitleRef} className="text-lg md:text-xl text-gray-400 leading-relaxed max-w-4xl mx-auto">
             Criamos soluções digitais personalizadas que conectam pessoas, fortalecem marcas e impulsionam o crescimento por meio de estratégias tecnológicas inovadoras.
             </p>
           </div>
@@ -641,7 +639,7 @@ export default function Hero() {
 
         {/* Shape divider curve */}
         <div ref={curveRef} className="custom-shape-divider-bottom relative z-[5]">
-          <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" className="h-[60px] md:h-[80px] lg:h-[100px]">
+          <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" className="h-[40px] md:h-[50px] lg:h-[60px]">
             <path d="M0,0V7.23C0,65.52,268.63,112.77,600,112.77S1200,65.52,1200,7.23V0Z" className="shape-fill"></path>
           </svg>
         </div>
@@ -650,44 +648,91 @@ export default function Hero() {
       {/* Segunda seção - Tablet demonstrativo */}
       <section className="py-20 bg-[#0a0a0f] relative section-noise-blur flex flex-col items-center justify-center min-h-screen">
         
+<<<<<<< HEAD
+=======
+        {/* Faixa superior do carrossel - largura total da tela */}
+        <div className="w-full mb-8">
+          <StackCarousel position="top" />
+        </div>
+        
+>>>>>>> origin/souzadev
         {/* Container do Tablet */}
-        <div ref={tabletRef} className="relative w-[95vw] max-w-6xl tablet-container z-10">
-          <div className="relative">
-            
-            {/* Tablet Frame com design profissional */}
-            <div className="relative bg-black rounded-2xl p-3 shadow-2xl overflow-hidden border border-gray-800">
-              {/* Screen Content */}
-              <div className="bg-gray-900 rounded-xl overflow-hidden relative">
-                {/* Browser Bar realista */}
-                <div className="bg-gray-800 px-6 py-4 flex items-center gap-3 border-b border-gray-700">
-                  <div className="flex gap-3">
-                    <div className="w-4 h-4 bg-red-500 rounded-full shadow-sm"></div>
-                    <div className="w-4 h-4 bg-yellow-500 rounded-full shadow-sm"></div>
-                    <div className="w-4 h-4 bg-green-500 rounded-full shadow-sm"></div>
+        <div className="relative w-full max-w-6xl flex justify-center py-12">
+          {/* Eclipse glow esquerdo */}
+          <div 
+            className="absolute pointer-events-none z-[5]"
+            style={{
+              background: `radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(139, 92, 246, 0.12) 30%, rgba(196, 181, 253, 0.08) 60%, transparent 85%)`,
+              width: '400px',
+              height: '400px',
+              borderRadius: '50%',
+              filter: 'blur(40px)',
+              mixBlendMode: 'screen',
+              top: '20%',
+              left: '-10%',
+              transform: 'translateY(-50%)'
+            }}
+          />
+          
+          {/* Eclipse glow direito */}
+          <div 
+            className="absolute pointer-events-none z-[5]"
+            style={{
+              background: `radial-gradient(circle, rgba(196, 181, 253, 0.18) 0%, rgba(168, 85, 247, 0.15) 40%, rgba(139, 92, 246, 0.10) 70%, transparent 90%)`,
+              width: '350px',
+              height: '350px',
+              borderRadius: '50%',
+              filter: 'blur(35px)',
+              mixBlendMode: 'screen',
+              top: '70%',
+              right: '-5%',
+              transform: 'translateY(-50%)'
+            }}
+          />
+          
+          <div ref={tabletRef} className="relative w-[95vw] max-w-6xl tablet-container z-10">
+            <div className="relative">
+              
+              {/* Tablet Frame com design profissional */}
+              <div className="relative bg-black rounded-2xl p-3 shadow-2xl overflow-hidden border border-gray-800">
+                {/* Screen Content */}
+                <div className="bg-gray-900 rounded-xl overflow-hidden relative">
+                  {/* Browser Bar realista */}
+                  <div className="bg-gray-800 px-6 py-4 flex items-center gap-3 border-b border-gray-700">
+                    <div className="flex gap-3">
+                      <div className="w-4 h-4 bg-red-500 rounded-full shadow-sm"></div>
+                      <div className="w-4 h-4 bg-yellow-500 rounded-full shadow-sm"></div>
+                      <div className="w-4 h-4 bg-green-500 rounded-full shadow-sm"></div>
+                    </div>
+                    <div className="flex-1 bg-gray-700 rounded-lg px-4 py-2 ml-6">
+                      <div className="text-gray-400 text-sm text-left">n2sgroup.com.br</div>
+                    </div>
                   </div>
-                  <div className="flex-1 bg-gray-700 rounded-lg px-4 py-2 ml-6">
-                    <div className="text-gray-400 text-sm text-left">n2sdigital.com</div>
-                  </div>
-                </div>
-                
-                {/* Video Container - 16:9 Aspect Ratio */}
-                <div className="aspect-video bg-gray-900 relative">
-                  <video
-                    src="/Noxus.mp4"
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="w-full h-full object-cover rounded-xl"
-                  />
-                  <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                    <div className="text-white text-xl font-semibold bg-black/50 px-4 py-2 rounded">
+                  
+                  {/* Video Container - 16:9 Aspect Ratio */}
+                  <div className="aspect-video bg-gray-900 relative">
+                    <video
+                      src="/Noxus.mp4"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover rounded-xl"
+                    />
+                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                      <div className="text-white text-xl font-semibold bg-black/50 px-4 py-2 rounded">
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+        
+        {/* Faixa inferior do carrossel - largura total da tela */}
+        <div className="w-full mt-8">
+          <StackCarousel position="bottom" />
         </div>
 
       </section>
@@ -718,7 +763,7 @@ export default function Hero() {
         
         {/* Shape divider curve no topo */}
         <div ref={projectsShapeRef} className="absolute top-0 left-0 w-full overflow-hidden leading-none z-[20]" style={{ marginTop: '-1px' }}>
-          <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" className="relative block w-full h-[60px] md:h-[80px] lg:h-[100px]" style={{ width: 'calc(100% + 1.3px)' }}>
+          <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" className="relative block w-full h-[40px] md:h-[50px] lg:h-[60px]" style={{ width: 'calc(100% + 1.3px)' }}>
             <path d="M0,0V7.23C0,65.52,268.63,112.77,600,112.77S1200,65.52,1200,7.23V0Z" className="shape-fill" fill="#0A0A0F" fillOpacity="1"></path>
           </svg>
         </div>
@@ -734,6 +779,22 @@ export default function Hero() {
               mixBlendMode: 'overlay'
             }}
             loading="lazy"
+          />
+        </div>
+
+        {/* Iluminacao.mp4 invertida e quase transparente - Layer 2 */}
+        <div className="absolute inset-0 pointer-events-none z-[2]">
+          <video 
+            src="/iluminacao.mp4" 
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover opacity-[0.15]"
+            style={{
+              filter: 'blur(2px) brightness(0.3) contrast(1.2)',
+              mixBlendMode: 'screen'
+            }}
           />
         </div>
 
@@ -759,37 +820,10 @@ export default function Hero() {
           
           {/* Subtítulo e descrição */}
           <div className="text-center mb-12 max-w-4xl mx-auto">
-            <p className="text-xl text-gray-300 mb-8 leading-relaxed">
+            <p className="text-xl text-gray-400 mb-8 leading-relaxed">
               Transformamos ideias em soluções digitais inovadoras que impulsionam negócios e conectam pessoas ao futuro da tecnologia.
             </p>
             
-            {/* Estatísticas dos projetos */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-              <div className="text-center">
-                <div className="text-3xl font-bold bg-gradient-to-r from-[#d8b4fe] to-[#a855f7] bg-clip-text text-transparent mb-2">
-                  50+
-                </div>
-                <div className="text-sm text-gray-400">Projetos Entregues</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold bg-gradient-to-r from-[#d8b4fe] to-[#a855f7] bg-clip-text text-transparent mb-2">
-                  98%
-                </div>
-                <div className="text-sm text-gray-400">Satisfação</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold bg-gradient-to-r from-[#d8b4fe] to-[#a855f7] bg-clip-text text-transparent mb-2">
-                  15+
-                </div>
-                <div className="text-sm text-gray-400">Tecnologias</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold bg-gradient-to-r from-[#d8b4fe] to-[#a855f7] bg-clip-text text-transparent mb-2">
-                  24/7
-                </div>
-                <div className="text-sm text-gray-400">Suporte</div>
-              </div>
-            </div>
           </div>
           
           {/* Setas de navegação */}
@@ -1012,3 +1046,5 @@ export default function Hero() {
     </>
   );
 }
+
+

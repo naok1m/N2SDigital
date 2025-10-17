@@ -1,7 +1,17 @@
+<<<<<<< HEAD
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './index.css'
+=======
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import './index.css';
+import Analytics from './components/Analytics';
+
+// Import pages
+>>>>>>> origin/souzadev
 import Home from './pages/Home';
 import Services from './pages/Services';
 import Contact from './components/contact';
@@ -19,17 +29,37 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+// Performance monitoring
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then((registration) => {
+        console.log('SW registered: ', registration);
+      })
+      .catch((registrationError) => {
+        console.log('SW registration failed: ', registrationError);
+      });
+  });
+}
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+<<<<<<< HEAD
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/contato" element={<Contact />} />
         
         {/* Rota para a página Services */}
+=======
+    <Analytics />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+>>>>>>> origin/souzadev
         <Route path="/services" element={<Services />} />
-
-        {/* Adicione outras rotas aqui no futuro, como "/contato", etc. */}
+        {/* Add 404 redirect */}
+        <Route path="*" element={<Home />} />
       </Routes>
     </Router>
   </StrictMode>,

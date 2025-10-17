@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,10 +7,6 @@ import {
   faLaptop, 
   faShoppingCart, 
   faUtensils,
-  faCode,
-  faPalette,
-  faMobile,
-  faGlobe,
   faArrowRight,
   faCheck
 } from '@fortawesome/free-solid-svg-icons';
@@ -27,7 +23,7 @@ const ServiceCard = ({ icon, title, description, features, index, category, uniq
 
   // Removidas animações individuais - agora padronizadas no componente pai
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = useCallback((e) => {
     if (window.innerWidth < 768) return; // Desabilitar em mobile
     
     const card = cardRef.current;
@@ -49,7 +45,7 @@ const ServiceCard = ({ icon, title, description, features, index, category, uniq
       ease: "power2.out",
       transformPerspective: 1000
     });
-  };
+  }, []);
 
   const handleMouseLeave = () => {
     gsap.to(cardRef.current, {
@@ -116,7 +112,7 @@ const ServiceCard = ({ icon, title, description, features, index, category, uniq
           </h3>
 
           {/* Description */}
-          <p className="text-gray-300 mb-6 leading-relaxed text-sm flex-grow">
+          <p className="text-gray-400 mb-6 leading-relaxed text-sm flex-grow">
             {description}
           </p>
 
@@ -149,62 +145,11 @@ const ServiceCard = ({ icon, title, description, features, index, category, uniq
   );
 };
 
-// Componente de Estatísticas
-const StatsSection = () => {
-  const statsRef = useRef(null);
-  const [counts, setCounts] = useState({
-    projects: 0,
-    clients: 0,
-    satisfaction: 0,
-    experience: 0
-  });
-
-  const stats = [
-    { key: 'projects', number: 150, label: 'Projetos Entregues', icon: faCode },
-    { key: 'clients', number: 100, label: 'Clientes Satisfeitos', icon: faGlobe },
-    { key: 'satisfaction', number: 98, label: '% Satisfação', icon: faCheck },
-    { key: 'experience', number: 4, label: 'Anos de Experiência', icon: faRocket }
-  ];
-
-  useEffect(() => {
-    // Animação dos contadores
-    stats.forEach(stat => {
-      gsap.to(counts, {
-        [stat.key]: stat.number,
-        duration: 2,
-        ease: "power2.out",
-        onUpdate: () => setCounts(prev => ({ ...prev })),
-        scrollTrigger: {
-          trigger: statsRef.current,
-          start: "top 80%",
-          toggleActions: "play none none none"
-        }
-      });
-    });
-  }, []);
-
-  return (
-    <div ref={statsRef} className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16 max-w-6xl mx-auto">
-      {stats.map((stat, index) => (
-        <div key={index} className="stats-card rounded-2xl p-6 text-center">
-          <div className="stats-icon-container w-12 h-12 rounded-xl mx-auto mb-3 flex items-center justify-center">
-            <FontAwesomeIcon icon={stat.icon} className="text-lg text-purple-400" />
-          </div>
-          <div className="text-2xl md:text-3xl font-bold text-purple-400 mb-2">
-            {stat.key === 'satisfaction' ? `${Math.floor(counts[stat.key])}%` : `${Math.floor(counts[stat.key])}+`}
-          </div>
-          <div className="text-gray-300 text-xs md:text-sm">{stat.label}</div>
-        </div>
-      ))}
-    </div>
-  );
-};
 
 export default function Services() {
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
   const subtitleRef = useRef(null);
-  const nuvensRef = useRef(null);
   const [showContactForm, setShowContactForm] = useState(false);
   const [showServiceModal, setShowServiceModal] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
@@ -331,24 +276,6 @@ export default function Services() {
         { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, "-=0.3"
       );
 
-    // Animações com ScrollTrigger padronizadas para stats
-    gsap.utils.toArray(".stat-card").forEach((card, index) => {
-      gsap.fromTo(card, 
-        { opacity: 0, y: 30, scale: 0.9 },
-        {
-          opacity: 1,
-          y: 0,
-        scale: 1,
-        duration: 0.8,
-        ease: "back.out(1.7)",
-        scrollTrigger: {
-            trigger: card,
-            start: "top 85%",
-            toggleActions: "play none none none"
-          }
-        }
-      );
-    });
 
     // Animações padronizadas para cards de serviços
     gsap.utils.toArray(".service-card-advanced").forEach((card, index) => {
@@ -500,38 +427,26 @@ export default function Services() {
         id="servicos"
         className="relative min-h-screen py-20 overflow-hidden section-noise-blur"
         style={{
-          background: 'linear-gradient(135deg, #0a0a0f 0%, #1a0b2e 50%, #2d1b69 100%)'
+          background: 'linear-gradient(to bottom, #1a0b2e 0%, #0a0a0f 100%)'
         }}
       >
-        {/* Nuvens invertidas no background - Layer 2 */}
-        <div className="absolute top-0 left-0 right-0 h-1/3 pointer-events-none z-[5]">
-          <img 
-            ref={nuvensRef}
-            src="/nuvens.png" 
-            alt="Nuvens" 
-            className="w-full h-full object-cover opacity-[0.5]"
-            style={{
-              filter: 'contrast(1.4) brightness(0.6) blur(3px)',
-              mixBlendMode: 'multiply',
-              transform: 'scaleY(-1)' // Inversão vertical
-            }}
-          />
-        </div>
-
-
-        {/* Nuvens na parte inferior - Layer 4 */}
-        <div className="absolute bottom-0 left-0 right-0 h-1/3 pointer-events-none z-[6]">
-          <img 
-            ref={nuvensRef}
-            src="/nuvens.png" 
-            alt="Nuvens" 
-            className="w-full h-full object-cover opacity-[0.5]"
-            style={{
-              filter: 'contrast(1.4) brightness(0.6) blur(3px)',
-              mixBlendMode: 'multiply'
-            }}
-          />
-        </div>
+        {/* Background com arco.png e efeitos */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: `
+              linear-gradient(rgba(10, 10, 15, 0.8), rgba(10, 10, 15, 0.8)),
+              url('/arco2.png')
+            `,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            filter: 'blur(1px) brightness(0.7) contrast(1.1)'
+          }}
+        />
+        
+        {/* Vignette effect */}
+        <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/20 pointer-events-none" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 pt-20">
           {/* Header */}
@@ -546,15 +461,13 @@ export default function Services() {
             </h2>
             <p
               ref={subtitleRef}
-              className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed px-4"
+              className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed px-4"
             >
               Soluções digitais completas para transformar seu negócio e 
               conquistar resultados extraordinários
             </p>
           </div>
 
-          {/* Estatísticas */}
-          <StatsSection />
 
           {/* Services Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto mb-16">
@@ -577,7 +490,7 @@ export default function Services() {
                   Pronto para decolar?
               </h3>
               </div>
-              <p className="text-gray-300 mb-6 text-sm">
+              <p className="text-gray-400 mb-6 text-sm">
                 Entre em contato e descubra como podemos transformar sua presença digital
               </p>
               <div className="flex justify-center">
