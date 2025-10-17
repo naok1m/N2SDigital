@@ -7,13 +7,9 @@ import StackCarousel from './StackCarousel';
 import Card3D from './Card3D';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart, faHospital, faRocket, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-<<<<<<< HEAD
-import Footer from './footer';
-import { OptimizedImage, preloadImages } from '../utils/imageOptimization.jsx';
-import { usePerformanceMonitoring, useScrollTracking, PerformanceMonitor } from '../hooks/usePerformance';
-=======
 import { useDebounce } from '../hooks/useDebounce';
->>>>>>> a28db1b7ad5a39add824902dd69db824ba305994
+import { usePerformanceMonitoring, useScrollTracking } from '../hooks/usePerformance';
+import { OptimizedImage } from '../utils/imageOptimization.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -212,8 +208,14 @@ export default function Hero() {
   useEffect(() => {
     const timeout = setTimeout(() => setShow(true), 100);
     
-<<<<<<< HEAD
     // Preload de imagens críticas
+    const preloadImages = (imageUrls) => {
+      imageUrls.forEach(url => {
+        const img = new Image();
+        img.src = url;
+      });
+    };
+    
     preloadImages([
       '/liquidos.png',
       '/correntes.png', 
@@ -222,13 +224,12 @@ export default function Hero() {
       '/pattern.png',
       '/arco.png'
     ]);
-=======
+    
     // Configurar GSAP para melhor performance
     gsap.set([eclipseRef.current, planetaRef.current, correntesRef.current, liquidosRef.current], {
       force3D: true,
       willChange: "transform, opacity"
     });
->>>>>>> a28db1b7ad5a39add824902dd69db824ba305994
     
     // Timeline principal para animações de entrada
     const tl = gsap.timeline({ delay: 0.5 });
@@ -534,7 +535,6 @@ export default function Hero() {
               mixBlendMode: 'soft-light',
               willChange: 'transform'
             }}
-            loading="eager"
             placeholder={false}
           />
         </div>
@@ -555,7 +555,6 @@ export default function Hero() {
               objectPosition: 'left center',
               willChange: 'transform'
             }}
-            loading="eager"
             placeholder={false}
           />
         </div>
@@ -594,7 +593,6 @@ export default function Hero() {
               filter: 'blur(2px)',
               willChange: 'transform'
             }}
-            loading="eager"
             placeholder={false}
           />
         </div>
@@ -637,14 +635,11 @@ export default function Hero() {
       {/* Segunda seção - Tablet demonstrativo */}
       <section className="py-20 bg-[#0a0a0f] relative section-noise-blur flex flex-col items-center justify-center min-h-screen">
         
-<<<<<<< HEAD
-=======
         {/* Faixa superior do carrossel - largura total da tela */}
         <div className="w-full mb-8">
           <StackCarousel position="top" />
         </div>
         
->>>>>>> a28db1b7ad5a39add824902dd69db824ba305994
         {/* Container do Tablet */}
         <div className="relative w-full max-w-6xl flex justify-center py-12">
           {/* Eclipse glow esquerdo */}

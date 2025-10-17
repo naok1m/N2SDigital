@@ -3,13 +3,8 @@ import logo from "../assets/logoN2S.png";
 import LinkPadrao from "./LinkPadrao";
 
 const linksEsquerda = [
-<<<<<<< HEAD
-  { href: "/", label: "Início" },           
-  { href: "/services", label: "Serviços" },
-=======
   { href: "#hero", label: "Início" },           
   { href: "#servicos", label: "Serviços" }, 
->>>>>>> a28db1b7ad5a39add824902dd69db824ba305994
 ];
 
 const linksDireita = [
