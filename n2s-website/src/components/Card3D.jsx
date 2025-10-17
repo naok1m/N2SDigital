@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { gsap } from 'gsap';
+import { OptimizedImage } from '../utils/imageOptimization.jsx';
 
 const Card3D = ({ title, description, technologies, icon, image, tag }) => {
   const cardRef = useRef(null);
@@ -179,10 +180,11 @@ const Card3D = ({ title, description, technologies, icon, image, tag }) => {
       {/* Container da imagem principal */}
       <div className="relative h-64 overflow-hidden">
         {/* Imagem do projeto */}
-        <img 
+        <OptimizedImage 
           src={image} 
           alt={title}
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+          loading="lazy"
         />
         
         {/* Overlay gradiente para melhor legibilidade */}

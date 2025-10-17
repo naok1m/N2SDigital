@@ -20,7 +20,7 @@ import CustomCursor from './CustomCursor';
 gsap.registerPlugin(ScrollTrigger);
 
 // Componente de Card de Serviço Avançado
-const ServiceCard = ({ icon, title, description, features, index, category, onLearnMore }) => {
+const ServiceCard = ({ icon, title, description, features, index, category, uniqueInfo, onLearnMore }) => {
   const cardRef = useRef(null);
   const contentRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -134,7 +134,7 @@ const ServiceCard = ({ icon, title, description, features, index, category, onLe
 
           {/* CTA Button */}
           <button 
-            onClick={() => onLearnMore && onLearnMore({ icon, title, description, features, category })}
+            onClick={() => onLearnMore && onLearnMore({ icon, title, description, features, category, uniqueInfo })}
             className="service-cta-button w-full text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 group"
           >
             <span>Saiba Mais</span>
@@ -383,7 +383,24 @@ export default function Services() {
         "Otimização para conversão (CRO)",
         "Integração com ferramentas de marketing",
         "Performance e SEO otimizados"
-      ]
+      ],
+      uniqueInfo: {
+        price: "A partir de R$ 1.500",
+        timeline: "7-15 dias",
+        benefits: [
+          "Aumento de 300% na conversão",
+          "Design exclusivo e profissional",
+          "Integração com CRM",
+          "Relatórios detalhados de performance"
+        ],
+        process: [
+          "Briefing e análise de mercado",
+          "Criação do design exclusivo",
+          "Desenvolvimento responsivo",
+          "Testes e otimizações",
+          "Entrega e treinamento"
+        ]
+      }
     },
     {
       icon: faLaptop,
@@ -395,7 +412,24 @@ export default function Services() {
         "Sistema de gerenciamento de conteúdo",
         "Múltiplos idiomas e acessibilidade",
         "Analytics e métricas detalhadas"
-      ]
+      ],
+      uniqueInfo: {
+        price: "A partir de R$ 2.500",
+        timeline: "15-30 dias",
+        benefits: [
+          "Presença digital profissional",
+          "Sistema de gestão integrado",
+          "SEO otimizado",
+          "Suporte técnico completo"
+        ],
+        process: [
+          "Análise da identidade da marca",
+          "Estruturação do conteúdo",
+          "Desenvolvimento personalizado",
+          "Integração de funcionalidades",
+          "Testes e lançamento"
+        ]
+      }
     },
     {
       icon: faShoppingCart,
@@ -407,7 +441,24 @@ export default function Services() {
         "Integração com gateways de pagamento",
         "Gestão de estoque e pedidos",
         "Sistema de cupons e promoções"
-      ]
+      ],
+      uniqueInfo: {
+        price: "A partir de R$ 3.500",
+        timeline: "30-45 dias",
+        benefits: [
+          "Vendas 24/7 automatizadas",
+          "Integração com marketplaces",
+          "Sistema de gestão completo",
+          "Relatórios de vendas detalhados"
+        ],
+        process: [
+          "Análise do catálogo de produtos",
+          "Configuração de pagamentos",
+          "Desenvolvimento da loja",
+          "Integração com estoque",
+          "Testes e lançamento"
+        ]
+      }
     },
     {
       icon: faUtensils,
@@ -419,7 +470,24 @@ export default function Services() {
         "Atualização em tempo real",
         "QR Code para acesso rápido",
         "Painel administrativo completo"
-      ]
+      ],
+      uniqueInfo: {
+        price: "A partir de R$ 800",
+        timeline: "5-10 dias",
+        benefits: [
+          "Redução de 50% no tempo de atendimento",
+          "Atualização instantânea de preços",
+          "Interface moderna e atrativa",
+          "Relatórios de pedidos"
+        ],
+        process: [
+          "Análise do cardápio atual",
+          "Design personalizado",
+          "Desenvolvimento da interface",
+          "Configuração do QR Code",
+          "Treinamento da equipe"
+        ]
+      }
     }
   ];
 
@@ -562,7 +630,7 @@ export default function Services() {
             </div>
 
             {/* Description */}
-            <p className="text-gray-300 text-lg leading-relaxed mb-8">
+            <p className="text-gray-300 text-lg leading-relaxed mb-12">
               {selectedService.description}
             </p>
 
@@ -581,33 +649,48 @@ export default function Services() {
               </div>
             </div>
 
-            {/* Additional Info */}
-            <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-xl p-6 mb-8 border border-purple-500/20">
-              <h3 className="text-lg font-semibold text-white mb-6 text-center">Por que escolher este serviço?</h3>
-              <div className="grid md:grid-cols-3 gap-6 text-sm">
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-xl flex items-center justify-center mx-auto mb-3">
-                    <FontAwesomeIcon icon={faRocket} className="text-xl text-purple-400" />
-                  </div>
-                  <div className="text-gray-300">Entrega rápida</div>
-                </div>
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-xl flex items-center justify-center mx-auto mb-3">
-                    <FontAwesomeIcon icon={faCheck} className="text-xl text-purple-400" />
-                  </div>
-                  <div className="text-gray-300">Foco em resultados</div>
-                </div>
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-xl flex items-center justify-center mx-auto mb-3">
-                    <FontAwesomeIcon icon={faGlobe} className="text-xl text-purple-400" />
-                  </div>
-                  <div className="text-gray-300">Suporte completo</div>
+            {/* Divider */}
+            <div className="border-t border-gray-700/50 mb-8"></div>
+
+            {/* Benefits */}
+            {selectedService.uniqueInfo?.benefits && (
+              <div className="mb-8">
+                <h3 className="text-xl font-semibold text-white mb-4">Benefícios exclusivos:</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  {selectedService.uniqueInfo.benefits.map((benefit, idx) => (
+                    <div key={idx} className="flex items-center gap-3 text-gray-300">
+                      <div className="w-5 h-5 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <FontAwesomeIcon icon={faCheck} className="text-xs text-white" />
+                      </div>
+                      <span>{benefit}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
-            </div>
+            )}
+
+            {/* Divider */}
+            <div className="border-t border-gray-700/50 mb-8"></div>
+
+            {/* Process */}
+            {selectedService.uniqueInfo?.process && (
+              <div className="mb-8">
+                <h3 className="text-xl font-semibold text-white mb-4">Como funciona:</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  {selectedService.uniqueInfo.process.slice(0, 4).map((step, idx) => (
+                    <div key={idx} className="flex items-center gap-4 text-gray-300">
+                      <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0 text-white font-bold text-sm">
+                        {idx + 1}
+                      </div>
+                      <span>{step}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 mt-12">
               <button
                 onClick={handleCloseServiceModal}
                 className="flex-1 py-3 px-6 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors"
