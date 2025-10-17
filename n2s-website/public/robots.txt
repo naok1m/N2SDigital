@@ -37,3 +37,4 @@ Allow: /*.gif
 Allow: /*.svg
 Allow: /*.webp
 Allow: /*.ico
+

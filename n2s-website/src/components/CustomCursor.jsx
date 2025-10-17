@@ -58,33 +58,6 @@ export default function CustomCursor() {
         
         setIsHovering(true);
         gsap.to(cursor, { scale: 2, duration: 0.3, ease: "back.out(1.7)" });
-        
-        // Efeito de ripple
-        const ripple = document.createElement('div');
-        ripple.style.position = 'fixed';
-        ripple.style.left = mouseX + 'px';
-        ripple.style.top = mouseY + 'px';
-        ripple.style.width = '0px';
-        ripple.style.height = '0px';
-        ripple.style.borderRadius = '50%';
-        ripple.style.background = 'rgba(168, 85, 247, 0.3)';
-        ripple.style.transform = 'translate(-50%, -50%)';
-        ripple.style.pointerEvents = 'none';
-        ripple.style.zIndex = '9999';
-        
-        document.body.appendChild(ripple);
-        
-        gsap.fromTo(ripple,
-          { width: '0px', height: '0px', opacity: 1 },
-          { 
-            width: '100px', 
-            height: '100px', 
-            opacity: 0,
-            duration: 0.6,
-            ease: "power2.out",
-            onComplete: () => document.body.removeChild(ripple)
-          }
-        );
       }
       
       // Links

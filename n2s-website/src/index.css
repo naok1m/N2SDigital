@@ -26,11 +26,16 @@ img {
   image-rendering: crisp-edges;
 }
 
-/* Otimização para scroll suave */
+/* Configurações básicas de scroll */
 html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 80px;
+  overflow-x: hidden;
 }
+
+body {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
 
 /* Otimização para elementos com backdrop-blur */
 .backdrop-blur-element {
@@ -275,14 +280,6 @@ body {
   text-shadow: 0 0 8px rgba(168, 85, 247, 0.8);
 }
 
-/* Scroll Styles */
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  overflow-x: hidden;
-}
 
 /* Otimizações para animação de scroll do tablet */
 .element-to-animate {

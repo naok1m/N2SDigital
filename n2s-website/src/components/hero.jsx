@@ -456,7 +456,7 @@ export default function Hero() {
       <CustomCursor />
       
       {/* Primeira seção - Hero com headline centralizada */}
-      <section className="hero-section relative overflow-hidden flex flex-col items-center justify-center min-h-screen">
+      <section id="hero" className="hero-section relative overflow-hidden flex flex-col items-center justify-center min-h-screen">
         
         {/* Background profissional com gradiente ultra suave */}
         <div className="absolute inset-0" style={{

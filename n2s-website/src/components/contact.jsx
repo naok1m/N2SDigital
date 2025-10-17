@@ -104,7 +104,7 @@ function Contact() {
             has_phone: !!formData.telefone
         });
         
-        const message = `Olá! Gostaria de mais informações sobre os serviços da N2S Digital.
+        const message = `Olá! Gostaria de mais informações sobre os serviços da N2S Group.
 
 Nome: ${formData.nome}
 Email: ${formData.email}
@@ -147,7 +147,7 @@ Mensagem: ${formData.mensagem}`;
             services_count: selectedServices.length
         });
 
-        const message = `Olá! Gostaria de iniciar um projeto com a N2S Digital.
+        const message = `Olá! Gostaria de iniciar um projeto com a N2S Group.
 
 Serviços de interesse:
 ${selectedServices.map(service => `• ${service}`).join('\n')}
@@ -234,6 +234,7 @@ Por favor, entre em contato para discutirmos os detalhes do projeto.`;
     return (
         <>
         <section 
+            id="contato"
             ref={sectionRef}
             className="relative min-h-screen py-20 overflow-hidden section-noise-blur bg-gradient-to-b from-[#000002] to-[#190B2E]"
         >

@@ -108,3 +108,4 @@ export const trackConversion = (conversionId, value = 0, currency = 'BRL') => {
 };
 
 export default Analytics;
+

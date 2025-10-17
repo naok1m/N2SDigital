@@ -36,3 +36,5 @@ export const useThrottle = (callback, delay) => {
 
   return throttledCallback;
 };
+
+
