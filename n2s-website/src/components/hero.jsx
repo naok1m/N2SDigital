@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef, useMemo, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import GlassButton from './glassButton';
@@ -7,6 +7,7 @@ import StackCarousel from './StackCarousel';
 import Card3D from './Card3D';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart, faHospital, faRocket, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { useDebounce } from '../hooks/useDebounce';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -43,21 +44,21 @@ export default function Hero() {
   const [carouselCanStart, setCarouselCanStart] = useState(false);
   const [carouselPaused, setCarouselPaused] = useState(false);
 
-  // Funções para controlar pausa do carousel
-  const pauseCarousel = () => {
+  // Funções para controlar pausa do carousel (otimizadas com useCallback)
+  const pauseCarousel = useCallback(() => {
     setCarouselPaused(true);
-  };
+  }, []);
 
-  const resumeCarousel = () => {
+  const resumeCarousel = useCallback(() => {
     setCarouselPaused(false);
-  };
+  }, []);
 
-  // Função para animação de transição horizontal (simplificada)
-  const animatePageTransition = (isManual = false) => {
+  // Função para animação de transição horizontal (otimizada com useCallback)
+  const animatePageTransition = useCallback((isManual = false) => {
     if (projectsCardsRef.current) {
       const cardsContainer = projectsCardsRef.current;
       
-      // Animação simples de fade
+      // Animação simples de fade otimizada
       gsap.to(cardsContainer, {
         opacity: 0,
         duration: 0.2,
@@ -76,10 +77,10 @@ export default function Hero() {
         }
       });
     }
-  };
+  }, []);
 
-  // Função para mudança manual de página com animação
-  const handlePageChange = (newPage) => {
+  // Função para mudança manual de página com animação (otimizada)
+  const handlePageChange = useCallback((newPage) => {
     if (newPage !== currentPage) {
       // Animação especial para clique manual
       if (projectsIndicatorsRef.current) {
@@ -100,20 +101,20 @@ export default function Hero() {
       
       setCurrentPage(newPage);
     }
-  };
+  }, [currentPage, animatePageTransition]);
 
-  // Funções para navegação com setas
-  const handlePreviousPage = () => {
+  // Funções para navegação com setas (otimizadas)
+  const handlePreviousPage = useCallback(() => {
     const newPage = currentPage === 0 ? totalPages - 1 : currentPage - 1;
     handlePageChange(newPage);
-  };
+  }, [currentPage, handlePageChange]);
 
-  const handleNextPage = () => {
+  const handleNextPage = useCallback(() => {
     const newPage = (currentPage + 1) % totalPages;
     handlePageChange(newPage);
-  };
+  }, [currentPage, handlePageChange]);
   
-  // Carousel automático - só inicia após animação de entrada
+  // Carousel automático - só inicia após animação de entrada (otimizado)
   useEffect(() => {
     if (!carouselCanStart || carouselPaused) return;
 
@@ -128,7 +129,7 @@ export default function Hero() {
     }, 3000); // Muda a cada 3 segundos
 
     return () => clearInterval(interval);
-  }, [totalPages, carouselCanStart, carouselPaused]);
+  }, [carouselCanStart, carouselPaused, animatePageTransition]);
 
   // Animação dos indicadores apenas (otimizada)
   useEffect(() => {
@@ -201,6 +202,12 @@ export default function Hero() {
   useEffect(() => {
     const timeout = setTimeout(() => setShow(true), 100);
     
+    // Configurar GSAP para melhor performance
+    gsap.set([eclipseRef.current, planetaRef.current, correntesRef.current, liquidosRef.current], {
+      force3D: true,
+      willChange: "transform, opacity"
+    });
+    
     // Timeline principal para animações de entrada
     const tl = gsap.timeline({ delay: 0.5 });
     
@@ -265,6 +272,12 @@ export default function Hero() {
       }, "-=1.5"
     );
 
+    // Configurar elementos de texto para melhor performance
+    gsap.set([titleRef.current, subtitleRef.current, buttonRef.current], {
+      force3D: true,
+      willChange: "transform, opacity"
+    });
+    
     // Animação dos elementos de texto
     const textTl = gsap.timeline({ delay: 1 });
     
@@ -489,11 +502,15 @@ export default function Hero() {
           <img 
             ref={liquidosRef}
             src="/liquidos.png" 
-            alt="Líquidos" 
+            alt="Efeito visual líquido no background" 
             className="w-full h-full object-cover opacity-[0.9] background-image"
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
             style={{
               filter: 'contrast(1.3) brightness(1.1) blur(3px)',
-              mixBlendMode: 'soft-light'
+              mixBlendMode: 'soft-light',
+              willChange: 'transform'
             }}
           />
         </div>
@@ -503,13 +520,16 @@ export default function Hero() {
           <img 
             ref={correntesRef}
             src="/correntes.png" 
-            alt="Correntes" 
+            alt="Efeito visual de correntes no background" 
             className="w-full h-full object-cover opacity-[0.95] background-image"
+            loading="lazy"
+            decoding="async"
             style={{
               filter: 'contrast(1.4) brightness(1.0) blur(3px)',
               mixBlendMode: 'overlay',
               transform: 'translateX(-10%)',
-              objectPosition: 'left center'
+              objectPosition: 'left center',
+              willChange: 'transform'
             }}
           />
         </div>
@@ -539,10 +559,14 @@ export default function Hero() {
           <img 
             ref={planetaRef}
             src="/planeta.png" 
-            alt="Planeta" 
+            alt="Planeta estilizado no background" 
             className="w-[700px] h-[700px] md:w-[900px] md:h-[900px] lg:w-[1100px] lg:h-[1100px] opacity-90 object-contain mix-blend-mode-screen background-image"
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
             style={{
-              filter: 'blur(2px)'
+              filter: 'blur(2px)',
+              willChange: 'transform'
             }}
           />
         </div>
@@ -639,7 +663,7 @@ export default function Hero() {
                       <div className="w-4 h-4 bg-green-500 rounded-full shadow-sm"></div>
                     </div>
                     <div className="flex-1 bg-gray-700 rounded-lg px-4 py-2 ml-6">
-                      <div className="text-gray-400 text-sm text-left">n2sdigital.com</div>
+                      <div className="text-gray-400 text-sm text-left">n2sgroup.com.br</div>
                     </div>
                   </div>
                   

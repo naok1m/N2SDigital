@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useCallback, useMemo } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,6 +11,7 @@ import {
   faCheck,
   faRocket
 } from '@fortawesome/free-solid-svg-icons';
+import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -79,14 +80,15 @@ export default function AboutSection() {
 
   }, []);
 
-  const stats = [
+  // Otimizar dados com useMemo para evitar re-renders desnecessários
+  const stats = useMemo(() => [
     { number: "150+", label: "Projetos Entregues", icon: faCode },
     { number: "100+", label: "Clientes Satisfeitos", icon: faGlobe },
     { number: "98%", label: "Satisfação", icon: faCheck },
     { number: "4+", label: "Anos de Experiência", icon: faRocket }
-  ];
+  ], []);
 
-  const values = [
+  const values = useMemo(() => [
     {
       icon: faLightbulb,
       title: "Inovação",
@@ -102,11 +104,29 @@ export default function AboutSection() {
       title: "Colaboração",
       description: "Acreditamos que os melhores resultados vêm do trabalho em equipe e parcerias sólidas."
     }
-  ];
+  ], []);
 
   return (
-    <section id="sobre" ref={aboutRef} className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#000002] to-[#190B2E] section-noise-blur">
-      <div className="max-w-7xl mx-auto">
+    <section id="sobre" ref={aboutRef} className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden" style={{backgroundColor: '#000001'}}>
+      {/* Black Hole Background */}
+      <div className="absolute inset-0 flex items-center justify-center pt-64 pointer-events-none z-0">
+        <img 
+          src="/blackhole.png" 
+          alt="Buraco negro no background" 
+          className="w-[1200px] h-[1200px] md:w-[1400px] md:h-[1400px] lg:w-[1600px] lg:h-[1600px] xl:w-[1800px] xl:h-[1800px] opacity-[0.15] 
+                     mix-blend-mode-screen 
+                     pointer-events-none
+                     select-none"
+          loading="lazy"
+          decoding="async"
+          style={{
+            filter: 'brightness(1.3) contrast(1.2) blur(8px)',
+            willChange: 'transform'
+          }}
+        />
+      </div>
+      
+      <div className="max-w-7xl mx-auto relative z-10">
         
         {/* Hero da Seção */}
         <div ref={heroRef} className="text-center mb-16">
@@ -136,6 +156,7 @@ export default function AboutSection() {
             </div>
           ))}
         </div>
+
 
         {/* Values Section */}
         <div ref={valuesRef} className="grid grid-cols-1 md:grid-cols-3 gap-8">

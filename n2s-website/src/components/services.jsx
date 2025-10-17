@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -23,7 +23,7 @@ const ServiceCard = ({ icon, title, description, features, index, category }) =>
 
   // Removidas animações individuais - agora padronizadas no componente pai
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = useCallback((e) => {
     if (window.innerWidth < 768) return; // Desabilitar em mobile
     
     const card = cardRef.current;
@@ -45,7 +45,7 @@ const ServiceCard = ({ icon, title, description, features, index, category }) =>
       ease: "power2.out",
       transformPerspective: 1000
     });
-  };
+  }, []);
 
   const handleMouseLeave = () => {
     gsap.to(cardRef.current, {

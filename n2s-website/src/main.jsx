@@ -1,25 +1,35 @@
-// Em main.jsx ou index.jsx
-
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Routes, Route } from 'react-router-dom'; // Importe o BrowserRouter
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './index.css';
+import Analytics from './components/Analytics';
 
-// Importe suas páginas
+// Import pages
 import Home from './pages/Home';
 import Services from './pages/Services';
 
+// Performance monitoring
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then((registration) => {
+        console.log('SW registered: ', registration);
+      })
+      .catch((registrationError) => {
+        console.log('SW registration failed: ', registrationError);
+      });
+  });
+}
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter> {/* PASSO 1: Envolva tudo com BrowserRouter */}
+    <Analytics />
+    <BrowserRouter>
       <Routes>
-        {/* PASSO 2: Defina a rota da Home para o caminho "/" */}
         <Route path="/" element={<Home />} />
-        
-        {/* Rota para a página Services */}
         <Route path="/services" element={<Services />} />
-
-        {/* Adicione outras rotas aqui no futuro, como "/contato", etc. */}
+        {/* Add 404 redirect */}
+        <Route path="*" element={<Home />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
