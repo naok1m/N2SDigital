@@ -31,6 +31,59 @@ function Contact() {
         mensagem: ''
     });
 
+    // Estados para o modal de projeto
+    const [showProjectModal, setShowProjectModal] = useState(false);
+    const [selectedServices, setSelectedServices] = useState([]);
+
+    // Dados dos serviços para o modal
+    const projectServices = [
+        {
+            id: 1,
+            name: "Website Institucional",
+            description: "Site profissional para sua empresa"
+        },
+        {
+            id: 2,
+            name: "Landing Page",
+            description: "Página de alta conversão para capturar leads"
+        },
+        {
+            id: 3,
+            name: "Sistema Web",
+            description: "Sistema personalizado para gestão"
+        },
+        {
+            id: 4,
+            name: "SEO & Otimização",
+            description: "Aparecer no Google"
+        },
+        {
+            id: 5,
+            name: "Outros",
+            description: "Solução personalizada para sua necessidade"
+        },
+        {
+            id: 6,
+            name: "E-commerce/Loja Virtual",
+            description: "Loja online para vender produtos"
+        },
+        {
+            id: 7,
+            name: "Aplicativo Mobile",
+            description: "App para iOS e Android"
+        },
+        {
+            id: 8,
+            name: "Linktree",
+            description: "Página de links para redes sociais"
+        },
+        {
+            id: 9,
+            name: "Automação",
+            description: "Automatizar processos"
+        }
+    ];
+
     const handleInputChange = useCallback((e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
@@ -71,6 +124,51 @@ Mensagem: ${formData.mensagem}`;
             service_interest: formData.servico
         });
     }, [formData]);
+
+    // Funções para o modal de projeto
+    const handleServiceToggle = useCallback((serviceName) => {
+        setSelectedServices(prev => {
+            if (prev.includes(serviceName)) {
+                return prev.filter(name => name !== serviceName);
+            } else {
+                return [...prev, serviceName];
+            }
+        });
+    }, []);
+
+    const handleProjectSubmission = useCallback(() => {
+        if (selectedServices.length === 0) return;
+
+        // Track project submission
+        trackEvent('project_modal_submit', {
+            event_category: 'engagement',
+            event_label: 'project_briefing',
+            selected_services: selectedServices,
+            services_count: selectedServices.length
+        });
+
+        const message = `Olá! Gostaria de iniciar um projeto com a N2S Digital.
+
+Serviços de interesse:
+${selectedServices.map(service => `• ${service}`).join('\n')}
+
+Por favor, entre em contato para discutirmos os detalhes do projeto.`;
+
+        const whatsappUrl = `https://wa.me/5585996941119?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
+        
+        // Close modal after submission
+        setShowProjectModal(false);
+        setSelectedServices([]);
+        
+        // Track WhatsApp click from modal
+        trackEvent('whatsapp_click', {
+            event_category: 'engagement',
+            event_label: 'project_modal_whatsapp',
+            source: 'project_modal',
+            services: selectedServices.join(', ')
+        });
+    }, [selectedServices]);
 
     useEffect(() => {
         // Animação de entrada da seção
@@ -134,6 +232,7 @@ Mensagem: ${formData.mensagem}`;
     }, []);
 
     return (
+        <>
         <section 
             ref={sectionRef}
             className="relative min-h-screen py-20 overflow-hidden section-noise-blur bg-gradient-to-b from-[#000002] to-[#190B2E]"
@@ -356,16 +455,8 @@ Mensagem: ${formData.mensagem}`;
                                                button_location: 'contact_section'
                                            });
                                            
-                                           const message = "Olá! Gostaria de iniciar um projeto com a N2S Digital.";
-                                           const whatsappUrl = `https://wa.me/5585996941119?text=${encodeURIComponent(message)}`;
-                                           window.open(whatsappUrl, '_blank');
-                                           
-                                           // Track WhatsApp click from CTA
-                                           trackEvent('whatsapp_click', {
-                                               event_category: 'engagement',
-                                               event_label: 'start_project_whatsapp',
-                                               source: 'cta_button'
-                                           });
+                                           // Open project modal
+                                           setShowProjectModal(true);
                                        }, [])}
                                        className="flex items-center justify-center gap-3 mx-auto
                                                   bg-gradient-to-r from-[rgba(196,181,253,0.4)] via-[rgba(196,181,253,0.25)] to-[rgba(196,181,253,0.4)]
@@ -387,6 +478,115 @@ Mensagem: ${formData.mensagem}`;
                 </div>
             </div>
         </section>
+
+        {/* Modal do Checklist de Projeto */}
+        {showProjectModal && (
+            <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4">
+                <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-white/20 max-w-4xl w-full max-h-[90vh] overflow-y-auto animate-modal-in">
+                    <div className="p-4 sm:p-6 lg:p-8">
+                        {/* Header do Modal */}
+                        <div className="flex justify-between items-center mb-8">
+                            <div>
+                                <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+                                    Iniciar Meu Projeto
+                                </h2>
+                                <p className="text-gray-300 text-sm sm:text-base">
+                                    Selecione os serviços que você precisa para seu projeto
+                                </p>
+                            </div>
+                            <button
+                                onClick={() => setShowProjectModal(false)}
+                                className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition-colors"
+                            >
+                                ✕
+                            </button>
+                        </div>
+
+                        {/* Checklist de Serviços */}
+                        <div className="grid md:grid-cols-2 gap-4 mb-8">
+                            {projectServices.map((service) => (
+                                <div
+                                    key={service.id}
+                                    onClick={() => handleServiceToggle(service.name)}
+                                    className={`p-4 rounded-xl border cursor-pointer transition-all duration-300 transform ${
+                                        selectedServices.includes(service.name)
+                                            ? 'bg-purple-500/20 border-purple-500/50 scale-[1.02] shadow-lg shadow-purple-500/20'
+                                            : 'bg-white/5 border-white/20 hover:border-white/40 hover:bg-white/10 hover:scale-[1.01]'
+                                    }`}
+                                >
+                                    <div className="flex items-start gap-3">
+                                        <div className={`w-5 h-5 rounded border-2 flex items-center justify-center mt-0.5 transition-all duration-200 ${
+                                            selectedServices.includes(service.name)
+                                                ? 'bg-purple-500 border-purple-500 scale-110'
+                                                : 'border-white/40 hover:border-white/60'
+                                        }`}>
+                                            {selectedServices.includes(service.name) && (
+                                                <span className="text-white text-xs">✓</span>
+                                            )}
+                                        </div>
+                                        <div>
+                                            <h3 className="text-white font-semibold mb-1">
+                                                {service.name}
+                                            </h3>
+                                            <p className="text-gray-400 text-sm">
+                                                {service.description}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Resumo */}
+                        {selectedServices.length > 0 && (
+                            <div className="bg-white/5 rounded-xl p-6 mb-8 border border-white/10">
+                                <h3 className="text-white font-semibold mb-4">
+                                    Serviços Selecionados ({selectedServices.length})
+                                </h3>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                                    {selectedServices.map((service, index) => (
+                                        <span
+                                            key={service}
+                                            className="bg-purple-500/20 text-purple-300 px-4 py-2 rounded-full text-sm border border-purple-500/30 
+                                                       flex items-center justify-center text-center
+                                                       transition-all duration-300 hover:bg-purple-500/30 hover:scale-105
+                                                       animate-fade-in"
+                                            style={{
+                                                animationDelay: `${index * 100}ms`
+                                            }}
+                                        >
+                                            {service}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Botões de Ação */}
+                        <div className="flex flex-col sm:flex-row gap-4">
+                            <button
+                                onClick={() => setShowProjectModal(false)}
+                                className="flex-1 py-3 px-6 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                onClick={handleProjectSubmission}
+                                disabled={selectedServices.length === 0}
+                                className={`flex-1 py-3 px-6 text-white font-semibold rounded-xl transition-all duration-300 disabled:cursor-not-allowed ${
+                                    selectedServices.length > 0
+                                        ? 'bg-gradient-to-r from-[rgba(196,181,253,0.4)] via-[rgba(196,181,253,0.25)] to-[rgba(196,181,253,0.4)] border border-[rgba(196,181,253,0.6)] backdrop-blur-[20px] shadow-[0_8px_32px_rgba(196,181,253,0.15),inset_0_1px_0_rgba(255,255,255,0.2)] hover:shadow-[0_12px_40px_rgba(196,181,253,0.25),inset_0_1px_0_rgba(255,255,255,0.3)] hover:scale-105'
+                                        : 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
+                                }`}
+                            >
+                                Enviar Briefing
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )}
+        </>
     );
 }
 
