@@ -6,7 +6,7 @@ import {
   faRocket, 
   faLaptop, 
   faShoppingCart, 
-  faUtensils,
+  faMobile,
   faArrowRight,
   faCheck
 } from '@fortawesome/free-solid-svg-icons';
@@ -278,15 +278,15 @@ export default function Services() {
       ]
     },
     {
-      icon: faUtensils,
-      title: "Cardápios Digitais",
-      description: "Solução moderna e interativa para restaurantes modernizarem seu atendimento.",
-      category: "Gastronomia",
+      icon: faMobile,
+      title: "Aplicativos Mobile",
+      description: "Apps nativos e híbridos para iOS e Android que conectam você com seus clientes.",
+      category: "Mobile",
       features: [
-        "Interface intuitiva e atrativa",
-        "Atualização em tempo real",
-        "QR Code para acesso rápido",
-        "Painel administrativo completo"
+        "Desenvolvimento nativo iOS e Android",
+        "Interface intuitiva e responsiva",
+        "Integração com APIs e sistemas",
+        "Publicação nas app stores"
       ]
     }
   ];

@@ -4,6 +4,7 @@ import Hero from '../../components/hero';
 import Services from '../../components/services';
 import AboutSection from '../../components/about';
 import Contact from '../../components/contact';
+import Footer from '../../components/Footer';
 import SEOHead from '../../components/SEOHead';
 
 function Home() {
@@ -20,6 +21,7 @@ function Home() {
             <Services/>
             <AboutSection/>
             <Contact/>
+            <Footer/>
         </>
     )
 }
