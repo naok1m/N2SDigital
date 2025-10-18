@@ -10,7 +10,8 @@ import {
   faCode,
   faRocket,
   faChevronUp,
-  faExternalLinkAlt
+  faExternalLinkAlt,
+  faShareAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { 
   faWhatsapp, 
@@ -157,7 +158,7 @@ export default function Footer() {
         <div className="relative z-10">
           {/* Main Footer Content */}
           <div className="max-w-7xl mx-auto px-6 py-16">
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
               
               {/* Company Info & Logo */}
               <div className="lg:col-span-1">
@@ -242,25 +243,31 @@ export default function Footer() {
                   ))}
                 </ul>
 
-                {/* Social Links */}
-                <div className="mt-8">
-                  <h5 className="text-white font-semibold mb-4">Siga-nos</h5>
-                  <div className="flex flex-wrap gap-3">
-                    {socialLinks.map((social, index) => (
+              </div>
+
+              {/* Social Media */}
+              <div>
+                <h4 className="text-white font-bold text-lg mb-6 flex items-center gap-2">
+                  <FontAwesomeIcon icon={faShareAlt} className="text-purple-400" />
+                  Redes Sociais
+                </h4>
+                <div className="space-y-4">
+                  {socialLinks.map((social, index) => (
+                    <div key={index}>
                       <a
-                        key={index}
                         href={social.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-10 h-10 bg-gradient-to-br from-white/10 to-white/5 rounded-lg flex items-center justify-center border border-white/20 hover:border-purple-500/50 transition-all duration-300 hover:scale-110 hover:shadow-lg group hover:bg-purple-500/20"
+                        className="text-gray-400 hover:text-purple-400 transition-colors duration-300 text-sm flex items-center gap-3 group"
                       >
                         <FontAwesomeIcon 
                           icon={social.icon} 
-                          className="text-gray-400 group-hover:text-purple-400 transition-colors duration-300" 
+                          className="w-4 h-4 text-purple-400 group-hover:scale-110 transition-transform duration-300" 
                         />
+                        {social.name}
                       </a>
-                    ))}
-                  </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

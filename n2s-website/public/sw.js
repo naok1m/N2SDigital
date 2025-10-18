@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // Service Worker para cache de assets
 const CACHE_NAME = 'n2s-digital-v1';
 const STATIC_CACHE_URLS = [
@@ -8,155 +7,72 @@ const STATIC_CACHE_URLS = [
   // Adicionar outros assets críticos conforme necessário
 ];
 
-// Instalar Service Worker
-=======
-const CACHE_NAME = 'n2s-digital-v1';
-const urlsToCache = [
-  '/',
-  '/src/main.jsx',
-  '/src/index.css',
-  '/src/assets/logoN2S.png',
-  '/public/arco.png',
-  '/public/arco2.png',
-  '/public/asteroides.png',
-  '/public/banner-cta.png',
-  '/public/banner-cta2.png',
-  '/public/banner-cta3.png',
-  '/public/correntes.png',
-  '/public/estela.png',
-  '/public/liquidos.png',
-  '/public/love.png',
-  '/public/noise.png',
-  '/public/nuvens-baixo.png',
-  '/public/nuvens-cima.png',
-  '/public/pattern.png',
-  '/public/planeta.png',
-  'https://fonts.googleapis.com/css2?family=Clash+Grotesk:wght@200..700&display=swap'
-];
-
-// Install event
->>>>>>> a28db1b7ad5a39add824902dd69db824ba305994
+// Instalação do Service Worker
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-<<<<<<< HEAD
-        console.log('Service Worker: Cache aberto');
         return cache.addAll(STATIC_CACHE_URLS);
       })
-      .catch((error) => {
-        console.error('Service Worker: Erro ao cachear assets', error);
-=======
-        return cache.addAll(urlsToCache);
->>>>>>> a28db1b7ad5a39add824902dd69db824ba305994
+      .then(() => {
+        return self.skipWaiting();
       })
   );
 });
 
-<<<<<<< HEAD
-// Ativar Service Worker
-=======
-// Fetch event
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        // Return cached version or fetch from network
-        return response || fetch(event.request);
-      }
-    )
-  );
-});
-
-// Activate event
->>>>>>> a28db1b7ad5a39add824902dd69db824ba305994
+// Ativação do Service Worker
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
-<<<<<<< HEAD
-            console.log('Service Worker: Removendo cache antigo', cacheName);
-=======
->>>>>>> a28db1b7ad5a39add824902dd69db824ba305994
             return caches.delete(cacheName);
           }
         })
       );
+    }).then(() => {
+      return self.clients.claim();
     })
   );
 });
 
-<<<<<<< HEAD
-// Interceptar requisições
+// Interceptação de requisições
 self.addEventListener('fetch', (event) => {
-  // Ignorar requisições de extensões do Chrome e outros esquemas não suportados
-  if (event.request.url.startsWith('chrome-extension://') || 
-      event.request.url.startsWith('moz-extension://') ||
-      event.request.url.startsWith('safari-extension://') ||
-      event.request.url.startsWith('ms-browser-extension://')) {
-    return;
-  }
-  
-  // Estratégia Cache First para assets estáticos
-  if (event.request.destination === 'image' || 
-      event.request.destination === 'script' || 
-      event.request.destination === 'style') {
-    
-    event.respondWith(
-      caches.match(event.request)
-        .then((response) => {
-          if (response) {
-            return response;
-          }
-          
-          return fetch(event.request).then((response) => {
-            // Verificar se a resposta é válida
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-            
-            // Clonar a resposta
-            const responseToCache = response.clone();
-            
-            caches.open(CACHE_NAME)
-              .then((cache) => {
-                cache.put(event.request, responseToCache);
-              });
-            
-            return response;
-          });
-        })
-    );
-  }
-  
-  // Estratégia Network First para páginas HTML
-  else if (event.request.destination === 'document') {
-    event.respondWith(
-      fetch(event.request)
-        .then((response) => {
-          // Verificar se a resposta é válida
+  event.respondWith(
+    caches.match(event.request)
+      .then((response) => {
+        // Se encontrou no cache, retorna a versão em cache
+        if (response) {
+          return response;
+        }
+
+        // Se não encontrou, faz a requisição para a rede
+        return fetch(event.request).then((response) => {
+          // Verifica se recebeu uma resposta válida
           if (!response || response.status !== 200 || response.type !== 'basic') {
             return response;
           }
-          
-          // Clonar a resposta
+
+          // Clona a resposta
           const responseToCache = response.clone();
-          
+
+          // Adiciona ao cache
           caches.open(CACHE_NAME)
             .then((cache) => {
               cache.put(event.request, responseToCache);
             });
-          
+
           return response;
-        })
-        .catch(() => {
-          // Fallback para cache se a rede falhar
-          return caches.match(event.request);
-        })
-    );
-  }
+        });
+      })
+      .catch(() => {
+        // Se falhar, retorna uma página offline personalizada
+        if (event.request.destination === 'document') {
+          return caches.match('/index.html');
+        }
+      })
+  );
 });
 
 // Mensagens do Service Worker
@@ -166,12 +82,71 @@ self.addEventListener('message', (event) => {
   }
 });
 
-// Notificar sobre atualizações
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'GET_VERSION') {
-    event.ports[0].postMessage({ version: CACHE_NAME });
+// Notificações push (opcional)
+self.addEventListener('push', (event) => {
+  const options = {
+    body: event.data ? event.data.text() : 'Nova notificação da N2S Digital',
+    icon: '/icon-192x192.png',
+    badge: '/icon-72x72.png',
+    vibrate: [100, 50, 100],
+    data: {
+      dateOfArrival: Date.now(),
+      primaryKey: 1
+    },
+    actions: [
+      {
+        action: 'explore',
+        title: 'Ver detalhes',
+        icon: '/icon-192x192.png'
+      },
+      {
+        action: 'close',
+        title: 'Fechar',
+        icon: '/icon-192x192.png'
+      }
+    ]
+  };
+
+  event.waitUntil(
+    self.registration.showNotification('N2S Digital', options)
+  );
+});
+
+// Clique em notificação
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+
+  if (event.action === 'explore') {
+    event.waitUntil(
+      clients.openWindow('/')
+    );
   }
 });
-=======
 
->>>>>>> a28db1b7ad5a39add824902dd69db824ba305994
+// Sincronização em background (opcional)
+self.addEventListener('sync', (event) => {
+  if (event.tag === 'background-sync') {
+    event.waitUntil(doBackgroundSync());
+  }
+});
+
+function doBackgroundSync() {
+  // Implementar lógica de sincronização em background
+  return Promise.resolve();
+}
+
+// Limpeza de cache antigo
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheName !== CACHE_NAME) {
+            console.log('Removendo cache antigo:', cacheName);
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+});
