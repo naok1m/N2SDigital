@@ -8,8 +8,11 @@ const Card3D = ({ title, description, technologies, icon, image, tag }) => {
   const tagRef = useRef(null);
   const tagContentRef = useRef(null);
 
-  // Animação 3D simplificada
+  // Animação 3D simplificada - desabilitada em mobile
   const handleMouseMove = useCallback((e) => {
+    // Desabilita efeitos 3D em dispositivos móveis
+    if (window.innerWidth < 768) return;
+    
     const card = cardRef.current;
     if (!card) return;
 
@@ -171,20 +174,25 @@ const Card3D = ({ title, description, technologies, icon, image, tag }) => {
   return (
     <div 
       ref={cardRef}
-      className="card-3d w-full max-w-sm rounded-xl border border-white/20 hover:border-white/40 transition-all duration-300 shadow-2xl cursor-pointer overflow-hidden"
+      className="card-3d w-full max-w-sm mx-auto rounded-xl border border-white/20 hover:border-white/40 transition-all duration-300 shadow-2xl cursor-pointer overflow-hidden"
       style={{
         boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.1)',
         background: 'rgba(255, 255, 255, 0.05)',
+        transformStyle: 'preserve-3d'
       }}
     >
       {/* Container da imagem principal */}
-      <div className="relative h-64 overflow-hidden">
+      <div className="relative h-64 sm:h-72 md:h-80 overflow-hidden">
         {/* Imagem do projeto */}
         <OptimizedImage 
           src={image} 
           alt={title}
-          className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+          className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105"
           loading="lazy"
+          style={{
+            minHeight: '100%',
+            minWidth: '100%'
+          }}
         />
         
         {/* Overlay gradiente para melhor legibilidade */}

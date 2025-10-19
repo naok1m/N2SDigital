@@ -11,7 +11,6 @@ import {
   faCheck
 } from '@fortawesome/free-solid-svg-icons';
 import GlassButton from './glassButton';
-import CustomCursor from './CustomCursor';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -199,6 +198,58 @@ export default function Services() {
     );
   };
 
+  // Função para scroll suave até a seção de contato
+  const scrollToContact = useCallback(() => {
+    console.log('scrollToContact chamada (services)');
+    
+    // Verificar se estamos na página home
+    const isOnHomePage = window.location.pathname === '/' || window.location.pathname === '/home';
+    
+    if (!isOnHomePage) {
+      // Se não estiver na home, navegar para home com hash
+      console.log('Navegando para home com hash #contato (services)');
+      window.location.href = '/#contato';
+      return;
+    }
+    
+    // Tentar encontrar a seção de contato
+    let contactSection = document.getElementById('contato');
+    
+    // Se não encontrar, tentar outras formas
+    if (!contactSection) {
+      contactSection = document.querySelector('[id*="contato"]');
+    }
+    
+    if (!contactSection) {
+      contactSection = document.querySelector('section:last-of-type');
+    }
+    
+    console.log('Seção de contato encontrada (services):', contactSection);
+    
+    if (contactSection) {
+      const elementPosition = contactSection.offsetTop;
+      const offsetPosition = elementPosition - 100; // Aumentar offset para garantir visibilidade
+      
+      console.log('Posição calculada (services):', { elementPosition, offsetPosition });
+      
+      // Usar requestAnimationFrame para garantir que o DOM esteja pronto
+      requestAnimationFrame(() => {
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+        console.log('Scroll executado (services) para:', offsetPosition);
+      });
+    } else {
+      console.error('Seção de contato não encontrada (services)!');
+      // Fallback: scroll para o final da página
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+  }, []);
+
   useEffect(() => {
     // Animação de entrada padronizada - seguindo o padrão das outras seções
     const heroTl = gsap.timeline();
@@ -293,8 +344,6 @@ export default function Services() {
 
   return (
     <>
-      <CustomCursor />
-      
       <section
         ref={sectionRef}
         id="servicos"
@@ -303,13 +352,13 @@ export default function Services() {
           background: 'linear-gradient(to bottom, #1a0b2e 0%, #0a0a0f 100%)'
         }}
       >
-        {/* Background com arco.png e efeitos */}
+        {/* Background com arco.webp e efeitos */}
         <div 
           className="absolute inset-0"
           style={{
             background: `
               linear-gradient(rgba(10, 10, 15, 0.8), rgba(10, 10, 15, 0.8)),
-              url('/arco2.png')
+              url('/arco2.webp')
             `,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
@@ -366,7 +415,7 @@ export default function Services() {
                 Entre em contato e descubra como podemos transformar sua presença digital
               </p>
               <div className="flex justify-center">
-              <GlassButton onClick={handleOpenForm}>
+              <GlassButton onClick={scrollToContact}>
                 Fale Conosco Agora
               </GlassButton>
             </div>

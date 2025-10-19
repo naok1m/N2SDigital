@@ -306,10 +306,10 @@ export default function PrivacyPage() {
                         <h4 className="font-bold text-white mb-2 text-lg">Telefone</h4>
                         <p className="text-gray-300 mb-2">Ligue para nós diretamente</p>
                         <a 
-                          href="tel:+5585996941119" 
+                          href="tel:+5585991120816" 
                           className="text-purple-400 hover:text-purple-300 transition-colors duration-300 font-medium"
                         >
-                          +55 (85) 9 9694-1119
+                          +55 (85) 9 9112-0816
                         </a>
                       </div>
                     </div>

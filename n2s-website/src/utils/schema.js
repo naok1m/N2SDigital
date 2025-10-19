@@ -17,7 +17,7 @@ export const organizationSchema = {
   },
   "contactPoint": {
     "@type": "ContactPoint",
-    "telephone": "+55-85-99694-1119",
+    "telephone": "+55-85-99112-0816",
     "contactType": "customer service",
     "areaServed": "BR",
     "availableLanguage": "Portuguese"
@@ -26,7 +26,7 @@ export const organizationSchema = {
   "sameAs": [
     "https://www.instagram.com/n2sdigital",
     "https://www.linkedin.com/company/n2sdigital",
-    "https://wa.me/5585996941119"
+    "https://wa.me/5585991120816"
   ],
   "areaServed": {
     "@type": "Country",

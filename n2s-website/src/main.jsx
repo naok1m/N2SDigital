@@ -8,6 +8,8 @@ import Analytics from './components/Analytics';
 import Home from './pages/Home';
 import Services from './pages/Services';
 import Privacy from './pages/Privacy';
+import Terms from './pages/Terms';
+import Cookies from './pages/Cookies';
 
 // Registrar Service Worker
 if ('serviceWorker' in navigator) {
@@ -43,6 +45,8 @@ createRoot(document.getElementById('root')).render(
         <Route path="/" element={<Home />} />
         <Route path="/services" element={<Services />} />
         <Route path="/privacy" element={<Privacy />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/cookies" element={<Cookies />} />
         {/* Add 404 redirect */}
         <Route path="*" element={<Home />} />
       </Routes>

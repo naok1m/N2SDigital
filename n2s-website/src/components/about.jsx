@@ -111,7 +111,7 @@ export default function AboutSection() {
       {/* Black Hole Background */}
       <div className="absolute inset-0 flex items-center justify-center pt-64 pointer-events-none z-0">
         <img 
-          src="/blackhole.png" 
+          src="/blackhole.webp" 
           alt="Buraco negro no background" 
           className="w-[1200px] h-[1200px] md:w-[1400px] md:h-[1400px] lg:w-[1600px] lg:h-[1600px] xl:w-[1800px] xl:h-[1800px] opacity-[0.15] 
                      mix-blend-mode-screen 

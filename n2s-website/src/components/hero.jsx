@@ -2,7 +2,6 @@ import React, { useState, useEffect, useLayoutEffect, useRef, useMemo, useCallba
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import GlassButton from './glassButton';
-import CustomCursor from './CustomCursor';
 import StackCarousel from './StackCarousel';
 import Card3D from './Card3D';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -40,13 +39,14 @@ export default function Hero() {
   const projectsCardsRef = useRef(null);
   const projectsShapeRef = useRef(null);
   const projectsIndicatorsRef = useRef(null);
+  const mobileProjectsRefs = useRef([]);
   
   // Estado para controlar se a animação já foi executada
   const [projectsAnimationPlayed, setProjectsAnimationPlayed] = useState(false);
   
   // Estado para controlar o carousel de projetos
   const [currentPage, setCurrentPage] = useState(0);
-  const totalPages = 5;
+  const totalPages = 4;
   const [carouselCanStart, setCarouselCanStart] = useState(false);
   const [carouselPaused, setCarouselPaused] = useState(false);
 
@@ -111,14 +111,130 @@ export default function Hero() {
 
   // Funções para navegação com setas (otimizadas)
   const handlePreviousPage = useCallback(() => {
-    const newPage = currentPage === 0 ? totalPages - 1 : currentPage - 1;
-    handlePageChange(newPage);
+    if (window.innerWidth < 640) { // Mobile
+      const currentMobileRef = mobileProjectsRefs.current[currentPage];
+      if (currentMobileRef) {
+        const scrollLeft = currentMobileRef.scrollLeft;
+        const cardWidth = currentMobileRef.scrollWidth / 3; // 3 cards por página
+        
+        if (scrollLeft > 0) {
+          // Ainda há cards à esquerda, scroll horizontal
+          currentMobileRef.scrollTo({
+            left: scrollLeft - cardWidth,
+            behavior: 'smooth'
+          });
+        } else {
+          // Está no início, vai para página anterior
+          const newPage = currentPage === 0 ? totalPages - 1 : currentPage - 1;
+          handlePageChange(newPage);
+          // Scroll para o final da nova página
+          setTimeout(() => {
+            const newMobileRef = mobileProjectsRefs.current[newPage];
+            if (newMobileRef) {
+              newMobileRef.scrollTo({
+                left: newMobileRef.scrollWidth - newMobileRef.clientWidth,
+                behavior: 'smooth'
+              });
+            }
+          }, 100);
+        }
+      }
+    } else {
+      // Desktop - comportamento original
+      const newPage = currentPage === 0 ? totalPages - 1 : currentPage - 1;
+      handlePageChange(newPage);
+    }
   }, [currentPage, handlePageChange]);
 
   const handleNextPage = useCallback(() => {
-    const newPage = (currentPage + 1) % totalPages;
-    handlePageChange(newPage);
+    if (window.innerWidth < 640) { // Mobile
+      const currentMobileRef = mobileProjectsRefs.current[currentPage];
+      if (currentMobileRef) {
+        const scrollLeft = currentMobileRef.scrollLeft;
+        const scrollWidth = currentMobileRef.scrollWidth;
+        const clientWidth = currentMobileRef.clientWidth;
+        const cardWidth = scrollWidth / 3; // 3 cards por página
+        
+        if (scrollLeft + clientWidth < scrollWidth - 10) { // 10px de tolerância
+          // Ainda há cards à direita, scroll horizontal
+          currentMobileRef.scrollTo({
+            left: scrollLeft + cardWidth,
+            behavior: 'smooth'
+          });
+        } else {
+          // Está no final, vai para próxima página
+          const newPage = (currentPage + 1) % totalPages;
+          handlePageChange(newPage);
+          // Scroll para o início da nova página
+          setTimeout(() => {
+            const newMobileRef = mobileProjectsRefs.current[newPage];
+            if (newMobileRef) {
+              newMobileRef.scrollTo({
+                left: 0,
+                behavior: 'smooth'
+              });
+            }
+          }, 100);
+        }
+      }
+    } else {
+      // Desktop - comportamento original
+      const newPage = (currentPage + 1) % totalPages;
+      handlePageChange(newPage);
+    }
   }, [currentPage, handlePageChange]);
+
+  // Função para scroll suave até a seção de contato
+  const scrollToContact = useCallback(() => {
+    console.log('scrollToContact chamada');
+    
+    // Verificar se estamos na página home
+    const isOnHomePage = window.location.pathname === '/' || window.location.pathname === '/home';
+    
+    if (!isOnHomePage) {
+      // Se não estiver na home, navegar para home com hash
+      console.log('Navegando para home com hash #contato');
+      window.location.href = '/#contato';
+      return;
+    }
+    
+    // Tentar encontrar a seção de contato
+    let contactSection = document.getElementById('contato');
+    
+    // Se não encontrar, tentar outras formas
+    if (!contactSection) {
+      contactSection = document.querySelector('[id*="contato"]');
+    }
+    
+    if (!contactSection) {
+      contactSection = document.querySelector('section:last-of-type');
+    }
+    
+    console.log('Seção de contato encontrada:', contactSection);
+    
+    if (contactSection) {
+      const elementPosition = contactSection.offsetTop;
+      const offsetPosition = elementPosition - 100; // Aumentar offset para garantir visibilidade
+      
+      console.log('Posição calculada:', { elementPosition, offsetPosition });
+      
+      // Usar requestAnimationFrame para garantir que o DOM esteja pronto
+      requestAnimationFrame(() => {
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+        console.log('Scroll executado para:', offsetPosition);
+      });
+    } else {
+      console.error('Seção de contato não encontrada!');
+      // Fallback: scroll para o final da página
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+  }, []);
   
   // Carousel automático - só inicia após animação de entrada (otimizado)
   useEffect(() => {
@@ -153,52 +269,83 @@ export default function Hero() {
     }
   }, [currentPage]);
 
+  // Variáveis para armazenar as animações constantes
+  const continuousAnimations = useRef({
+    planeta: null,
+    correntes: null,
+    liquidos: null,
+    eclipse: null,
+    estela: null
+  });
+
   // Função para iniciar animações constantes
   const startContinuousAnimations = () => {
-    // Animação constante do planeta - rotação muito lenta
-    gsap.to(planetaRef.current, {
-      rotation: "+=360",
-      duration: 180, // 3 minutos para uma rotação completa
-      ease: "none",
-      repeat: -1
+    // Limpar animações anteriores se existirem
+    Object.values(continuousAnimations.current).forEach(animation => {
+      if (animation) {
+        animation.kill();
+      }
     });
+
+    // Animação constante do planeta - rotação muito lenta
+    if (planetaRef.current) {
+      continuousAnimations.current.planeta = gsap.to(planetaRef.current, {
+        rotation: "+=360",
+        duration: 180, // 3 minutos para uma rotação completa
+        ease: "none",
+        repeat: -1,
+        paused: false
+      });
+    }
 
     // Animação constante das correntes - movimento horizontal suave
-    gsap.to(correntesRef.current, {
-      x: "+=30",
-      duration: 8,
-      ease: "power1.inOut",
-      repeat: -1,
-      yoyo: true
-    });
+    if (correntesRef.current) {
+      continuousAnimations.current.correntes = gsap.to(correntesRef.current, {
+        x: "+=30",
+        duration: 8,
+        ease: "power1.inOut",
+        repeat: -1,
+        yoyo: true,
+        paused: false
+      });
+    }
 
     // Animação constante dos líquidos - movimento vertical suave
-    gsap.to(liquidosRef.current, {
-      y: "+=20",
-      duration: 6,
-      ease: "power1.inOut",
-      repeat: -1,
-      yoyo: true
-    });
+    if (liquidosRef.current) {
+      continuousAnimations.current.liquidos = gsap.to(liquidosRef.current, {
+        y: "+=20",
+        duration: 6,
+        ease: "power1.inOut",
+        repeat: -1,
+        yoyo: true,
+        paused: false
+      });
+    }
 
     // Animação constante do eclipse - pulso suave
-    gsap.to(eclipseRef.current, {
-      scale: 1.1,
-      duration: 8,
-      ease: "power1.inOut",
-      repeat: -1,
-      yoyo: true
-    });
+    if (eclipseRef.current) {
+      continuousAnimations.current.eclipse = gsap.to(eclipseRef.current, {
+        scale: 1.1,
+        duration: 8,
+        ease: "power1.inOut",
+        repeat: -1,
+        yoyo: true,
+        paused: false
+      });
+    }
 
     // Animação constante da estela - rotação lenta como o planeta
     if (estelaRef.current) {
-      gsap.to(estelaRef.current, {
+      continuousAnimations.current.estela = gsap.to(estelaRef.current, {
         rotation: "+=360",
         duration: 120, // 2 minutos para uma rotação completa (mais rápido que o planeta)
         ease: "none",
-        repeat: -1
+        repeat: -1,
+        paused: false
       });
     }
+
+    console.log('Animações contínuas iniciadas:', continuousAnimations.current);
 
 
   };
@@ -217,12 +364,12 @@ export default function Hero() {
     };
     
     preloadImages([
-      '/liquidos.png',
-      '/correntes.png', 
-      '/planeta.png',
-      '/estela.png',
-      '/pattern.png',
-      '/arco.png'
+      '/liquidos.webp',
+      '/correntes.webp', 
+      '/planeta.webp',
+      '/estela.webp',
+      '/pattern.webp',
+      '/arco.webp'
     ]);
     
     // Configurar GSAP para melhor performance
@@ -469,15 +616,19 @@ export default function Hero() {
     return () => {
       clearTimeout(timeout);
       clearTimeout(continuousTimeout);
+      // Limpar animações contínuas
+      Object.values(continuousAnimations.current).forEach(animation => {
+        if (animation) {
+          animation.kill();
+        }
+      });
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, []);
 
+
   return (
     <>
-      {/* Cursor customizado */}
-      <CustomCursor />
-      
       {/* Primeira seção - Hero com headline centralizada */}
       <section id="hero" className="hero-section relative overflow-hidden flex flex-col items-center justify-center min-h-screen">
         
@@ -502,7 +653,7 @@ export default function Hero() {
         
         {/* Noise texture visível */}
         <div className="absolute inset-0 opacity-35" style={{
-          backgroundImage: 'url("/noise.png")',
+          backgroundImage: 'url("/noise.webp")',
           backgroundSize: '256px 256px',
           backgroundRepeat: 'repeat',
           mixBlendMode: 'overlay'
@@ -524,7 +675,7 @@ export default function Hero() {
         <div className="absolute inset-0 pointer-events-none z-[1]">
           <OptimizedImage 
             ref={liquidosRef}
-            src="/liquidos.png" 
+            src="/liquidos.webp" 
             alt="Efeito visual líquido no background" 
             className="w-full h-full object-cover opacity-[0.9] background-image"
             loading="eager"
@@ -543,7 +694,7 @@ export default function Hero() {
         <div className="absolute inset-0 pointer-events-none z-[2]">
           <OptimizedImage 
             ref={correntesRef}
-            src="/correntes.png" 
+            src="/correntes.webp" 
             alt="Efeito visual de correntes no background" 
             className="w-full h-full object-cover opacity-[0.95] background-image"
             loading="lazy"
@@ -583,7 +734,7 @@ export default function Hero() {
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[4]">
           <OptimizedImage 
             ref={planetaRef}
-            src="/planeta.png" 
+            src="/planeta.webp" 
             alt="Planeta estilizado no background" 
             className="w-[700px] h-[700px] md:w-[900px] md:h-[900px] lg:w-[1100px] lg:h-[1100px] opacity-90 object-contain mix-blend-mode-screen background-image"
             loading="eager"
@@ -619,7 +770,7 @@ export default function Hero() {
           {/* Botão de ação */}
           <div className="flex justify-center">
             <div ref={buttonRef} className="interactive-element">
-              <GlassButton>Comece Sua Jornada</GlassButton>
+              <GlassButton onClick={scrollToContact}>Comece Sua Jornada</GlassButton>
             </div>
           </div>
       </div>
@@ -724,13 +875,13 @@ export default function Hero() {
       {/* Terceira seção - Projetos */}
       <section className="projects-section py-20 relative section-noise-blur flex flex-col items-center justify-center min-h-screen">
         
-        {/* Background com arco.png e efeitos */}
+        {/* Background com arco.webp e efeitos */}
         <div 
           className="absolute inset-0"
           style={{
             background: `
               linear-gradient(rgba(10, 10, 15, 0.8), rgba(10, 10, 15, 0.8)),
-              url('/arco.png')
+              url('/arco.webp')
             `,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
@@ -752,10 +903,10 @@ export default function Hero() {
           </svg>
         </div>
         
-        {/* Pattern.png como camada sobre o background - Layer 1 */}
+        {/* Pattern.webp como camada sobre o background - Layer 1 */}
         <div className="absolute inset-0 pointer-events-none z-[1]">
           <OptimizedImage 
-            src="/pattern.png" 
+            src="/pattern.webp" 
             alt="Pattern" 
             className="w-full h-full object-cover opacity-[0.4]"
             style={{
@@ -788,7 +939,7 @@ export default function Hero() {
           <div className="relative mb-8">
             <OptimizedImage 
               ref={estelaRef}
-              src="/estela.png" 
+              src="/estela.webp" 
               alt="Estela" 
               className="w-[60px] h-[60px] md:w-[80px] md:h-[80px] opacity-[0.8] object-contain mix-blend-mode-screen"
               style={{
@@ -810,28 +961,31 @@ export default function Hero() {
             
           </div>
           
-          {/* Setas de navegação */}
-          <div className="relative w-full max-w-6xl mx-auto flex items-center">
-            {/* Seta esquerda */}
-            <button
-              onClick={handlePreviousPage}
-              onMouseEnter={pauseCarousel}
-              onMouseLeave={resumeCarousel}
-              className="project-nav-arrow flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center group mr-6"
-            >
-              <FontAwesomeIcon 
-                icon={faChevronLeft} 
-                className="text-white text-lg group-hover:text-purple-200 transition-colors duration-300" 
-              />
-            </button>
+          {/* Container principal dos cards e navegação */}
+          <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-0">
+            
+            {/* Layout Desktop: Setas nas laterais */}
+            <div className="hidden sm:flex items-center">
+              {/* Seta esquerda */}
+              <button
+                onClick={handlePreviousPage}
+                onMouseEnter={pauseCarousel}
+                onMouseLeave={resumeCarousel}
+                className="project-nav-arrow flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center group mr-6 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-all duration-300"
+              >
+                <FontAwesomeIcon 
+                  icon={faChevronLeft} 
+                  className="text-white text-lg group-hover:text-purple-200 transition-colors duration-300" 
+                />
+              </button>
 
-            {/* Container dos cards */}
-            <div className="flex-1">
-              <div ref={projectsCardsRef} className="relative overflow-hidden py-16">
+              {/* Container dos cards */}
+              <div className="flex-1">
+                <div ref={projectsCardsRef} className="relative overflow-hidden py-16">
               {/* Página 1 - E-commerce */}
               {currentPage === 0 && (
                 <div 
-                  className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center animate-fade-in px-8"
+                  className="grid grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 justify-items-center animate-fade-in px-4 lg:px-8"
                   onMouseEnter={pauseCarousel}
                   onMouseLeave={resumeCarousel}
                 >
@@ -865,7 +1019,7 @@ export default function Hero() {
               {/* Página 2 - Apps Mobile */}
               {currentPage === 1 && (
                 <div 
-                  className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center animate-fade-in px-8"
+                  className="grid grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 justify-items-center animate-fade-in px-4 lg:px-8"
                   onMouseEnter={pauseCarousel}
                   onMouseLeave={resumeCarousel}
                 >
@@ -899,7 +1053,7 @@ export default function Hero() {
               {/* Página 3 - Landing Pages */}
               {currentPage === 2 && (
                 <div 
-                  className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center animate-fade-in px-8"
+                  className="grid grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 justify-items-center animate-fade-in px-4 lg:px-8"
                   onMouseEnter={pauseCarousel}
                   onMouseLeave={resumeCarousel}
                 >
@@ -948,7 +1102,7 @@ export default function Hero() {
                       }}
                     >
                       <OptimizedImage 
-                        src="/banner-cta.png" 
+                        src="/banner-cta.webp" 
                         alt="Banner CTA - Clique para entrar em contato" 
                         className="w-full h-auto object-cover"
                         loading="lazy"
@@ -960,71 +1114,227 @@ export default function Hero() {
                 </div>
               )}
 
-              {/* Página 5 - Design & UX */}
-              {currentPage === 4 && (
-                <div 
-                  className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center animate-fade-in px-8"
-                  onMouseEnter={pauseCarousel}
-                  onMouseLeave={resumeCarousel}
-                >
-                  <Card3D
-                    icon={faHospital}
-                    title="Design System"
-                    description="Sistema de design completo com componentes reutilizáveis, guias de estilo e documentação interativa."
-                    technologies="Figma, Storybook, React"
-                    image="https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                    tag="Design System"
-                  />
-                  <Card3D
-                    icon={faRocket}
-                    title="UX Research"
-                    description="Pesquisa de usuário completa com personas, jornadas e insights que direcionam decisões de produto."
-                    technologies="Figma, Miro, Analytics"
-                    image="https://images.unsplash.com/photo-1558655146-9f40138edfeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                    tag="UX Research"
-                  />
-                  <Card3D
-                    icon={faShoppingCart}
-                    title="Prototipagem"
-                    description="Protótipos interativos de alta fidelidade que validam conceitos antes do desenvolvimento."
-                    technologies="Figma, Principle, Framer"
-                    image="https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                    tag="Prototipagem"
-                  />
-                </div>
-              )}
             </div>
           
             {/* Indicadores de slider */}
-            <div ref={projectsIndicatorsRef} className="mt-12 flex justify-center gap-3 items-center">
+            <div ref={projectsIndicatorsRef} className="mt-8 sm:mt-12 flex justify-center gap-2 sm:gap-3 items-center px-4">
               {Array.from({ length: totalPages }, (_, index) => (
                 <button
                   key={index}
                   onClick={() => handlePageChange(index)}
                   className={`transition-all duration-500 ease-out rounded-full cursor-pointer relative ${
                     currentPage === index
-                      ? 'w-5 h-2 bg-gradient-to-r from-[#d8b4fe] to-[#a855f7] shadow-lg shadow-purple-500/50'
-                      : 'w-2 h-2 bg-white/20 hover:bg-white/40'
+                      ? 'w-4 h-1.5 sm:w-5 sm:h-2 bg-gradient-to-r from-[#d8b4fe] to-[#a855f7] shadow-lg shadow-purple-500/50'
+                      : 'w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white/20 hover:bg-white/40'
                   }`}
                 />
               ))}
             </div>
           </div>
 
-          {/* Seta direita */}
-          <button
-            onClick={handleNextPage}
-            onMouseEnter={pauseCarousel}
-            onMouseLeave={resumeCarousel}
-            className="project-nav-arrow flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center group ml-6"
-          >
-            <FontAwesomeIcon 
-              icon={faChevronRight} 
-              className="text-white text-lg group-hover:text-purple-200 transition-colors duration-300" 
-            />
-          </button>
+              {/* Seta direita */}
+              <button
+                onClick={handleNextPage}
+                onMouseEnter={pauseCarousel}
+                onMouseLeave={resumeCarousel}
+                className="project-nav-arrow flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center group ml-6 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-all duration-300"
+              >
+                <FontAwesomeIcon 
+                  icon={faChevronRight} 
+                  className="text-white text-lg group-hover:text-purple-200 transition-colors duration-300" 
+                />
+              </button>
+            </div>
+
+            {/* Layout Mobile: Scroll horizontal dentro de cada página */}
+            <div className="sm:hidden">
+              {/* Container dos cards mobile */}
+              <div ref={projectsCardsRef} className="relative overflow-hidden py-8">
+                {/* Página 1 - E-commerce */}
+                {currentPage === 0 && (
+                  <div 
+                    ref={(el) => mobileProjectsRefs.current[0] = el}
+                    className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth hide-scrollbar pb-4 px-4 space-x-4"
+                  >
+                    <div className="flex-shrink-0 w-full snap-center">
+                      <Card3D
+                        icon={faShoppingCart}
+                        title="E-commerce Avançado"
+                        description="Plataforma completa de vendas online com microserviços, pagamentos integrados e dashboard administrativo avançado."
+                        technologies="React, Node.js, AWS, Stripe"
+                        image="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        tag="E-Commerce"
+                      />
+                    </div>
+                    <div className="flex-shrink-0 w-full snap-center">
+                      <Card3D
+                        icon={faShoppingCart}
+                        title="Marketplace Digital"
+                        description="Plataforma de marketplace com sistema de comissões, gestão de vendedores e pagamentos automatizados."
+                        technologies="Next.js, PostgreSQL, Stripe"
+                        image="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        tag="Marketplace"
+                      />
+                    </div>
+                    <div className="flex-shrink-0 w-full snap-center">
+                      <Card3D
+                        icon={faShoppingCart}
+                        title="Loja Virtual Premium"
+                        description="E-commerce de luxo com experiência imersiva, realidade aumentada e personalização avançada."
+                        technologies="React, Three.js, AI"
+                        image="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        tag="E-Commerce"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Página 2 - Apps Mobile */}
+                {currentPage === 1 && (
+                  <div 
+                    ref={(el) => mobileProjectsRefs.current[1] = el}
+                    className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth hide-scrollbar pb-4 px-4 space-x-4"
+                  >
+                    <div className="flex-shrink-0 w-full snap-center">
+                      <Card3D
+                        icon={faHospital}
+                        title="App Mobile para Saúde"
+                        description="Aplicativo nativo para iOS/Android com integração IoT, telemedicina e monitoramento em tempo real."
+                        technologies="React Native, Swift, Kotlin, IoT"
+                        image="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        tag="App Mobile"
+                      />
+                    </div>
+                    <div className="flex-shrink-0 w-full snap-center">
+                      <Card3D
+                        icon={faHospital}
+                        title="Telemedicina Avançada"
+                        description="Plataforma completa de consultas online com IA para diagnóstico e integração com dispositivos médicos."
+                        technologies="Flutter, AI, WebRTC"
+                        image="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        tag="Telemedicine"
+                      />
+                    </div>
+                    <div className="flex-shrink-0 w-full snap-center">
+                      <Card3D
+                        icon={faHospital}
+                        title="Monitoramento IoT"
+                        description="Sistema de monitoramento de pacientes com dispositivos IoT e alertas em tempo real."
+                        technologies="React Native, IoT, Cloud"
+                        image="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        tag="IoT"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Página 3 - Landing Pages */}
+                {currentPage === 2 && (
+                  <div 
+                    ref={(el) => mobileProjectsRefs.current[2] = el}
+                    className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth hide-scrollbar pb-4 px-4 space-x-4"
+                  >
+                    <div className="flex-shrink-0 w-full snap-center">
+                      <Card3D
+                        icon={faRocket}
+                        title="Landing Page Imersiva"
+                        description="Design responsivo focado em conversão com animações avançadas e otimização para SEO e performance."
+                        technologies="Next.js, GSAP, Tailwind CSS"
+                        image="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        tag="Landing Page"
+                      />
+                    </div>
+                    <div className="flex-shrink-0 w-full snap-center">
+                      <Card3D
+                        icon={faRocket}
+                        title="SaaS Dashboard"
+                        description="Interface moderna para SaaS com métricas em tempo real, gráficos interativos e gestão de usuários."
+                        technologies="React, D3.js, Chart.js"
+                        image="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        tag="SaaS Platform"
+                      />
+                    </div>
+                    <div className="flex-shrink-0 w-full snap-center">
+                      <Card3D
+                        icon={faRocket}
+                        title="Portfolio Criativo"
+                        description="Portfolio interativo com animações 3D, galeria dinâmica e integração com redes sociais."
+                        technologies="Three.js, GSAP, CMS"
+                        image="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        tag="Portfolio"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Página 4 - Banner */}
+                {currentPage === 3 && (
+                  <div 
+                    ref={(el) => mobileProjectsRefs.current[3] = el}
+                    className="flex justify-center animate-fade-in px-4"
+                  >
+                    <div className="bg-gradient-to-r from-[rgba(156,83,227,0.1)] to-[rgba(168,85,247,0.1)] backdrop-blur-xl rounded-2xl p-6 border border-purple-500/30 text-center max-w-sm w-full">
+                      <div className="flex items-center justify-center gap-3 mb-4">
+                        <FontAwesomeIcon icon={faRocket} className="text-xl text-white" />
+                        <h3 className="text-lg font-bold text-white">
+                          Pronto para decolar?
+                        </h3>
+                      </div>
+                      <p className="text-gray-400 mb-4 text-sm">
+                        Entre em contato e descubra como podemos transformar sua presença digital
+                      </p>
+                      <GlassButton onClick={scrollToContact}>
+                        Fale Conosco Agora
+                      </GlassButton>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Indicadores de página mobile */}
+              <div className="flex justify-center space-x-2 mb-6">
+                {Array.from({ length: totalPages }, (_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handlePageChange(i)}
+                    className={`rounded-full transition-all duration-300 ${
+                      i === currentPage
+                        ? 'w-5 h-2 bg-gradient-to-r from-[#d8b4fe] to-[#a855f7] shadow-lg shadow-purple-500/50'
+                        : 'w-2 h-2 bg-white/20 hover:bg-white/40'
+                    }`}
+                  />
+                ))}
+              </div>
+
+              {/* Botões de navegação mobile */}
+              <div className="flex justify-center space-x-4">
+                <button
+                  onClick={handlePreviousPage}
+                  onMouseEnter={pauseCarousel}
+                  onMouseLeave={resumeCarousel}
+                  className="w-12 h-12 rounded-full flex items-center justify-center group bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-all duration-300"
+                >
+                  <FontAwesomeIcon 
+                    icon={faChevronLeft} 
+                    className="text-white text-lg group-hover:text-purple-200 transition-colors duration-300" 
+                  />
+                </button>
+
+                <button
+                  onClick={handleNextPage}
+                  onMouseEnter={pauseCarousel}
+                  onMouseLeave={resumeCarousel}
+                  className="w-12 h-12 rounded-full flex items-center justify-center group bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-all duration-300"
+                >
+                  <FontAwesomeIcon 
+                    icon={faChevronRight} 
+                    className="text-white text-lg group-hover:text-purple-200 transition-colors duration-300" 
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
       </section>
 
     </>
