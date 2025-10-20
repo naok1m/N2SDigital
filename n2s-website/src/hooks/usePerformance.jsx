@@ -13,7 +13,6 @@ export const usePerformanceMonitoring = () => {
       
       if (lastEntry) {
         const lcp = lastEntry.startTime;
-        console.log('LCP:', lcp);
         
         // Enviar para analytics se necessário
         if (window.gtag) {
@@ -33,7 +32,6 @@ export const usePerformanceMonitoring = () => {
       const entries = list.getEntries();
       entries.forEach((entry) => {
         const fid = entry.processingStart - entry.startTime;
-        console.log('FID:', fid);
         
         if (window.gtag) {
           window.gtag('event', 'web_vitals', {
@@ -56,8 +54,6 @@ export const usePerformanceMonitoring = () => {
           clsValue += entry.value;
         }
       });
-      
-      console.log('CLS:', clsValue);
       
       if (window.gtag) {
         window.gtag('event', 'web_vitals', {
@@ -152,7 +148,6 @@ export const measurePerformance = (fn, name) => {
     const result = fn(...args);
     const end = performance.now();
     
-    console.log(`${name} took ${end - start} milliseconds`);
     return result;
   };
 };

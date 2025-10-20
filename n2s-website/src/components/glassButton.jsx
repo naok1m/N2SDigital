@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 
-export default function GlassButton({ children }) {
+export default function GlassButton({ children, onClick, ...props }) {
   const buttonRef = useRef(null);
   const rippleRef = useRef(null);
 
@@ -48,6 +48,10 @@ export default function GlassButton({ children }) {
 
     // Animação de clique
     const handleClick = (e) => {
+      // Chamar a função onClick se fornecida
+      if (onClick) {
+        onClick(e);
+      }
       const rect = button.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
@@ -103,6 +107,8 @@ export default function GlassButton({ children }) {
   return (
     <button
       ref={buttonRef}
+      onClick={onClick}
+      {...props}
       className="flex items-center gap-3
                  bg-gradient-to-r from-[rgba(196,181,253,0.4)] via-[rgba(196,181,253,0.25)] to-[rgba(196,181,253,0.4)]
                  border border-[rgba(196,181,253,0.6)]

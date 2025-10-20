@@ -186,54 +186,35 @@ export default function Hero() {
 
   // Função para scroll suave até a seção de contato
   const scrollToContact = useCallback(() => {
-    console.log('scrollToContact chamada');
-    
-    // Verificar se estamos na página home
-    const isOnHomePage = window.location.pathname === '/' || window.location.pathname === '/home';
-    
-    if (!isOnHomePage) {
-      // Se não estiver na home, navegar para home com hash
-      console.log('Navegando para home com hash #contato');
-      window.location.href = '/#contato';
-      return;
-    }
-    
-    // Tentar encontrar a seção de contato
-    let contactSection = document.getElementById('contato');
-    
-    // Se não encontrar, tentar outras formas
-    if (!contactSection) {
-      contactSection = document.querySelector('[id*="contato"]');
-    }
-    
-    if (!contactSection) {
-      contactSection = document.querySelector('section:last-of-type');
-    }
-    
-    console.log('Seção de contato encontrada:', contactSection);
-    
-    if (contactSection) {
-      const elementPosition = contactSection.offsetTop;
-      const offsetPosition = elementPosition - 100; // Aumentar offset para garantir visibilidade
+    // Aguardar um pouco para garantir que o DOM esteja pronto
+    setTimeout(() => {
+      // Verificar se estamos na página home
+      const isOnHomePage = window.location.pathname === '/' || window.location.pathname === '/home';
       
-      console.log('Posição calculada:', { elementPosition, offsetPosition });
+      if (!isOnHomePage) {
+        window.location.href = '/#contato';
+        return;
+      }
       
-      // Usar requestAnimationFrame para garantir que o DOM esteja pronto
-      requestAnimationFrame(() => {
+      // Tentar encontrar a seção de contato
+      const contactSection = document.getElementById('contato');
+      
+      if (contactSection) {
+        const elementPosition = contactSection.offsetTop;
+        const offsetPosition = elementPosition - 100; // Offset para header fixo
+        
         window.scrollTo({
           top: offsetPosition,
           behavior: 'smooth'
         });
-        console.log('Scroll executado para:', offsetPosition);
-      });
-    } else {
-      console.error('Seção de contato não encontrada!');
-      // Fallback: scroll para o final da página
-      window.scrollTo({
-        top: document.body.scrollHeight,
-        behavior: 'smooth'
-      });
-    }
+      } else {
+        // Fallback: scroll para o final da página
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: 'smooth'
+        });
+      }
+    }, 100);
   }, []);
   
   // Carousel automático - só inicia após animação de entrada (otimizado)
@@ -345,7 +326,6 @@ export default function Hero() {
       });
     }
 
-    console.log('Animações contínuas iniciadas:', continuousAnimations.current);
 
 
   };
@@ -353,7 +333,7 @@ export default function Hero() {
   // Configuração da animação GSAP de scroll do tablet
 
   useEffect(() => {
-    const timeout = setTimeout(() => setShow(true), 100);
+    const timeout = setTimeout(() => setShow(true), 20);
     
     // Preload de imagens críticas
     const preloadImages = (imageUrls) => {
@@ -372,14 +352,15 @@ export default function Hero() {
       '/arco.webp'
     ]);
     
-    // Configurar GSAP para melhor performance
+    // Configurar GSAP para melhor performance e definir opacidades iniciais
     gsap.set([eclipseRef.current, planetaRef.current, correntesRef.current, liquidosRef.current], {
       force3D: true,
-      willChange: "transform, opacity"
+      willChange: "transform, opacity",
+      opacity: 0 // Definir opacidade inicial como 0 para todos os elementos
     });
     
     // Timeline principal para animações de entrada
-    const tl = gsap.timeline({ delay: 0.5 });
+    const tl = gsap.timeline({ delay: 0.05 });
     
     // Animação do eclipse primeiro (atrás do planeta)
     tl.fromTo(eclipseRef.current,
@@ -401,13 +382,13 @@ export default function Hero() {
       { 
         scale: 0.5, 
         rotation: 0, 
-        opacity: 0,
+        opacity: 0.1,
         y: 100
       },
       { 
         scale: 1, 
         rotation: 0, 
-        opacity: 0.7,
+        opacity: 0.9,
         y: 0,
         duration: 2,
         ease: "power3.out"
@@ -416,12 +397,12 @@ export default function Hero() {
     .fromTo(correntesRef.current,
       {
         x: -200,
-        opacity: 0,
+        opacity: 0.3,
         scale: 1.2
       },
       {
         x: 0,
-        opacity: 0.8,
+        opacity: 0.95,
         scale: 1,
         duration: 1.5,
         ease: "power2.out"
@@ -430,12 +411,12 @@ export default function Hero() {
     .fromTo(liquidosRef.current,
       {
         x: 200,
-        opacity: 0,
+        opacity: 0.3,
         scale: 0.8
       },
       {
         x: 0,
-        opacity: 0.7,
+        opacity: 0.9,
         scale: 1,
         duration: 1.5,
         ease: "power2.out"
@@ -449,7 +430,7 @@ export default function Hero() {
     });
     
     // Animação dos elementos de texto
-    const textTl = gsap.timeline({ delay: 1 });
+    const textTl = gsap.timeline({ delay: 0.8 });
     
     textTl.fromTo(titleRef.current,
       {
@@ -460,7 +441,7 @@ export default function Hero() {
       },
       {
         y: 0,
-        opacity: 0.9,
+        opacity: 1,
         scale: 1,
         rotationX: 0,
         duration: 1.2,
@@ -475,7 +456,7 @@ export default function Hero() {
       },
       {
         y: 0,
-        opacity: 0.8,
+        opacity: 1,
         scale: 1,
         duration: 1,
         ease: "power3.out"
@@ -490,7 +471,7 @@ export default function Hero() {
       },
       {
         y: 0,
-        opacity: 0.9,
+        opacity: 1,
         scale: 1,
         rotation: 0,
         duration: 0.8,
@@ -677,7 +658,7 @@ export default function Hero() {
             ref={liquidosRef}
             src="/liquidos.webp" 
             alt="Efeito visual líquido no background" 
-            className="w-full h-full object-cover opacity-[0.9] background-image"
+            className="w-full h-full object-cover background-image"
             loading="eager"
             decoding="async"
             fetchPriority="high"
@@ -696,7 +677,7 @@ export default function Hero() {
             ref={correntesRef}
             src="/correntes.webp" 
             alt="Efeito visual de correntes no background" 
-            className="w-full h-full object-cover opacity-[0.95] background-image"
+            className="w-full h-full object-cover background-image"
             loading="lazy"
             decoding="async"
             style={{
@@ -736,7 +717,7 @@ export default function Hero() {
             ref={planetaRef}
             src="/planeta.webp" 
             alt="Planeta estilizado no background" 
-            className="w-[700px] h-[700px] md:w-[900px] md:h-[900px] lg:w-[1100px] lg:h-[1100px] opacity-90 object-contain mix-blend-mode-screen background-image"
+            className="w-[700px] h-[700px] md:w-[900px] md:h-[900px] lg:w-[1100px] lg:h-[1100px] object-contain mix-blend-mode-screen background-image"
             loading="eager"
             decoding="async"
             fetchPriority="high"
@@ -941,7 +922,7 @@ export default function Hero() {
               ref={estelaRef}
               src="/estela.webp" 
               alt="Estela" 
-              className="w-[60px] h-[60px] md:w-[80px] md:h-[80px] opacity-[0.8] object-contain mix-blend-mode-screen"
+              className="w-[60px] h-[60px] md:w-[80px] md:h-[80px] object-contain mix-blend-mode-screen"
               style={{
                 filter: 'contrast(1.3) brightness(1.1) blur(0.5px)'
               }}

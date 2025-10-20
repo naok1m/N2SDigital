@@ -421,6 +421,17 @@ video {
   }
 }
 
+/* Estilos para animações de contagem */
+.counter-number {
+  transition: all 0.3s ease;
+  font-variant-numeric: tabular-nums;
+}
+
+.counter-number:hover {
+  transform: scale(1.05);
+  text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+}
+
 /* Estilos para as setas de navegação dos projetos */
 .project-nav-arrow {
   background: rgba(216, 180, 254, 0.1);

@@ -19,7 +19,6 @@ export default function Header() {
 
   // Função para lidar com cliques nos links
   const handleLinkClick = (href) => {
-    console.log('Link clicado:', href, 'Página atual:', location.pathname);
     
     // Se estamos na página inicial, apenas faz scroll para a seção
     if (location.pathname === '/') {

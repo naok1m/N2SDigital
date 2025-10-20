@@ -12,6 +12,7 @@ import {
   faRocket
 } from '@fortawesome/free-solid-svg-icons';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
+import StatCard from './StatCard';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -39,7 +40,7 @@ export default function AboutSection() {
         { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, "-=0.3"
       );
 
-    // Animações com ScrollTrigger para stats
+    // Animações com ScrollTrigger para stats (apenas entrada visual)
     gsap.utils.toArray(".stats-card").forEach((card, index) => {
       gsap.fromTo(card, 
         { opacity: 0, y: 30, scale: 0.9 },
@@ -145,15 +146,13 @@ export default function AboutSection() {
         {/* Stats Section */}
         <div ref={statsRef} className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
           {stats.map((stat, index) => (
-            <div key={index} className="stats-card rounded-2xl p-6 text-center">
-              <div className="stats-icon-container w-12 h-12 rounded-xl mx-auto mb-3 flex items-center justify-center">
-                <FontAwesomeIcon icon={stat.icon} className="text-lg text-purple-400" />
-              </div>
-              <div className="text-2xl md:text-3xl font-bold text-purple-400 mb-2">
-                {stat.number}
-              </div>
-              <div className="text-gray-300 text-xs md:text-sm">{stat.label}</div>
-            </div>
+            <StatCard
+              key={index}
+              number={stat.number}
+              label={stat.label}
+              icon={stat.icon}
+              index={index}
+            />
           ))}
         </div>
 

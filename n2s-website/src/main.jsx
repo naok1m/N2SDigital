@@ -10,6 +10,7 @@ import Services from './pages/Services';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import Cookies from './pages/Cookies';
+import NotFound from './pages/NotFound';
 
 // Registrar Service Worker
 if ('serviceWorker' in navigator) {
@@ -47,8 +48,8 @@ createRoot(document.getElementById('root')).render(
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/cookies" element={<Cookies />} />
-        {/* Add 404 redirect */}
-        <Route path="*" element={<Home />} />
+        {/* 404 Page */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,

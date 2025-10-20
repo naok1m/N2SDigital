@@ -11,11 +11,12 @@ import {
   faCheck
 } from '@fortawesome/free-solid-svg-icons';
 import GlassButton from './glassButton';
+import ServiceModal from './ServiceModal';
 
 gsap.registerPlugin(ScrollTrigger);
 
 // Componente de Card de Serviço Avançado
-const ServiceCard = ({ icon, title, description, features, index, category }) => {
+const ServiceCard = ({ icon, title, description, features, index, category, onLearnMore }) => {
   const cardRef = useRef(null);
   const contentRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -128,7 +129,10 @@ const ServiceCard = ({ icon, title, description, features, index, category }) =>
           </div>
 
           {/* CTA Button */}
-          <button className="service-cta-button w-full text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 group">
+          <button 
+            onClick={() => onLearnMore({ icon, title, description, features, category })}
+            className="service-cta-button w-full text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 group"
+          >
             <span>Saiba Mais</span>
             <FontAwesomeIcon 
               icon={faArrowRight} 
@@ -147,11 +151,23 @@ export default function Services() {
   const titleRef = useRef(null);
   const subtitleRef = useRef(null);
   const [showContactForm, setShowContactForm] = useState(false);
+  const [showServiceModal, setShowServiceModal] = useState(false);
+  const [selectedService, setSelectedService] = useState(null);
   const formRef = useRef(null);
   const overlayRef = useRef(null);
 
   const handleOpenForm = () => {
     setShowContactForm(true);
+  };
+
+  const handleLearnMore = (service) => {
+    setSelectedService(service);
+    setShowServiceModal(true);
+  };
+
+  const handleCloseServiceModal = () => {
+    setShowServiceModal(false);
+    setSelectedService(null);
     
     gsap.fromTo(overlayRef.current,
       { opacity: 0 },
@@ -200,14 +216,11 @@ export default function Services() {
 
   // Função para scroll suave até a seção de contato
   const scrollToContact = useCallback(() => {
-    console.log('scrollToContact chamada (services)');
-    
     // Verificar se estamos na página home
     const isOnHomePage = window.location.pathname === '/' || window.location.pathname === '/home';
     
     if (!isOnHomePage) {
       // Se não estiver na home, navegar para home com hash
-      console.log('Navegando para home com hash #contato (services)');
       window.location.href = '/#contato';
       return;
     }
@@ -224,13 +237,9 @@ export default function Services() {
       contactSection = document.querySelector('section:last-of-type');
     }
     
-    console.log('Seção de contato encontrada (services):', contactSection);
-    
     if (contactSection) {
       const elementPosition = contactSection.offsetTop;
       const offsetPosition = elementPosition - 100; // Aumentar offset para garantir visibilidade
-      
-      console.log('Posição calculada (services):', { elementPosition, offsetPosition });
       
       // Usar requestAnimationFrame para garantir que o DOM esteja pronto
       requestAnimationFrame(() => {
@@ -238,10 +247,8 @@ export default function Services() {
           top: offsetPosition,
           behavior: 'smooth'
         });
-        console.log('Scroll executado (services) para:', offsetPosition);
       });
     } else {
-      console.error('Seção de contato não encontrada (services)!');
       // Fallback: scroll para o final da página
       window.scrollTo({
         top: document.body.scrollHeight,
@@ -398,6 +405,7 @@ export default function Services() {
                 key={index}
                 {...service}
                 index={index}
+                onLearnMore={handleLearnMore}
               />
             ))}
           </div>
@@ -499,6 +507,15 @@ export default function Services() {
     </div>
   </div>
 )}
+
+      {/* Service Modal */}
+      {selectedService && (
+        <ServiceModal
+          service={selectedService}
+          isOpen={showServiceModal}
+          onClose={handleCloseServiceModal}
+        />
+      )}
     </>
   );
 }

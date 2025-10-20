@@ -231,10 +231,10 @@ export default function CookiesPage() {
                   A maioria dos navegadores permite que você gerencie cookies através das configurações:
                 </p>
                 <ul className="list-disc list-inside text-gray-300 space-y-2 mb-6">
-                  <li><strong>Chrome:</strong> Configurações > Privacidade e segurança > Cookies</li>
-                  <li><strong>Firefox:</strong> Opções > Privacidade e Segurança > Cookies</li>
-                  <li><strong>Safari:</strong> Preferências > Privacidade > Cookies</li>
-                  <li><strong>Edge:</strong> Configurações > Cookies e permissões do site</li>
+                    <li><strong>Chrome:</strong> Configurações &gt; Privacidade e segurança &gt; Cookies</li>
+                    <li><strong>Firefox:</strong> Opções &gt; Privacidade e Segurança &gt; Cookies</li>
+                    <li><strong>Safari:</strong> Preferências &gt; Privacidade &gt; Cookies</li>
+                    <li><strong>Edge:</strong> Configurações &gt; Cookies e permissões do site</li>
                 </ul>
 
                 <h3 className="text-lg font-semibold text-white mb-3">
