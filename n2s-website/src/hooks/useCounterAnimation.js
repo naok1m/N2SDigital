@@ -77,3 +77,4 @@ export const useCounterAnimation = (targetValue, duration = 2, trigger = null) =
 
   return { count, counterRef };
 };
+

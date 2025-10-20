@@ -9,8 +9,7 @@
     "build": "vite build",
     "build:clean": "rm -rf dist && vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "clear-cache": "node scripts/clear-cache.js"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.1.0",
