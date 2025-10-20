@@ -212,13 +212,13 @@ const ServiceModal = ({ service, isOpen, onClose }) => {
         {/* Benefits */}
         <div className="mb-8">
           <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-            <FontAwesomeIcon icon={faCheck} className="text-green-400" />
+            <FontAwesomeIcon icon={faCheck} className="text-purple-400" />
             Principais Benefícios
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {currentService.benefits.map((benefit, index) => (
-              <div key={index} className="flex items-start gap-3 p-3 rounded-lg bg-green-500/10 border border-green-500/20">
-                <FontAwesomeIcon icon={faCheck} className="text-green-400 text-sm mt-1 flex-shrink-0" />
+              <div key={index} className="flex items-start gap-3 p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                <FontAwesomeIcon icon={faCheck} className="text-purple-400 text-sm mt-1 flex-shrink-0" />
                 <span className="text-gray-300 text-sm">{benefit}</span>
               </div>
             ))}
@@ -228,13 +228,13 @@ const ServiceModal = ({ service, isOpen, onClose }) => {
         {/* Process */}
         <div className="mb-8">
           <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-            <FontAwesomeIcon icon={faClock} className="text-blue-400" />
+            <FontAwesomeIcon icon={faClock} className="text-purple-400" />
             Nosso Processo
           </h3>
           <div className="space-y-3">
             {currentService.process.map((step, index) => (
-              <div key={index} className="flex items-center gap-4 p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
-                <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 font-bold text-sm">
+              <div key={index} className="flex items-center gap-4 p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 font-bold text-sm">
                   {index + 1}
                 </div>
                 <span className="text-gray-300">{step}</span>
@@ -260,11 +260,11 @@ const ServiceModal = ({ service, isOpen, onClose }) => {
         </div>
 
         {/* Pricing Notice */}
-        <div className="bg-gradient-to-r from-[rgba(255,193,7,0.1)] to-[rgba(255,193,7,0.05)] border border-yellow-500/30 rounded-lg p-4 mb-6">
+        <div className="bg-gradient-to-r from-[rgba(168,85,247,0.1)] to-[rgba(168,85,247,0.05)] border border-purple-500/30 rounded-lg p-4 mb-6">
           <div className="flex items-start gap-3">
-            <FontAwesomeIcon icon={faDollarSign} className="text-yellow-400 text-lg mt-1" />
+            <FontAwesomeIcon icon={faDollarSign} className="text-purple-400 text-lg mt-1" />
             <div>
-              <p className="text-yellow-300 font-medium mb-1">Investimento e Prazo</p>
+              <p className="text-purple-300 font-medium mb-1">Investimento e Prazo</p>
               <p className="text-gray-400 text-sm">
                 O prazo e o valor variam de projeto para projeto, dependendo da complexidade, 
                 funcionalidades e requisitos específicos. Entre em contato para um orçamento personalizado.

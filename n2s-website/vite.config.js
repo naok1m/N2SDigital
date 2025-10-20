@@ -47,6 +47,11 @@ export default defineConfig({
   server: {
     port: 3000,
     host: true, // Enable network access
+    headers: {
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    }
   },
   assetsDir: 'assets',
   preview: {

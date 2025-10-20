@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
 import Header from '../../components/header';
 import Footer from '../../components/Footer';
 import SEOHead from '../../components/SEOHead';
@@ -27,6 +28,61 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 export default function PrivacyPage() {
+  const [show, setShow] = useState(false);
+  
+  // Refs para animações
+  const titleRef = useRef(null);
+  const subtitleRef = useRef(null);
+  const updateRef = useRef(null);
+  const contentRef = useRef(null);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setShow(true), 100);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  useEffect(() => {
+    if (!show) return;
+
+    // Configurar elementos iniciais
+    gsap.set([titleRef.current, subtitleRef.current, updateRef.current, contentRef.current], {
+      opacity: 0,
+      y: 50
+    });
+
+    // Timeline principal com animações escalonadas
+    const tl = gsap.timeline({ delay: 0.3 });
+
+    tl.to(titleRef.current, {
+      opacity: 1,
+      y: 0,
+      duration: 1,
+      ease: "power3.out"
+    })
+    .to(subtitleRef.current, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      ease: "power2.out"
+    }, "-=0.6")
+    .to(updateRef.current, {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      ease: "power2.out"
+    }, "-=0.4")
+    .to(contentRef.current, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      ease: "power2.out"
+    }, "-=0.2");
+
+    return () => {
+      tl.kill();
+    };
+  }, [show]);
+
   return (
     <>
       <SEOHead 
@@ -43,16 +99,16 @@ export default function PrivacyPage() {
          <section className="relative py-20 px-6 overflow-hidden">
           
           <div className="relative z-10 max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-6xl font-black mb-6">
+            <h1 ref={titleRef} className="text-4xl md:text-6xl font-black mb-6">
               <span className="bg-gradient-to-r from-white via-purple-200 to-purple-400 bg-clip-text text-transparent">
                 Política de Privacidade
               </span>
             </h1>
-            <p className="text-lg text-gray-400 mb-8 leading-relaxed">
+            <p ref={subtitleRef} className="text-lg text-gray-400 mb-8 leading-relaxed">
               Transparência e proteção dos seus dados pessoais são fundamentais para nós. 
               Conheça como coletamos, utilizamos e protegemos suas informações.
             </p>
-            <div className="text-sm text-gray-500">
+            <div ref={updateRef} className="text-sm text-gray-500">
               Última atualização: {new Date().toLocaleDateString('pt-BR')}
             </div>
           </div>
@@ -61,7 +117,7 @@ export default function PrivacyPage() {
         {/* Content Section */}
         <section className="relative py-16 px-6">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-gradient-to-br from-white/5 to-white/2 backdrop-blur-xl rounded-2xl p-8 md:p-12 border border-white/10">
+            <div ref={contentRef} className="bg-gradient-to-br from-white/5 to-white/2 backdrop-blur-xl rounded-2xl p-8 md:p-12 border border-white/10">
               
               {/* 1. Introdução */}
               <div className="mb-12">
@@ -278,10 +334,10 @@ export default function PrivacyPage() {
                   Se você tiver dúvidas sobre esta Política de Privacidade ou sobre o tratamento 
                   de seus dados pessoais, entre em contato conosco:
                 </p>
-                <div className="bg-gradient-to-br from-white/8 to-white/3 backdrop-blur-xl rounded-2xl p-8 border border-purple-500/20 shadow-xl">
+                <div className="bg-gradient-to-br from-white/5 to-white/2 backdrop-blur-xl rounded-2xl p-8 border border-white/10">
                   <div className="grid md:grid-cols-2 gap-8">
                     {/* E-mail */}
-                    <div className="flex items-start gap-4 p-4 bg-gradient-to-r from-purple-500/5 to-purple-600/5 rounded-xl border border-purple-500/10 hover:border-purple-500/30 transition-all duration-300">
+                    <div className="flex items-start gap-4 p-4">
                       <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center">
                         <FontAwesomeIcon icon={faEnvelope} className="text-purple-400 text-lg" />
                       </div>
@@ -298,7 +354,7 @@ export default function PrivacyPage() {
                     </div>
 
                     {/* Telefone */}
-                    <div className="flex items-start gap-4 p-4 bg-gradient-to-r from-purple-500/5 to-purple-600/5 rounded-xl border border-purple-500/10 hover:border-purple-500/30 transition-all duration-300">
+                    <div className="flex items-start gap-4 p-4">
                       <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center">
                         <FontAwesomeIcon icon={faPhone} className="text-purple-400 text-lg" />
                       </div>
