@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -297,17 +298,17 @@ export default function Footer() {
 
                 {/* Legal Links */}
                 <div className="flex flex-wrap justify-center md:justify-end gap-6 items-center">
-                  <a href="/privacy" className="text-gray-400 hover:text-purple-400 transition-colors duration-300 text-sm">
+                  <Link to="/privacy" className="text-gray-400 hover:text-purple-400 transition-colors duration-300 text-sm">
                     Política de Privacidade
-                  </a>
+                  </Link>
                   <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
-                  <a href="/terms" className="text-gray-400 hover:text-purple-400 transition-colors duration-300 text-sm">
+                  <Link to="/terms" className="text-gray-400 hover:text-purple-400 transition-colors duration-300 text-sm">
                     Termos de Uso
-                  </a>
+                  </Link>
                   <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
-                  <a href="/cookies" className="text-gray-400 hover:text-purple-400 transition-colors duration-300 text-sm">
+                  <Link to="/cookies" className="text-gray-400 hover:text-purple-400 transition-colors duration-300 text-sm">
                     Cookies
-                  </a>
+                  </Link>
                 </div>
               </div>
 
