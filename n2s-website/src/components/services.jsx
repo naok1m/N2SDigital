@@ -365,7 +365,7 @@ export default function Services() {
           style={{
             background: `
               linear-gradient(rgba(10, 10, 15, 0.8), rgba(10, 10, 15, 0.8)),
-              url('/arco2.webp')
+              url('/images/elements/arco2.webp')
             `,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
@@ -399,7 +399,7 @@ export default function Services() {
 
 
           {/* Services Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-16 max-w-6xl mx-auto mb-16">
             {services.map((service, index) => (
               <ServiceCard
                 key={index}
@@ -413,15 +413,32 @@ export default function Services() {
           {/* CTA Section */}
           <div className="max-w-6xl mx-auto">
             <div className="bg-gradient-to-r from-[rgba(156,83,227,0.1)] to-[rgba(168,85,247,0.1)] backdrop-blur-xl rounded-2xl p-8 border border-purple-500/30 text-center">
-              <div className="flex items-center justify-center gap-3 mb-4">
-                <FontAwesomeIcon icon={faRocket} className="text-2xl text-white" />
-                <h3 className="text-2xl font-bold text-white">
+              {/* Mobile Layout */}
+              <div className="md:hidden">
+                <div className="flex justify-center mb-4">
+                  <FontAwesomeIcon icon={faRocket} className="text-2xl text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-4">
                   Pronto para decolar?
-              </h3>
+                </h3>
+                <p className="text-gray-400 mb-6 text-sm">
+                  Entre em contato e descubra como podemos transformar sua presença digital
+                </p>
               </div>
-              <p className="text-gray-400 mb-6 text-sm">
-                Entre em contato e descubra como podemos transformar sua presença digital
-              </p>
+              
+              {/* Desktop Layout */}
+              <div className="hidden md:block">
+                <div className="flex items-center justify-center gap-3 mb-4">
+                  <FontAwesomeIcon icon={faRocket} className="text-2xl text-white" />
+                  <h3 className="text-2xl font-bold text-white">
+                    Pronto para decolar?
+                  </h3>
+                </div>
+                <p className="text-gray-400 mb-6 text-sm">
+                  Entre em contato e descubra como podemos transformar sua presença digital
+                </p>
+              </div>
+              
               <div className="flex justify-center">
               <GlassButton onClick={scrollToContact}>
                 Fale Conosco Agora
@@ -443,7 +460,6 @@ export default function Services() {
       ref={formRef}
             className="bg-gradient-to-br from-[rgba(255,255,255,0.05)] to-[rgba(255,255,255,0.02)] backdrop-blur-xl rounded-2xl p-8 max-w-md w-full border border-purple-500/30 relative mx-4"
       onClick={(e) => e.stopPropagation()}
-      style={{ transformStyle: 'preserve-3d' }}
     >
       {/* Close Button */}
       <button

@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './index.css';
 import Analytics from './components/Analytics';
+import FPSToast from './components/FPSToast';
+import { useFPSDetection } from './hooks/useFPSDetection';
 
 // Import pages
 import Home from './pages/Home';
@@ -38,19 +40,37 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+// Componente wrapper para FPS detection
+function AppWithFPS() {
+  const { fps, isDetecting, showToast, hideToast } = useFPSDetection();
+
+  return (
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/cookies" element={<Cookies />} />
+          {/* 404 Page */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+      
+      {/* FPS Toast */}
+      <FPSToast 
+        show={showToast} 
+        onClose={hideToast} 
+        fps={fps}
+      />
+    </>
+  );
+}
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Analytics />
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/privacy" element={<Privacy />} />
-        <Route path="/terms" element={<Terms />} />
-        <Route path="/cookies" element={<Cookies />} />
-        {/* 404 Page */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
+    <AppWithFPS />
   </StrictMode>,
 ) 

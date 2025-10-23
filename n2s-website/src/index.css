@@ -43,6 +43,59 @@ body {
   transform: translateZ(0);
 }
 
+/* Stack Carousel Optimizations */
+.stack-band-inner {
+  will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.stack-item {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.stack-set {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* FPS Toast Animations */
+@keyframes shrink {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+.fps-toast-enter {
+  animation: toastEnter 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+.fps-toast-exit {
+  animation: toastExit 0.3s ease-in forwards;
+}
+
+@keyframes toastEnter {
+  from {
+    opacity: 0;
+    transform: translateX(100px) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes toastExit {
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100px) scale(0.8);
+  }
+}
+
 
 /* Configuração de cores */
 @layer base {
@@ -268,7 +321,7 @@ body {
   position: absolute;
   inset: 0;
   opacity: 0.15;
-  background-image: url('/noise.webp');
+  background-image: url('/images/backgrounds/noise.webp');
   background-size: 256px 256px;
   background-repeat: repeat;
   mix-blend-mode: overlay;
@@ -346,19 +399,7 @@ video {
   transform: translateZ(0);
 }
 
-/* Otimizações para cards 3D */
-.card-3d {
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
-  will-change: transform;
-  perspective: 1000px;
-}
-
-/* Suavização de animações 3D */
-.card-3d * {
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
-}
+/* Card styles - efeito 3D removido */
 
 /* Estilos para a seção About - Landing Page */
 .stat-card {
@@ -602,6 +643,37 @@ video {
   }
 }
 
+/* Animações para menu mobile */
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-down {
+  animation: slide-down 0.3s ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.4s ease-out forwards;
+}
+
 /* Scrollbar horizontal escondida para mobile carousel */
 .hide-scrollbar {
   -ms-overflow-style: none;  /* Internet Explorer 10+ */
@@ -610,4 +682,46 @@ video {
 
 .hide-scrollbar::-webkit-scrollbar {
   display: none;  /* Safari and Chrome */
+}
+
+/* Estilos para controles de vídeo personalizados */
+.slider {
+  background: linear-gradient(to right, #9C53E3 0%, #9C53E3 var(--value, 0%), #374151 var(--value, 0%), #374151 100%);
+}
+
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #9C53E3;
+  cursor: pointer;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #9C53E3;
+  cursor: pointer;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Animação para controles de vídeo */
+@keyframes fadeInControls {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.video-controls-enter {
+  animation: fadeInControls 0.3s ease-out;
 }

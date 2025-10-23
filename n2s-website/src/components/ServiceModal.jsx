@@ -176,13 +176,22 @@ const ServiceModal = ({ service, isOpen, onClose }) => {
         className="relative bg-gradient-to-br from-[rgba(255,255,255,0.05)] to-[rgba(255,255,255,0.02)] backdrop-blur-xl rounded-2xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-purple-500/30"
       >
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500/20 to-purple-600/20 flex items-center justify-center">
-              <FontAwesomeIcon 
-                icon={currentService.icon} 
-                className="text-2xl text-purple-400" 
-              />
+        <div className="mb-8">
+          {/* Mobile Layout */}
+          <div className="md:hidden">
+            <div className="flex items-start justify-between mb-4">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500/20 to-purple-600/20 flex items-center justify-center border border-purple-500/30">
+                <FontAwesomeIcon 
+                  icon={currentService.icon} 
+                  className="text-2xl text-purple-400" 
+                />
+              </div>
+              <button
+                onClick={onClose}
+                className="w-10 h-10 rounded-full bg-gray-800/50 hover:bg-purple-600/50 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:rotate-90 border border-gray-600/50"
+              >
+                <FontAwesomeIcon icon={faTimes} className="text-white text-lg" />
+              </button>
             </div>
             <div>
               <h2 className="text-3xl font-bold text-white mb-2">
@@ -194,12 +203,32 @@ const ServiceModal = ({ service, isOpen, onClose }) => {
             </div>
           </div>
           
-          <button
-            onClick={onClose}
-            className="w-10 h-10 rounded-full bg-gray-800/50 hover:bg-purple-600/50 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:rotate-90"
-          >
-            <FontAwesomeIcon icon={faTimes} className="text-white text-lg" />
-          </button>
+          {/* Desktop Layout */}
+          <div className="hidden md:flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500/20 to-purple-600/20 flex items-center justify-center border border-purple-500/30">
+                <FontAwesomeIcon 
+                  icon={currentService.icon} 
+                  className="text-2xl text-purple-400" 
+                />
+              </div>
+              <div>
+                <h2 className="text-3xl font-bold text-white mb-2">
+                  {currentService.title}
+                </h2>
+                <p className="text-purple-300 text-lg">
+                  {currentService.subtitle}
+                </p>
+              </div>
+            </div>
+            
+            <button
+              onClick={onClose}
+              className="w-10 h-10 rounded-full bg-gray-800/50 hover:bg-purple-600/50 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:rotate-90 border border-gray-600/50"
+            >
+              <FontAwesomeIcon icon={faTimes} className="text-white text-lg" />
+            </button>
+          </div>
         </div>
 
         {/* Description */}
@@ -212,13 +241,17 @@ const ServiceModal = ({ service, isOpen, onClose }) => {
         {/* Benefits */}
         <div className="mb-8">
           <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-            <FontAwesomeIcon icon={faCheck} className="text-purple-400" />
+            <div className="w-6 h-6 rounded-md bg-gradient-to-br from-purple-500/20 to-purple-600/20 flex items-center justify-center border border-purple-500/30">
+              <FontAwesomeIcon icon={faCheck} className="text-purple-400 text-sm" />
+            </div>
             Principais Benefícios
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {currentService.benefits.map((benefit, index) => (
               <div key={index} className="flex items-start gap-3 p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
-                <FontAwesomeIcon icon={faCheck} className="text-purple-400 text-sm mt-1 flex-shrink-0" />
+                <div className="w-5 h-5 rounded-md bg-gradient-to-br from-purple-500/20 to-purple-600/20 flex items-center justify-center border border-purple-500/30 flex-shrink-0 mt-1">
+                  <FontAwesomeIcon icon={faCheck} className="text-purple-400 text-xs" />
+                </div>
                 <span className="text-gray-300 text-sm">{benefit}</span>
               </div>
             ))}
@@ -228,7 +261,9 @@ const ServiceModal = ({ service, isOpen, onClose }) => {
         {/* Process */}
         <div className="mb-8">
           <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-            <FontAwesomeIcon icon={faClock} className="text-purple-400" />
+            <div className="w-6 h-6 rounded-md bg-gradient-to-br from-purple-500/20 to-purple-600/20 flex items-center justify-center border border-purple-500/30">
+              <FontAwesomeIcon icon={faClock} className="text-purple-400 text-sm" />
+            </div>
             Nosso Processo
           </h3>
           <div className="space-y-3">
@@ -246,7 +281,9 @@ const ServiceModal = ({ service, isOpen, onClose }) => {
         {/* Examples */}
         <div className="mb-8">
           <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-            <FontAwesomeIcon icon={faRocket} className="text-purple-400" />
+            <div className="w-6 h-6 rounded-md bg-gradient-to-br from-purple-500/20 to-purple-600/20 flex items-center justify-center border border-purple-500/30">
+              <FontAwesomeIcon icon={faRocket} className="text-purple-400 text-sm" />
+            </div>
             Exemplos de Aplicação
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -262,7 +299,9 @@ const ServiceModal = ({ service, isOpen, onClose }) => {
         {/* Pricing Notice */}
         <div className="bg-gradient-to-r from-[rgba(168,85,247,0.1)] to-[rgba(168,85,247,0.05)] border border-purple-500/30 rounded-lg p-4 mb-6">
           <div className="flex items-start gap-3">
-            <FontAwesomeIcon icon={faDollarSign} className="text-purple-400 text-lg mt-1" />
+            <div className="w-6 h-6 rounded-md bg-gradient-to-br from-purple-500/20 to-purple-600/20 flex items-center justify-center border border-purple-500/30 flex-shrink-0 mt-1">
+              <FontAwesomeIcon icon={faDollarSign} className="text-purple-400 text-sm" />
+            </div>
             <div>
               <p className="text-purple-300 font-medium mb-1">Investimento e Prazo</p>
               <p className="text-gray-400 text-sm">

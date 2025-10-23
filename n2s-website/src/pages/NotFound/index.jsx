@@ -292,7 +292,7 @@ export default function NotFound() {
           }}
         >
           <img 
-            src="/liquid-globe.webp" 
+            src="/images/elements/liquid-globe.webp" 
             alt="Liquid Globe"
             className="w-[900px] h-[900px] object-contain"
             style={{

@@ -114,7 +114,7 @@ Serviço de interesse: ${formData.servico}
 
 Mensagem: ${formData.mensagem}`;
         
-        const whatsappUrl = `https://wa.me/5585991120816?text=${encodeURIComponent(message)}`;
+        const whatsappUrl = `https://wa.me/5585996941119?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
         
         // Track WhatsApp click
@@ -154,7 +154,7 @@ ${selectedServices.map(service => `• ${service}`).join('\n')}
 
 Por favor, entre em contato para discutirmos os detalhes do projeto.`;
 
-        const whatsappUrl = `https://wa.me/5585991120816?text=${encodeURIComponent(message)}`;
+        const whatsappUrl = `https://wa.me/5585996941119?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
         
         // Close modal after submission
@@ -238,13 +238,13 @@ Por favor, entre em contato para discutirmos os detalhes do projeto.`;
             ref={sectionRef}
             className="relative min-h-screen py-20 overflow-hidden section-noise-blur bg-gradient-to-b from-[#000002] to-[#190B2E]"
         >
-            {/* Background com arco.webp e efeitos */}
+            {/* Background com arco.png e efeitos */}
                    <div 
                        className="absolute inset-0"
                        style={{
                            background: `
                                linear-gradient(rgba(10, 10, 15, 0.8), rgba(10, 10, 15, 0.8)),
-                               url('/arco2.webp')
+                               url('/arco2.png')
                            `,
                            backgroundSize: 'cover',
                            backgroundPosition: 'center',
@@ -328,7 +328,7 @@ Por favor, entre em contato para discutirmos os detalhes do projeto.`;
                                     name="telefone"
                                     value={formData.telefone}
                                     onChange={handleInputChange}
-                                    placeholder="(85) 9 9112-0816"
+                                    placeholder="(85) 9 9694-1119"
                                     className="w-full px-4 py-3 bg-gradient-to-br from-[rgba(255,255,255,0.08)] to-[rgba(255,255,255,0.03)] backdrop-blur-sm border border-purple-500/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500/50 focus:bg-gradient-to-br focus:from-[rgba(255,255,255,0.12)] focus:to-[rgba(255,255,255,0.05)] transition-all duration-300 text-sm"
                                 />
                             </div>
@@ -411,7 +411,7 @@ Por favor, entre em contato para discutirmos os detalhes do projeto.`;
                                 </div>
                                 <div>
                                     <h4 className="text-white font-bold text-lg">WhatsApp</h4>
-                                    <p className="text-gray-400">+55 (85) 9 9112-0816</p>
+                                    <p className="text-gray-400">+55 (85) 9 9694-1119</p>
                                 </div>
                             </div>
 

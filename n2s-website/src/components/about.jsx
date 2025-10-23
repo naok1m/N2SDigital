@@ -112,7 +112,7 @@ export default function AboutSection() {
       {/* Black Hole Background */}
       <div className="absolute inset-0 flex items-center justify-center pt-64 pointer-events-none z-0">
         <img 
-          src="/blackhole.webp" 
+          src="/images/backgrounds/blackhole.webp" 
           alt="Buraco negro no background" 
           className="w-[1200px] h-[1200px] md:w-[1400px] md:h-[1400px] lg:w-[1600px] lg:h-[1600px] xl:w-[1800px] xl:h-[1800px] opacity-[0.15] 
                      mix-blend-mode-screen 
@@ -160,7 +160,7 @@ export default function AboutSection() {
         {/* Values Section */}
         <div ref={valuesRef} className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {values.map((value, index) => (
-            <div key={index} className="value-card rounded-2xl p-6 text-center">
+            <div key={index} className="stats-card value-card rounded-2xl p-6 text-center">
               <div className="stats-icon-container w-12 h-12 rounded-xl mx-auto mb-3 flex items-center justify-center">
                 <FontAwesomeIcon icon={value.icon} className="text-lg text-purple-400" />
               </div>

@@ -2,8 +2,9 @@ import React, { useState, useEffect, useLayoutEffect, useRef, useMemo, useCallba
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import GlassButton from './glassButton';
+import VideoControls from './VideoControls';
 import StackCarousel from './StackCarousel';
-import Card3D from './Card3D';
+import ProjectCard from './ProjectCard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart, faHospital, faRocket, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useDebounce } from '../hooks/useDebounce';
@@ -40,13 +41,14 @@ export default function Hero() {
   const projectsShapeRef = useRef(null);
   const projectsIndicatorsRef = useRef(null);
   const mobileProjectsRefs = useRef([]);
+  const videoRef = useRef(null);
   
   // Estado para controlar se a animação já foi executada
   const [projectsAnimationPlayed, setProjectsAnimationPlayed] = useState(false);
   
   // Estado para controlar o carousel de projetos
   const [currentPage, setCurrentPage] = useState(0);
-  const totalPages = 4;
+  const totalPages = 3;
   const [carouselCanStart, setCarouselCanStart] = useState(false);
   const [carouselPaused, setCarouselPaused] = useState(false);
 
@@ -344,12 +346,12 @@ export default function Hero() {
     };
     
     preloadImages([
-      '/liquidos.webp',
-      '/correntes.webp', 
-      '/planeta.webp',
-      '/estela.webp',
-      '/pattern.webp',
-      '/arco.webp'
+      '/images/elements/liquidos.webp',
+      '/images/elements/correntes.webp', 
+      '/images/elements/planeta.webp',
+      '/images/elements/estela.webp',
+      '/images/backgrounds/pattern.webp',
+      '/images/elements/arco.webp'
     ]);
     
     // Configurar GSAP para melhor performance e definir opacidades iniciais
@@ -634,7 +636,7 @@ export default function Hero() {
         
         {/* Noise texture visível */}
         <div className="absolute inset-0 opacity-35" style={{
-          backgroundImage: 'url("/noise.webp")',
+          backgroundImage: 'url("/images/backgrounds/noise.webp")',
           backgroundSize: '256px 256px',
           backgroundRepeat: 'repeat',
           mixBlendMode: 'overlay'
@@ -656,7 +658,7 @@ export default function Hero() {
         <div className="absolute inset-0 pointer-events-none z-[1]">
           <OptimizedImage 
             ref={liquidosRef}
-            src="/liquidos.webp" 
+            src="/images/elements/liquidos.webp" 
             alt="Efeito visual líquido no background" 
             className="w-full h-full object-cover background-image"
             loading="eager"
@@ -675,7 +677,7 @@ export default function Hero() {
         <div className="absolute inset-0 pointer-events-none z-[2]">
           <OptimizedImage 
             ref={correntesRef}
-            src="/correntes.webp" 
+            src="/images/elements/correntes.webp" 
             alt="Efeito visual de correntes no background" 
             className="w-full h-full object-cover background-image"
             loading="lazy"
@@ -715,7 +717,7 @@ export default function Hero() {
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[4]">
           <OptimizedImage 
             ref={planetaRef}
-            src="/planeta.webp" 
+            src="/images/elements/planeta.webp" 
             alt="Planeta estilizado no background" 
             className="w-[700px] h-[700px] md:w-[900px] md:h-[900px] lg:w-[1100px] lg:h-[1100px] object-contain mix-blend-mode-screen background-image"
             loading="eager"
@@ -828,17 +830,14 @@ export default function Hero() {
                   {/* Video Container - 16:9 Aspect Ratio */}
                   <div className="aspect-video bg-gray-900 relative">
                     <video
-                      src="/Noxus.mp4"
-                      autoPlay
+                      ref={videoRef}
+                      src="/videos/Noxus.mp4"
                       loop
                       muted
                       playsInline
                       className="w-full h-full object-cover rounded-xl"
                     />
-                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                      <div className="text-white text-xl font-semibold bg-black/50 px-4 py-2 rounded">
-                      </div>
-                    </div>
+                    <VideoControls videoRef={videoRef} />
                   </div>
                 </div>
               </div>
@@ -862,7 +861,7 @@ export default function Hero() {
           style={{
             background: `
               linear-gradient(rgba(10, 10, 15, 0.8), rgba(10, 10, 15, 0.8)),
-              url('/arco.webp')
+              url('/images/elements/arco.webp')
             `,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
@@ -887,7 +886,7 @@ export default function Hero() {
         {/* Pattern.webp como camada sobre o background - Layer 1 */}
         <div className="absolute inset-0 pointer-events-none z-[1]">
           <OptimizedImage 
-            src="/pattern.webp" 
+            src="/images/backgrounds/pattern.webp" 
             alt="Pattern" 
             className="w-full h-full object-cover opacity-[0.4]"
             style={{
@@ -915,12 +914,12 @@ export default function Hero() {
         </div>
 
         
-        <div className="max-w-7xl mx-auto w-full text-white text-center flex flex-col items-center justify-center px-8 relative z-10">
+        <div className="w-full text-white text-center flex flex-col items-center justify-center px-4 relative z-10">
           {/* Estela pequena em cima do título */}
           <div className="relative mb-8">
             <OptimizedImage 
               ref={estelaRef}
-              src="/estela.webp" 
+              src="/images/elements/estela.webp" 
               alt="Estela" 
               className="w-[60px] h-[60px] md:w-[80px] md:h-[80px] object-contain mix-blend-mode-screen"
               style={{
@@ -943,56 +942,37 @@ export default function Hero() {
           </div>
           
           {/* Container principal dos cards e navegação */}
-          <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-0">
+           <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-0">
             
-            {/* Layout Desktop: Setas nas laterais */}
-            <div className="hidden sm:flex items-center">
-              {/* Seta esquerda */}
-              <button
-                onClick={handlePreviousPage}
-                onMouseEnter={pauseCarousel}
-                onMouseLeave={resumeCarousel}
-                className="project-nav-arrow flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center group mr-6 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-all duration-300"
-              >
-                <FontAwesomeIcon 
-                  icon={faChevronLeft} 
-                  className="text-white text-lg group-hover:text-purple-200 transition-colors duration-300" 
-                />
-              </button>
-
+            {/* Layout Desktop */}
+            <div className="hidden sm:block">
               {/* Container dos cards */}
-              <div className="flex-1">
+              <div className="w-full max-w-8xl mx-auto">
                 <div ref={projectsCardsRef} className="relative overflow-hidden py-16">
               {/* Página 1 - E-commerce */}
               {currentPage === 0 && (
                 <div 
-                  className="grid grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 justify-items-center animate-fade-in px-4 lg:px-8"
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12 justify-items-center animate-fade-in px-4 lg:px-8"
                   onMouseEnter={pauseCarousel}
                   onMouseLeave={resumeCarousel}
                 >
-                  <Card3D
-                    icon={faShoppingCart}
-                    title="E-commerce Avançado"
-                    description="Plataforma completa de vendas online com microserviços, pagamentos integrados e dashboard administrativo avançado."
-                    technologies="React, Node.js, AWS, Stripe"
-                    image="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                    tag="E-Commerce"
+                  <ProjectCard
+                    title="Wavy Movies"
+                    description="Plataforma desenvolvida para ajudar usuários a encontrarem filmes e séries de forma prática. Permite favoritar conteúdos e redireciona para sites oficiais ao clicar em 'Assistir Agora'."
+                    image="/images/projects/souzadev.png"
+                    category="Sites"
                   />
-                  <Card3D
-                    icon={faShoppingCart}
-                    title="Marketplace Digital"
-                    description="Plataforma de marketplace com sistema de comissões, gestão de vendedores e pagamentos automatizados."
-                    technologies="Next.js, PostgreSQL, Stripe"
-                    image="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                    tag="Marketplace"
+                  <ProjectCard
+                    title="Noxus"
+                    description="Noxus é uma landing page minimalista e elegante que criei para uma agência de marketing digital. A página foca em um design moderno com tema escuro e tons roxos."
+                    image="/images/projects/marko.png"
+                    category="Landing Pages"
                   />
-                  <Card3D
-                    icon={faShoppingCart}
-                    title="Loja Virtual Premium"
-                    description="E-commerce de luxo com experiência imersiva, realidade aumentada e personalização avançada."
-                    technologies="React, Three.js, AI"
-                    image="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                    tag="Luxury E-commerce"
+                  <ProjectCard
+                    title="Monetize com IA"
+                    description="Landing Page criada para a Monetize com IA, um curso sobre Inteligência Artificial. Design moderno com foco em conversão e experiência do usuário."
+                    image="/images/projects/vpf.png"
+                    category="Landing Pages"
                   />
                 </div>
               )}
@@ -1000,33 +980,27 @@ export default function Hero() {
               {/* Página 2 - Apps Mobile */}
               {currentPage === 1 && (
                 <div 
-                  className="grid grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 justify-items-center animate-fade-in px-4 lg:px-8"
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12 justify-items-center animate-fade-in px-4 lg:px-8"
                   onMouseEnter={pauseCarousel}
                   onMouseLeave={resumeCarousel}
                 >
-                  <Card3D
-                    icon={faHospital}
+                  <ProjectCard
                     title="App Mobile para Saúde"
                     description="Aplicativo nativo para iOS/Android com integração IoT, telemedicina e monitoramento em tempo real."
-                    technologies="React Native, Swift, Kotlin, IoT"
-                    image="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                    tag="App Mobile"
+                    image="/images/projects/souzadev.png"
+                    category="Mobile Apps"
                   />
-                  <Card3D
-                    icon={faHospital}
+                  <ProjectCard
                     title="Telemedicina Avançada"
                     description="Plataforma completa de consultas online com IA para diagnóstico e integração com dispositivos médicos."
-                    technologies="Flutter, AI, WebRTC"
-                    image="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                    tag="Telemedicine"
+                    image="/images/projects/marko.png"
+                    category="Sites"
                   />
-                  <Card3D
-                    icon={faHospital}
+                  <ProjectCard
                     title="Monitoramento IoT"
                     description="Sistema de monitoramento de pacientes com dispositivos IoT e alertas em tempo real."
-                    technologies="React Native, IoT, Cloud"
-                    image="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                    tag="IoT Health"
+                    image="/images/projects/vpf.png"
+                    category="Sites"
                   />
                 </div>
               )}
@@ -1034,66 +1008,31 @@ export default function Hero() {
               {/* Página 3 - Landing Pages */}
               {currentPage === 2 && (
                 <div 
-                  className="grid grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 justify-items-center animate-fade-in px-4 lg:px-8"
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12 justify-items-center animate-fade-in px-4 lg:px-8"
                   onMouseEnter={pauseCarousel}
                   onMouseLeave={resumeCarousel}
                 >
-                  <Card3D
-                    icon={faRocket}
+                  <ProjectCard
                     title="Landing Page Imersiva"
                     description="Design responsivo focado em conversão com animações avançadas e otimização para SEO e performance."
-                    technologies="Next.js, GSAP, Tailwind CSS"
-                    image="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                    tag="Landing Page"
+                    image="/images/projects/souzadev.png"
+                    category="Landing Pages"
                   />
-                  <Card3D
-                    icon={faRocket}
+                  <ProjectCard
                     title="SaaS Dashboard"
                     description="Interface moderna para SaaS com métricas em tempo real, gráficos interativos e gestão de usuários."
-                    technologies="React, D3.js, Chart.js"
-                    image="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                    tag="SaaS Platform"
+                    image="/images/projects/marko.png"
+                    category="Sites"
                   />
-                  <Card3D
-                    icon={faRocket}
+                  <ProjectCard
                     title="Portfolio Criativo"
                     description="Portfolio interativo com animações 3D, galeria dinâmica e integração com redes sociais."
-                    technologies="Three.js, GSAP, CMS"
-                    image="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                    tag="Creative Portfolio"
+                    image="/images/projects/vpf.png"
+                    category="Sites"
                   />
                 </div>
               )}
 
-              {/* Página 4 - Banner */}
-              {currentPage === 3 && (
-                <div 
-                  className="animate-fade-in w-full"
-                  onMouseEnter={pauseCarousel}
-                  onMouseLeave={resumeCarousel}
-                >
-                  <a 
-                    href="#contact" 
-                    className="block cursor-pointer"
-                  >
-                    <div 
-                      className="relative rounded-2xl overflow-hidden w-full border border-white/20 shadow-2xl"
-                      style={{
-                        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
-                      }}
-                    >
-                      <OptimizedImage 
-                        src="/banner-cta.webp" 
-                        alt="Banner CTA - Clique para entrar em contato" 
-                        className="w-full h-auto object-cover"
-                        loading="lazy"
-                      />
-                      {/* Sombra interna para profundidade */}
-                      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/15 to-black/40 pointer-events-none" />
-                    </div>
-                  </a>
-                </div>
-              )}
 
             </div>
           
@@ -1113,18 +1052,6 @@ export default function Hero() {
             </div>
           </div>
 
-              {/* Seta direita */}
-              <button
-                onClick={handleNextPage}
-                onMouseEnter={pauseCarousel}
-                onMouseLeave={resumeCarousel}
-                className="project-nav-arrow flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center group ml-6 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-all duration-300"
-              >
-                <FontAwesomeIcon 
-                  icon={faChevronRight} 
-                  className="text-white text-lg group-hover:text-purple-200 transition-colors duration-300" 
-                />
-              </button>
             </div>
 
             {/* Layout Mobile: Scroll horizontal dentro de cada página */}
@@ -1135,36 +1062,30 @@ export default function Hero() {
                 {currentPage === 0 && (
                   <div 
                     ref={(el) => mobileProjectsRefs.current[0] = el}
-                    className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth hide-scrollbar pb-4 px-4 space-x-4"
+                    className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth hide-scrollbar pb-4 px-4 space-x-8"
                   >
-                    <div className="flex-shrink-0 w-full snap-center">
-                      <Card3D
-                        icon={faShoppingCart}
-                        title="E-commerce Avançado"
-                        description="Plataforma completa de vendas online com microserviços, pagamentos integrados e dashboard administrativo avançado."
-                        technologies="React, Node.js, AWS, Stripe"
-                        image="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                        tag="E-Commerce"
+                    <div className="flex-shrink-0 w-full max-w-lg snap-center">
+                      <ProjectCard
+                        title="Wavy Movies"
+                        description="Plataforma desenvolvida para ajudar usuários a encontrarem filmes e séries de forma prática. Permite favoritar conteúdos e redireciona para sites oficiais ao clicar em 'Assistir Agora'."
+                        image="/images/projects/souzadev.png"
+                        category="Sites"
                       />
                     </div>
-                    <div className="flex-shrink-0 w-full snap-center">
-                      <Card3D
-                        icon={faShoppingCart}
-                        title="Marketplace Digital"
-                        description="Plataforma de marketplace com sistema de comissões, gestão de vendedores e pagamentos automatizados."
-                        technologies="Next.js, PostgreSQL, Stripe"
-                        image="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                        tag="Marketplace"
+                    <div className="flex-shrink-0 w-full max-w-lg snap-center">
+                      <ProjectCard
+                        title="Noxus"
+                        description="Noxus é uma landing page minimalista e elegante que criei para uma agência de marketing digital. A página foca em um design moderno com tema escuro e tons roxos."
+                        image="/images/projects/marko.png"
+                        category="Landing Pages"
                       />
                     </div>
-                    <div className="flex-shrink-0 w-full snap-center">
-                      <Card3D
-                        icon={faShoppingCart}
-                        title="Loja Virtual Premium"
-                        description="E-commerce de luxo com experiência imersiva, realidade aumentada e personalização avançada."
-                        technologies="React, Three.js, AI"
-                        image="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                        tag="E-Commerce"
+                    <div className="flex-shrink-0 w-full max-w-lg snap-center">
+                      <ProjectCard
+                        title="Monetize com IA"
+                        description="Landing Page criada para a Monetize com IA, um curso sobre Inteligência Artificial. Design moderno com foco em conversão e experiência do usuário."
+                        image="/images/projects/vpf.png"
+                        category="Landing Pages"
                       />
                     </div>
                   </div>
@@ -1174,36 +1095,30 @@ export default function Hero() {
                 {currentPage === 1 && (
                   <div 
                     ref={(el) => mobileProjectsRefs.current[1] = el}
-                    className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth hide-scrollbar pb-4 px-4 space-x-4"
+                    className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth hide-scrollbar pb-4 px-4 space-x-8"
                   >
-                    <div className="flex-shrink-0 w-full snap-center">
-                      <Card3D
-                        icon={faHospital}
+                    <div className="flex-shrink-0 w-full max-w-lg snap-center">
+                      <ProjectCard
                         title="App Mobile para Saúde"
                         description="Aplicativo nativo para iOS/Android com integração IoT, telemedicina e monitoramento em tempo real."
-                        technologies="React Native, Swift, Kotlin, IoT"
-                        image="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                        tag="App Mobile"
+                        image="/images/projects/souzadev.png"
+                        category="Mobile Apps"
                       />
                     </div>
-                    <div className="flex-shrink-0 w-full snap-center">
-                      <Card3D
-                        icon={faHospital}
+                    <div className="flex-shrink-0 w-full max-w-lg snap-center">
+                      <ProjectCard
                         title="Telemedicina Avançada"
                         description="Plataforma completa de consultas online com IA para diagnóstico e integração com dispositivos médicos."
-                        technologies="Flutter, AI, WebRTC"
-                        image="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                        tag="Telemedicine"
+                        image="/images/projects/marko.png"
+                        category="Sites"
                       />
                     </div>
-                    <div className="flex-shrink-0 w-full snap-center">
-                      <Card3D
-                        icon={faHospital}
+                    <div className="flex-shrink-0 w-full max-w-lg snap-center">
+                      <ProjectCard
                         title="Monitoramento IoT"
                         description="Sistema de monitoramento de pacientes com dispositivos IoT e alertas em tempo real."
-                        technologies="React Native, IoT, Cloud"
-                        image="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                        tag="IoT"
+                        image="/images/projects/vpf.png"
+                        category="Sites"
                       />
                     </div>
                   </div>
@@ -1213,63 +1128,35 @@ export default function Hero() {
                 {currentPage === 2 && (
                   <div 
                     ref={(el) => mobileProjectsRefs.current[2] = el}
-                    className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth hide-scrollbar pb-4 px-4 space-x-4"
+                    className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth hide-scrollbar pb-4 px-4 space-x-8"
                   >
-                    <div className="flex-shrink-0 w-full snap-center">
-                      <Card3D
-                        icon={faRocket}
+                    <div className="flex-shrink-0 w-full max-w-lg snap-center">
+                      <ProjectCard
                         title="Landing Page Imersiva"
                         description="Design responsivo focado em conversão com animações avançadas e otimização para SEO e performance."
-                        technologies="Next.js, GSAP, Tailwind CSS"
-                        image="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                        tag="Landing Page"
+                        image="/images/projects/marko.png"
+                        category="Landing Pages"
                       />
                     </div>
-                    <div className="flex-shrink-0 w-full snap-center">
-                      <Card3D
-                        icon={faRocket}
+                    <div className="flex-shrink-0 w-full max-w-lg snap-center">
+                      <ProjectCard
                         title="SaaS Dashboard"
                         description="Interface moderna para SaaS com métricas em tempo real, gráficos interativos e gestão de usuários."
-                        technologies="React, D3.js, Chart.js"
-                        image="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                        tag="SaaS Platform"
+                        image="/images/projects/vpf.png"
+                        category="Sites"
                       />
                     </div>
-                    <div className="flex-shrink-0 w-full snap-center">
-                      <Card3D
-                        icon={faRocket}
+                    <div className="flex-shrink-0 w-full max-w-lg snap-center">
+                      <ProjectCard
                         title="Portfolio Criativo"
                         description="Portfolio interativo com animações 3D, galeria dinâmica e integração com redes sociais."
-                        technologies="Three.js, GSAP, CMS"
-                        image="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                        tag="Portfolio"
+                        image="/images/projects/souzadev.png"
+                        category="Sites"
                       />
                     </div>
                   </div>
                 )}
 
-                {/* Página 4 - Banner */}
-                {currentPage === 3 && (
-                  <div 
-                    ref={(el) => mobileProjectsRefs.current[3] = el}
-                    className="flex justify-center animate-fade-in px-4"
-                  >
-                    <div className="bg-gradient-to-r from-[rgba(156,83,227,0.1)] to-[rgba(168,85,247,0.1)] backdrop-blur-xl rounded-2xl p-6 border border-purple-500/30 text-center max-w-sm w-full">
-                      <div className="flex items-center justify-center gap-3 mb-4">
-                        <FontAwesomeIcon icon={faRocket} className="text-xl text-white" />
-                        <h3 className="text-lg font-bold text-white">
-                          Pronto para decolar?
-                        </h3>
-                      </div>
-                      <p className="text-gray-400 mb-4 text-sm">
-                        Entre em contato e descubra como podemos transformar sua presença digital
-                      </p>
-                      <GlassButton onClick={scrollToContact}>
-                        Fale Conosco Agora
-                      </GlassButton>
-                    </div>
-                  </div>
-                )}
               </div>
 
               {/* Indicadores de página mobile */}
@@ -1287,32 +1174,6 @@ export default function Hero() {
                 ))}
               </div>
 
-              {/* Botões de navegação mobile */}
-              <div className="flex justify-center space-x-4">
-                <button
-                  onClick={handlePreviousPage}
-                  onMouseEnter={pauseCarousel}
-                  onMouseLeave={resumeCarousel}
-                  className="w-12 h-12 rounded-full flex items-center justify-center group bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-all duration-300"
-                >
-                  <FontAwesomeIcon 
-                    icon={faChevronLeft} 
-                    className="text-white text-lg group-hover:text-purple-200 transition-colors duration-300" 
-                  />
-                </button>
-
-                <button
-                  onClick={handleNextPage}
-                  onMouseEnter={pauseCarousel}
-                  onMouseLeave={resumeCarousel}
-                  className="w-12 h-12 rounded-full flex items-center justify-center group bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-all duration-300"
-                >
-                  <FontAwesomeIcon 
-                    icon={faChevronRight} 
-                    className="text-white text-lg group-hover:text-purple-200 transition-colors duration-300" 
-                  />
-                </button>
-              </div>
             </div>
           </div>
         </div>

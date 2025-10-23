@@ -52,9 +52,9 @@ export default function Footer() {
 
   const socialLinks = [
     { name: "WhatsApp", icon: faWhatsapp, href: "https://wa.me/5585991120816", color: "#25D366" },
-    { name: "Instagram", icon: faInstagram, href: "https://instagram.com/n2sgroup", color: "#E4405F" },
-    { name: "Facebook", icon: faFacebook, href: "https://facebook.com/n2sgroup", color: "#1877F2" },
-    { name: "Twitter", icon: faTwitter, href: "https://twitter.com/n2sgroup", color: "#1DA1F2" }
+    { name: "Instagram", icon: faInstagram, href: "https://instagram.com/n2s.group", color: "#E4405F" },
+    { name: "Facebook", icon: faFacebook, href: "https://facebook.com/n2s.group", color: "#1877F2" },
+    { name: "Twitter", icon: faTwitter, href: "https://twitter.com/n2s.group", color: "#1DA1F2" }
   ];
 
   const contactInfo = [
@@ -144,7 +144,7 @@ export default function Footer() {
         
         {/* Noise texture sutil */}
         <div className="absolute inset-0 opacity-25" style={{
-          backgroundImage: 'url("/noise.webp")',
+          backgroundImage: 'url("/images/backgrounds/noise.webp")',
           backgroundSize: '256px 256px',
           backgroundRepeat: 'repeat',
           mixBlendMode: 'overlay'
@@ -165,7 +165,122 @@ export default function Footer() {
         <div className="relative z-10">
           {/* Main Footer Content */}
           <div className="max-w-7xl mx-auto px-6 py-16">
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
+            {/* Mobile Layout */}
+            <div className="md:hidden space-y-6">
+              {/* Company Info & Logo */}
+              <div className="p-6 text-center">
+                <div className="flex items-center justify-center mb-4">
+                  <img src={logo} alt="N2S Group" className="w-12 h-12" />
+                </div>
+                <p className="text-gray-400 text-sm leading-relaxed mb-3">
+                  {companyInfo.description}
+                </p>
+                <p className="text-gray-500 text-xs">
+                  © {new Date().getFullYear()} N2S Group. Todos os direitos reservados.
+                </p>
+                <p className="text-gray-600 text-xs mt-1">
+                  Fundada em {companyInfo.founded} • {companyInfo.location}
+                </p>
+              </div>
+
+              {/* Services */}
+              <div className="bg-gradient-to-br from-[rgba(255,255,255,0.1)] to-[rgba(255,255,255,0.05)] backdrop-blur-[20px] rounded-2xl p-6 border border-[rgba(255,255,255,0.2)]">
+                <h4 className="text-white font-bold text-lg mb-4 flex items-center gap-2">
+                  <FontAwesomeIcon icon={faCode} className="text-purple-400" />
+                  Serviços
+                </h4>
+                <ul className="space-y-3">
+                  {services.map((service, index) => (
+                    <li key={index}>
+                      <button
+                        onClick={() => scrollToSection(service.href)}
+                        className="text-gray-400 hover:text-purple-400 transition-colors duration-300 text-sm flex items-center gap-2 group w-full text-left"
+                      >
+                        <span className="w-1.5 h-1.5 bg-purple-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        {service.name}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Quick Links */}
+              <div className="bg-gradient-to-br from-[rgba(255,255,255,0.1)] to-[rgba(255,255,255,0.05)] backdrop-blur-[20px] rounded-2xl p-6 border border-[rgba(255,255,255,0.2)]">
+                <h4 className="text-white font-bold text-lg mb-4 flex items-center gap-2">
+                  <FontAwesomeIcon icon={faRocket} className="text-purple-400" />
+                  Links Rápidos
+                </h4>
+                <ul className="space-y-3">
+                  {quickLinks.map((link, index) => (
+                    <li key={index}>
+                      <button
+                        onClick={() => scrollToSection(link.href)}
+                        className="text-gray-400 hover:text-purple-400 transition-colors duration-300 text-sm flex items-center gap-2 group w-full text-left"
+                      >
+                        <span className="w-1.5 h-1.5 bg-purple-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        {link.name}
+                        {link.href.startsWith('http') && (
+                          <FontAwesomeIcon icon={faExternalLinkAlt} className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        )}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Contact Info */}
+              <div className="bg-gradient-to-br from-[rgba(255,255,255,0.1)] to-[rgba(255,255,255,0.05)] backdrop-blur-[20px] rounded-2xl p-6 border border-[rgba(255,255,255,0.2)]">
+                <h4 className="text-white font-bold text-lg mb-4 flex items-center gap-2">
+                  <FontAwesomeIcon icon={faEnvelope} className="text-purple-400" />
+                  Contato
+                </h4>
+                <ul className="space-y-4">
+                  {contactInfo.map((contact, index) => (
+                    <li key={index}>
+                      <a
+                        href={contact.href}
+                        className="text-gray-400 hover:text-purple-400 transition-colors duration-300 text-sm flex items-center gap-3 group"
+                      >
+                        <FontAwesomeIcon 
+                          icon={contact.icon} 
+                          className="w-4 h-4 text-purple-400 group-hover:scale-110 transition-transform duration-300" 
+                        />
+                        {contact.text}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Social Media */}
+              <div className="bg-gradient-to-br from-[rgba(255,255,255,0.1)] to-[rgba(255,255,255,0.05)] backdrop-blur-[20px] rounded-2xl p-6 border border-[rgba(255,255,255,0.2)]">
+                <h4 className="text-white font-bold text-lg mb-4 flex items-center gap-2">
+                  <FontAwesomeIcon icon={faShareAlt} className="text-purple-400" />
+                  Redes Sociais
+                </h4>
+                <div className="space-y-4">
+                  {socialLinks.map((social, index) => (
+                    <div key={index}>
+                      <a
+                        href={social.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-400 hover:text-purple-400 transition-colors duration-300 text-sm flex items-center gap-3 group"
+                      >
+                        <FontAwesomeIcon 
+                          icon={social.icon} 
+                          className="w-4 h-4 text-purple-400 group-hover:scale-110 transition-transform duration-300" 
+                        />
+                        {social.name}
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Desktop Layout */}
+            <div className="hidden md:grid grid-cols-1 lg:grid-cols-5 gap-12">
               
               {/* Company Info & Logo */}
               <div className="lg:col-span-1">
@@ -285,8 +400,8 @@ export default function Footer() {
             <div className="max-w-7xl mx-auto px-6 py-6">
               <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                 
-                {/* Copyright */}
-                <div className="text-center md:text-left">
+                {/* Copyright - Desktop Only */}
+                <div className="hidden md:block text-center md:text-left">
                   <p className="text-gray-400 text-sm">
                     © {new Date().getFullYear()} <span className="text-purple-400 font-semibold">{companyInfo.name}</span>. 
                     Todos os direitos reservados.
@@ -299,7 +414,7 @@ export default function Footer() {
                 {/* Legal Links */}
                 <div className="flex flex-wrap justify-center md:justify-end gap-6 items-center">
                   <Link to="/privacy" className="text-gray-400 hover:text-purple-400 transition-colors duration-300 text-sm">
-                    Política de Privacidade
+                    Privacidade
                   </Link>
                   <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
                   <Link to="/terms" className="text-gray-400 hover:text-purple-400 transition-colors duration-300 text-sm">
