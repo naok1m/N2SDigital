@@ -48,7 +48,7 @@ export default function Hero() {
   
   // Estado para controlar o carousel de projetos
   const [currentPage, setCurrentPage] = useState(0);
-  const totalPages = 3;
+  const totalPages = 4;
   const [carouselCanStart, setCarouselCanStart] = useState(false);
   const [carouselPaused, setCarouselPaused] = useState(false);
 
@@ -944,6 +944,27 @@ export default function Hero() {
           {/* Container principal dos cards e navegação */}
            <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-0">
             
+            {/* Setas de navegação - posicionadas nas laterais do viewport */}
+            <button
+              onClick={() => handlePageChange(currentPage === 0 ? totalPages - 1 : currentPage - 1)}
+              className="fixed left-8 sm:left-16 top-[60%] transform -translate-y-1/2 z-20 group flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-r from-purple-600/20 to-purple-800/20 backdrop-blur-md border border-purple-500/30 hover:from-purple-600/40 hover:to-purple-800/40 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-purple-500/25"
+              aria-label="Página anterior"
+            >
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white group-hover:text-purple-300 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+
+            <button
+              onClick={() => handlePageChange((currentPage + 1) % totalPages)}
+              className="fixed right-8 sm:right-16 top-[60%] transform -translate-y-1/2 z-20 group flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-r from-purple-600/20 to-purple-800/20 backdrop-blur-md border border-purple-500/30 hover:from-purple-600/40 hover:to-purple-800/40 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-purple-500/25"
+              aria-label="Próxima página"
+            >
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white group-hover:text-purple-300 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+            
             {/* Layout Desktop */}
             <div className="hidden sm:block">
               {/* Container dos cards */}
@@ -1028,6 +1049,34 @@ export default function Hero() {
                     title="Portfolio Criativo"
                     description="Portfolio interativo com animações 3D, galeria dinâmica e integração com redes sociais."
                     image="/images/projects/vpf.png"
+                    category="Sites"
+                  />
+                </div>
+              )}
+
+              {/* Página 4 - Novos Projetos */}
+              {currentPage === 3 && (
+                <div 
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12 justify-items-center animate-fade-in px-4 lg:px-8"
+                  onMouseEnter={pauseCarousel}
+                  onMouseLeave={resumeCarousel}
+                >
+                  <ProjectCard
+                    title="Portfolio Nícolas Queiroga"
+                    description="Portfolio moderno com design escuro e tema de rede/constelação. Interface elegante com navegação intuitiva e call-to-action destacado para visualização de projetos."
+                    image="/images/projects/nicolas-queiroga.png"
+                    category="Sites"
+                  />
+                  <ProjectCard
+                    title="My Coffee!"
+                    description="E-commerce de café com landing page atrativa. Design quente e acolhedor com hero section impactante mostrando diferentes tipos de café e call-to-action para explorar blends."
+                    image="/images/projects/my-coffee.png"
+                    category="Sites"
+                  />
+                  <ProjectCard
+                    title="Portfolio Thiago Naoki"
+                    description="Portfolio minimalista com tema escuro roxo/preto. Design elegante com efeito de digitação dinâmico e botões de ação para download de currículo e contato."
+                    image="/images/projects/thiago-naoki.png"
                     category="Sites"
                   />
                 </div>
@@ -1151,6 +1200,39 @@ export default function Hero() {
                         title="Portfolio Criativo"
                         description="Portfolio interativo com animações 3D, galeria dinâmica e integração com redes sociais."
                         image="/images/projects/souzadev.png"
+                        category="Sites"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Página 4 - Novos Projetos */}
+                {currentPage === 3 && (
+                  <div 
+                    ref={(el) => mobileProjectsRefs.current[3] = el}
+                    className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth hide-scrollbar pb-4 px-4 space-x-8"
+                  >
+                    <div className="flex-shrink-0 w-full max-w-lg snap-center">
+                      <ProjectCard
+                        title="Portfolio Nícolas Queiroga"
+                        description="Portfolio moderno com design escuro e tema de rede/constelação. Interface elegante com navegação intuitiva e call-to-action destacado para visualização de projetos."
+                        image="/images/projects/nicolas-queiroga.png"
+                        category="Sites"
+                      />
+                    </div>
+                    <div className="flex-shrink-0 w-full max-w-lg snap-center">
+                      <ProjectCard
+                        title="My Coffee!"
+                        description="E-commerce de café com landing page atrativa. Design quente e acolhedor com hero section impactante mostrando diferentes tipos de café e call-to-action para explorar blends."
+                        image="/images/projects/my-coffee.png"
+                        category="Sites"
+                      />
+                    </div>
+                    <div className="flex-shrink-0 w-full max-w-lg snap-center">
+                      <ProjectCard
+                        title="Portfolio Thiago Naoki"
+                        description="Portfolio minimalista com tema escuro roxo/preto. Design elegante com efeito de digitação dinâmico e botões de ação para download de currículo e contato."
+                        image="/images/projects/thiago-naoki.png"
                         category="Sites"
                       />
                     </div>
