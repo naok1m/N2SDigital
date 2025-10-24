@@ -980,54 +980,27 @@ export default function Hero() {
                   <ProjectCard
                     title="Wavy Movies"
                     description="Plataforma desenvolvida para ajudar usuários a encontrarem filmes e séries de forma prática. Permite favoritar conteúdos e redireciona para sites oficiais ao clicar em 'Assistir Agora'."
-                    image="/images/projects/souzadev.png"
+                    image="/images/projects/Wavy-Movies.png"
                     category="Sites"
                   />
                   <ProjectCard
                     title="Noxus"
                     description="Noxus é uma landing page minimalista e elegante que criei para uma agência de marketing digital. A página foca em um design moderno com tema escuro e tons roxos."
-                    image="/images/projects/marko.png"
+                    image="/images/projects/Noxus.png"
                     category="Landing Pages"
                   />
                   <ProjectCard
-                    title="Monetize com IA"
-                    description="Landing Page criada para a Monetize com IA, um curso sobre Inteligência Artificial. Design moderno com foco em conversão e experiência do usuário."
-                    image="/images/projects/vpf.png"
-                    category="Landing Pages"
-                  />
-                </div>
-              )}
-
-              {/* Página 2 - Apps Mobile */}
-              {currentPage === 1 && (
-                <div 
-                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12 justify-items-center animate-fade-in px-4 lg:px-8"
-                  onMouseEnter={pauseCarousel}
-                  onMouseLeave={resumeCarousel}
-                >
-                  <ProjectCard
-                    title="App Mobile para Saúde"
-                    description="Aplicativo nativo para iOS/Android com integração IoT, telemedicina e monitoramento em tempo real."
-                    image="/images/projects/souzadev.png"
+                    title="App Juridico"
+                    description="Aplicativo desenvolvido para a área jurídica. Permite que advogados atualizem informações de processos em tempo real, com visualização imediata pelos clientes."
+                    image="/images/projects/mobile.png"
                     category="Mobile Apps"
                   />
-                  <ProjectCard
-                    title="Telemedicina Avançada"
-                    description="Plataforma completa de consultas online com IA para diagnóstico e integração com dispositivos médicos."
-                    image="/images/projects/marko.png"
-                    category="Sites"
-                  />
-                  <ProjectCard
-                    title="Monitoramento IoT"
-                    description="Sistema de monitoramento de pacientes com dispositivos IoT e alertas em tempo real."
-                    image="/images/projects/vpf.png"
-                    category="Sites"
-                  />
                 </div>
               )}
 
+
               {/* Página 3 - Landing Pages */}
-              {currentPage === 2 && (
+              {currentPage === 1 && (
                 <div 
                   className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12 justify-items-center animate-fade-in px-4 lg:px-8"
                   onMouseEnter={pauseCarousel}
@@ -1055,7 +1028,7 @@ export default function Hero() {
               )}
 
               {/* Página 4 - Novos Projetos */}
-              {currentPage === 3 && (
+              {currentPage === 2 && (
                 <div 
                   className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12 justify-items-center animate-fade-in px-4 lg:px-8"
                   onMouseEnter={pauseCarousel}
@@ -1117,7 +1090,7 @@ export default function Hero() {
                       <ProjectCard
                         title="Wavy Movies"
                         description="Plataforma desenvolvida para ajudar usuários a encontrarem filmes e séries de forma prática. Permite favoritar conteúdos e redireciona para sites oficiais ao clicar em 'Assistir Agora'."
-                        image="/images/projects/souzadev.png"
+                        image="/images/projects/Wavy-Movies.png"
                         category="Sites"
                       />
                     </div>
@@ -1125,58 +1098,25 @@ export default function Hero() {
                       <ProjectCard
                         title="Noxus"
                         description="Noxus é uma landing page minimalista e elegante que criei para uma agência de marketing digital. A página foca em um design moderno com tema escuro e tons roxos."
-                        image="/images/projects/marko.png"
+                        image="/images/projects/Noxus.png"
                         category="Landing Pages"
                       />
                     </div>
                     <div className="flex-shrink-0 w-full max-w-lg snap-center">
                       <ProjectCard
-                        title="Monetize com IA"
-                        description="Landing Page criada para a Monetize com IA, um curso sobre Inteligência Artificial. Design moderno com foco em conversão e experiência do usuário."
+                        title="App Juridico"
+                        description="Aplicativo desenvolvido para a área jurídica. Permite que advogados atualizem informações de processos em tempo real, com visualização imediata pelos clientes."
                         image="/images/projects/vpf.png"
-                        category="Landing Pages"
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {/* Página 2 - Apps Mobile */}
-                {currentPage === 1 && (
-                  <div 
-                    ref={(el) => mobileProjectsRefs.current[1] = el}
-                    className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth hide-scrollbar pb-4 px-4 space-x-8"
-                  >
-                    <div className="flex-shrink-0 w-full max-w-lg snap-center">
-                      <ProjectCard
-                        title="App Mobile para Saúde"
-                        description="Aplicativo nativo para iOS/Android com integração IoT, telemedicina e monitoramento em tempo real."
-                        image="/images/projects/souzadev.png"
                         category="Mobile Apps"
-                      />
-                    </div>
-                    <div className="flex-shrink-0 w-full max-w-lg snap-center">
-                      <ProjectCard
-                        title="Telemedicina Avançada"
-                        description="Plataforma completa de consultas online com IA para diagnóstico e integração com dispositivos médicos."
-                        image="/images/projects/marko.png"
-                        category="Sites"
-                      />
-                    </div>
-                    <div className="flex-shrink-0 w-full max-w-lg snap-center">
-                      <ProjectCard
-                        title="Monitoramento IoT"
-                        description="Sistema de monitoramento de pacientes com dispositivos IoT e alertas em tempo real."
-                        image="/images/projects/vpf.png"
-                        category="Sites"
                       />
                     </div>
                   </div>
                 )}
 
                 {/* Página 3 - Landing Pages */}
-                {currentPage === 2 && (
+                {currentPage === 1 && (
                   <div 
-                    ref={(el) => mobileProjectsRefs.current[2] = el}
+                    ref={(el) => mobileProjectsRefs.current[1] = el}
                     className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth hide-scrollbar pb-4 px-4 space-x-8"
                   >
                     <div className="flex-shrink-0 w-full max-w-lg snap-center">
@@ -1207,9 +1147,9 @@ export default function Hero() {
                 )}
 
                 {/* Página 4 - Novos Projetos */}
-                {currentPage === 3 && (
+                {currentPage === 2 && (
                   <div 
-                    ref={(el) => mobileProjectsRefs.current[3] = el}
+                    ref={(el) => mobileProjectsRefs.current[2] = el}
                     className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth hide-scrollbar pb-4 px-4 space-x-8"
                   >
                     <div className="flex-shrink-0 w-full max-w-lg snap-center">
