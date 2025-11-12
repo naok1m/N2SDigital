@@ -23,62 +23,7 @@ export default function AboutSection() {
   const valuesRef = useRef(null);
 
   useEffect(() => {
-    // Animação de entrada do hero
-    const heroTl = gsap.timeline();
-    
-    heroTl
-      .fromTo(heroRef.current, 
-        { opacity: 0, y: 50 },
-        { opacity: 1, y: 0, duration: 1, ease: "power2.out" }
-      )
-      .fromTo(".about-title", 
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "-=0.5"
-      )
-      .fromTo(".about-subtitle", 
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, "-=0.3"
-      );
-
-    // Animações com ScrollTrigger para stats
-    gsap.utils.toArray(".stats-card").forEach((card, index) => {
-      gsap.fromTo(card, 
-        { opacity: 0, y: 40, rotationY: 15 },
-        {
-          opacity: 1,
-          y: 0,
-          rotationY: 0,
-          duration: 0.8,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: card,
-            start: "top 85%",
-            toggleActions: "play none none none"
-          }
-        }
-      );
-    });
-
-    // Animações padronizadas para value cards - IGUAL AOS SERVIÇOS
-    gsap.utils.toArray(".value-card").forEach((card, index) => {
-      gsap.fromTo(card, 
-        { opacity: 0, y: 40, rotationY: 15 },
-        {
-          opacity: 1,
-          y: 0,
-          rotationY: 0,
-          duration: 0.8,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: card,
-            start: "top 85%",
-            toggleActions: "play none none none"
-          }
-        }
-      );
-    });
-
-
+    // Animações de entrada removidas
   }, []);
 
   // Otimizar dados com useMemo para evitar re-renders desnecessários

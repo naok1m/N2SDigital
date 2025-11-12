@@ -258,50 +258,7 @@ export default function Services() {
   }, []);
 
   useEffect(() => {
-    // Animação de entrada padronizada - seguindo o padrão das outras seções
-    const heroTl = gsap.timeline();
-    
-    heroTl
-      .fromTo(sectionRef.current, 
-        { opacity: 0, y: 50 },
-        { opacity: 1, y: 0, duration: 1, ease: "power2.out" }
-      )
-      .fromTo(titleRef.current, 
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "-=0.5"
-      )
-      .fromTo(subtitleRef.current, 
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, "-=0.3"
-      );
-
-
-    // Animações dos cards - VOO RÁPIDO DE BAIXO PARA CIMA
-    gsap.utils.toArray(".service-card-advanced").forEach((card, index) => {
-      // Animação de "voo" rápido de baixo para cima
-      gsap.fromTo(card, 
-        { 
-          opacity: 0, 
-          y: 80, // Começa mais embaixo para dar efeito de "voo"
-          scale: 0.9, // Leve inclinação inicial
-        },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          rotationX: 0.8,
-          duration: 0.7, // Voo rápido e dinâmico
-          ease: "back.out(1.7)", // Mais rápido e responsivo
-          scrollTrigger: {
-            trigger: card,
-            start: "top 90%",
-            toggleActions: "play none none none"
-          }
-        }
-      );
-    });
-
-
+    // Animações de entrada removidas
   }, []);
 
   const services = [

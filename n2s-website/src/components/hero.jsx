@@ -48,7 +48,7 @@ export default function Hero() {
   
   // Estado para controlar o carousel de projetos
   const [currentPage, setCurrentPage] = useState(0);
-  const totalPages = 4;
+  const totalPages = 3;
   const [carouselCanStart, setCarouselCanStart] = useState(false);
   const [carouselPaused, setCarouselPaused] = useState(false);
 
@@ -990,20 +990,20 @@ export default function Hero() {
                   onMouseLeave={resumeCarousel}
                 >
                   <ProjectCard
-                    title="Landing Page Imersiva"
-                    description="Design responsivo focado em conversão com animações avançadas e otimização para SEO e performance."
+                    title="SouzaDev"
+                    description="A SouzaDev é um projeto pessoal que representa meu trabalho como desenvolvedor web, unindo conhecimento técnico, responsabilidade e atenção aos detalhes. O objetivo é simples: criar soluções digitais modernas, seguras e eficientes, que realmente ajudem pessoas e negócios a se destacarem online."
                     image="/images/projects/souzadev.png"
                     category="Landing Pages"
                   />
                   <ProjectCard
-                    title="SaaS Dashboard"
-                    description="Interface moderna para SaaS com métricas em tempo real, gráficos interativos e gestão de usuários."
+                    title="Marko Mods"
+                    description="Plataforma de Mods de Minecraft criada para o criador de conteúdo 'Eu, Marko!'."
                     image="/images/projects/marko.png"
                     category="Sites"
                   />
                   <ProjectCard
-                    title="Portfolio Criativo"
-                    description="Portfolio interativo com animações 3D, galeria dinâmica e integração com redes sociais."
+                    title="Vem Pra Fonte"
+                    description="E-commerce especializado em tênis esportivos com interface moderna e intuitiva. Plataforma completa com catálogo organizado, sistema de busca avançado, carrinho de compras e checkout otimizado para uma experiência de compra fluida e segura."
                     image="/images/projects/vpf.png"
                     category="Sites"
                   />
@@ -1104,25 +1104,25 @@ export default function Hero() {
                   >
                     <div className="flex-shrink-0 w-full max-w-lg snap-center">
                       <ProjectCard
-                        title="Landing Page Imersiva"
-                        description="Design responsivo focado em conversão com animações avançadas e otimização para SEO e performance."
+                        title="SouzaDev"
+                        description="A SouzaDev é um projeto pessoal que representa meu trabalho como desenvolvedor web, unindo conhecimento técnico, responsabilidade e atenção aos detalhes. O objetivo é simples: criar soluções digitais modernas, seguras e eficientes, que realmente ajudem pessoas e negócios a se destacarem online."
                         image="/images/projects/marko.png"
                         category="Landing Pages"
                       />
                     </div>
                     <div className="flex-shrink-0 w-full max-w-lg snap-center">
                       <ProjectCard
-                        title="SaaS Dashboard"
-                        description="Interface moderna para SaaS com métricas em tempo real, gráficos interativos e gestão de usuários."
-                        image="/images/projects/vpf.png"
+                        title="Marko Mods"
+                        description="Plataforma de Mods de Minecraft criada para o criador de conteúdo 'Eu, Marko!'."
+                        image="/images/projects/marko.png"
                         category="Sites"
                       />
                     </div>
                     <div className="flex-shrink-0 w-full max-w-lg snap-center">
                       <ProjectCard
-                        title="Portfolio Criativo"
-                        description="Portfolio interativo com animações 3D, galeria dinâmica e integração com redes sociais."
-                        image="/images/projects/souzadev.png"
+                        title="Vem Pra Fonte"
+                        description="E-commerce especializado em tênis esportivos com interface moderna e intuitiva. Plataforma completa com catálogo organizado, sistema de busca avançado, carrinho de compras e checkout otimizado para uma experiência de compra fluida e segura."
+                        image="/images/projects/vpf.png"
                         category="Sites"
                       />
                     </div>

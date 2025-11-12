@@ -171,61 +171,8 @@ Por favor, entre em contato para discutirmos os detalhes do projeto.`;
     }, [selectedServices]);
 
     useEffect(() => {
-        // Animação de entrada da seção
-        const contactTl = gsap.timeline();
+        // Animações de entrada removidas
         
-        contactTl
-            .fromTo(sectionRef.current, 
-                { opacity: 0, y: 50 },
-                { opacity: 1, y: 0, duration: 1, ease: "power2.out" }
-            )
-            .fromTo(titleRef.current, 
-                { opacity: 0, y: 30 },
-                { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "-=0.5"
-            )
-            .fromTo(subtitleRef.current, 
-                { opacity: 0, y: 20 },
-                { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, "-=0.3"
-            );
-
-        // Animações para cards de contato
-        gsap.utils.toArray(".contact-card").forEach((card, index) => {
-            gsap.fromTo(card, 
-                { opacity: 0, y: 40, rotationY: 15 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    rotationY: 0,
-                    duration: 0.8,
-                    ease: "power2.out",
-                    scrollTrigger: {
-                        trigger: card,
-                        start: "top 85%",
-                        toggleActions: "play none none none"
-                    }
-                }
-            );
-        });
-
-        // Animações para formulário e CTA
-        gsap.utils.toArray(".contact-form, .contact-cta").forEach((element, index) => {
-            gsap.fromTo(element, 
-                { opacity: 0, y: 50, scale: 0.95 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    scale: 1,
-                    duration: 0.8,
-                    ease: "back.out(1.7)",
-                    scrollTrigger: {
-                        trigger: element,
-                        start: "top 80%",
-                        toggleActions: "play none none none"
-                    }
-                }
-            );
-        });
-
         return () => {
             ScrollTrigger.getAll().forEach(trigger => trigger.kill());
         };
