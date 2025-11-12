@@ -944,26 +944,9 @@ export default function Hero() {
           {/* Container principal dos cards e navegação */}
            <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-0">
             
-            {/* Setas de navegação - posicionadas nas laterais do viewport */}
-            <button
-              onClick={() => handlePageChange(currentPage === 0 ? totalPages - 1 : currentPage - 1)}
-              className="fixed left-8 sm:left-16 top-[60%] transform -translate-y-1/2 z-20 group flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-r from-purple-600/20 to-purple-800/20 backdrop-blur-md border border-purple-500/30 hover:from-purple-600/40 hover:to-purple-800/40 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-purple-500/25"
-              aria-label="Página anterior"
-            >
-              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white group-hover:text-purple-300 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
+            
 
-            <button
-              onClick={() => handlePageChange((currentPage + 1) % totalPages)}
-              className="fixed right-8 sm:right-16 top-[60%] transform -translate-y-1/2 z-20 group flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-r from-purple-600/20 to-purple-800/20 backdrop-blur-md border border-purple-500/30 hover:from-purple-600/40 hover:to-purple-800/40 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-purple-500/25"
-              aria-label="Próxima página"
-            >
-              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white group-hover:text-purple-300 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
+            
             
             {/* Layout Desktop */}
             <div className="hidden sm:block">
