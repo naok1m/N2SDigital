@@ -276,19 +276,25 @@ export default function Services() {
       );
 
 
-    // Animações padronizadas para cards de serviços
+    // Animações dos cards - VOO RÁPIDO DE BAIXO PARA CIMA
     gsap.utils.toArray(".service-card-advanced").forEach((card, index) => {
+      // Animação de "voo" rápido de baixo para cima
       gsap.fromTo(card, 
-        { opacity: 0, y: 40, rotationY: 15 },
+        { 
+          opacity: 0, 
+          y: 80, // Começa mais embaixo para dar efeito de "voo"
+          scale: 0.9, // Leve inclinação inicial
+        },
         {
           opacity: 1,
           y: 0,
-          rotationY: 0,
-          duration: 0.8,
-          ease: "power2.out",
+          scale: 1,
+          rotationX: 0.8,
+          duration: 0.7, // Voo rápido e dinâmico
+          ease: "back.out(1.7)", // Mais rápido e responsivo
           scrollTrigger: {
             trigger: card,
-            start: "top 85%",
+            start: "top 90%",
             toggleActions: "play none none none"
           }
         }

@@ -40,16 +40,16 @@ export default function AboutSection() {
         { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, "-=0.3"
       );
 
-    // Animações com ScrollTrigger para stats (apenas entrada visual)
+    // Animações com ScrollTrigger para stats
     gsap.utils.toArray(".stats-card").forEach((card, index) => {
       gsap.fromTo(card, 
-        { opacity: 0, y: 30, scale: 0.9 },
+        { opacity: 0, y: 40, rotationY: 15 },
         {
           opacity: 1,
           y: 0,
-          scale: 1,
+          rotationY: 0,
           duration: 0.8,
-          ease: "back.out(1.7)",
+          ease: "power2.out",
           scrollTrigger: {
             trigger: card,
             start: "top 85%",
@@ -59,7 +59,7 @@ export default function AboutSection() {
       );
     });
 
-    // Animações para valores
+    // Animações padronizadas para value cards - IGUAL AOS SERVIÇOS
     gsap.utils.toArray(".value-card").forEach((card, index) => {
       gsap.fromTo(card, 
         { opacity: 0, y: 40, rotationY: 15 },
