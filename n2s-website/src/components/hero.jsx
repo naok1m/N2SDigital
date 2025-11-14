@@ -831,7 +831,7 @@ export default function Hero() {
                   <div className="aspect-video bg-gray-900 relative">
                     <video
                       ref={videoRef}
-                      src="/videos/Noxus.mp4"
+                      src="/videos/mockups.mp4"
                       loop
                       muted
                       playsInline
