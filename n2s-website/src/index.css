@@ -43,21 +43,25 @@ body {
   transform: translateZ(0);
 }
 
-/* Stack Carousel Optimizations */
+/* Stack Carousel Optimizations - Performance crítico */
 .stack-band-inner {
-  will-change: transform;
+  /* Otimizações de rendering */
+  contain: layout style paint;
   backface-visibility: hidden;
-  perspective: 1000px;
+  transform: translateZ(0);
+  /* Removido perspective - não necessário e pesado */
 }
 
 .stack-item {
-  will-change: transform;
-  backface-visibility: hidden;
+  /* Isolar rendering de cada item */
+  contain: layout style;
+  /* Removido will-change - já definido inline quando necessário */
 }
 
 .stack-set {
-  will-change: transform;
-  backface-visibility: hidden;
+  /* Isolar rendering de cada set */
+  contain: layout style paint;
+  /* Removido will-change - já definido inline quando necessário */
 }
 
 /* FPS Toast Animations */

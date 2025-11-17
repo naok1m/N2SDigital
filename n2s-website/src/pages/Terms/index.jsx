@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import Header from '../../components/header';
 import Footer from '../../components/Footer';
-import SEOHead from '../../components/SEOHead';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faFileContract, 
@@ -86,13 +85,6 @@ export default function TermsPage() {
 
   return (
     <>
-      <SEOHead 
-        title="Termos de Uso - N2S Group | Condições de Serviço"
-        description="Conheça nossos termos de uso e condições de serviço. Entenda seus direitos e obrigações ao utilizar nossos serviços digitais."
-        keywords="termos de uso, condições de serviço, contratos digitais, direitos e obrigações, N2S Group"
-        url="https://n2sgroup.com.br/terms"
-      />
-      
       <Header />
       
        <main className="pt-20 min-h-screen bg-gradient-to-b from-[#0a0a0f] to-[#1a0b2e]">

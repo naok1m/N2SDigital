@@ -8,7 +8,6 @@ import {
   faLightbulb
 } from '@fortawesome/free-solid-svg-icons';
 import GlassButton from '../../components/glassButton';
-import SEOHead from '../../components/SEOHead';
 
 export default function NotFound() {
   const navigate = useNavigate();
@@ -249,12 +248,6 @@ export default function NotFound() {
 
   return (
     <>
-      <SEOHead 
-        title="404 - Página Não Encontrada | N2S Digital"
-        description="Página não encontrada."
-        keywords="404, página não encontrada, erro, N2S Digital"
-      />
-      
       <div 
         ref={containerRef}
         className="min-h-screen flex items-center justify-center relative overflow-hidden"

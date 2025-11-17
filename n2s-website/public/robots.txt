@@ -2,23 +2,6 @@ User-agent: *
 Allow: /
 
 # Sitemap
-<<<<<<< HEAD
-Sitemap: https://n2sdigital.com/sitemap.xml
-
-# Crawl-delay
-Crawl-delay: 1
-
-# Disallow admin areas (if any)
-Disallow: /admin/
-Disallow: /api/
-Disallow: /_next/
-Disallow: /static/
-
-# Allow important files
-Allow: /favicon.ico
-Allow: /robots.txt
-Allow: /sitemap.xml
-=======
 Sitemap: https://n2sgroup.com.br/sitemap.xml
 
 # Crawl-delay for all bots
@@ -37,12 +20,15 @@ User-agent: Slurp
 Allow: /
 Crawl-delay: 1
 
-# Block access to admin and private areas (if any)
+# Block access to admin and private areas
 Disallow: /admin/
 Disallow: /private/
 Disallow: /.git/
 Disallow: /node_modules/
 Disallow: /src/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /static/
 
 # Allow specific file types
 Allow: /*.css
@@ -55,4 +41,7 @@ Allow: /*.svg
 Allow: /*.webp
 Allow: /*.ico
 
->>>>>>> a28db1b7ad5a39add824902dd69db824ba305994
+# Allow important files
+Allow: /favicon.ico
+Allow: /robots.txt
+Allow: /sitemap.xml

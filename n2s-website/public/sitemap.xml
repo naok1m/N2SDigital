@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<<<<<<< HEAD
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://n2sdigital.com/</loc>
-=======
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
@@ -12,15 +7,10 @@
   <!-- Homepage -->
   <url>
     <loc>https://n2sgroup.com.br/</loc>
->>>>>>> a28db1b7ad5a39add824902dd69db824ba305994
     <lastmod>2024-01-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
-<<<<<<< HEAD
-  <url>
-    <loc>https://n2sdigital.com/contato</loc>
-=======
 
   <!-- Services Page -->
   <url>
@@ -30,43 +20,44 @@
     <priority>0.9</priority>
   </url>
 
-  <!-- About Section (Anchor) -->
+  <!-- Privacy Page -->
   <url>
-    <loc>https://n2sgroup.com.br/#sobre</loc>
->>>>>>> a28db1b7ad5a39add824902dd69db824ba305994
+    <loc>https://n2sgroup.com.br/privacy</loc>
     <lastmod>2024-01-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-<<<<<<< HEAD
+
+  <!-- Terms Page -->
   <url>
-    <loc>https://n2sdigital.com/services</loc>
-=======
+    <loc>https://n2sgroup.com.br/terms</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Cookies Page -->
+  <url>
+    <loc>https://n2sgroup.com.br/cookies</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- About Section (Anchor) -->
+  <url>
+    <loc>https://n2sgroup.com.br/#sobre</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
 
   <!-- Contact Section (Anchor) -->
   <url>
     <loc>https://n2sgroup.com.br/#contato</loc>
->>>>>>> a28db1b7ad5a39add824902dd69db824ba305994
     <lastmod>2024-01-15</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-<<<<<<< HEAD
-  <url>
-    <loc>https://n2sdigital.com/portfolio</loc>
-    <lastmod>2024-01-15</lastmod>
-    <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
-  <url>
-    <loc>https://n2sdigital.com/sobre</loc>
-    <lastmod>2024-01-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-</urlset>
-=======
 
 </urlset>
-
->>>>>>> a28db1b7ad5a39add824902dd69db824ba305994

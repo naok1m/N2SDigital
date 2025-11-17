@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useMemo, useCallback } from 'react';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faReact, 
@@ -24,8 +23,9 @@ import {
 
 const StackCarousel = ({ position = 'top' }) => {
   const bandRef = useRef(null);
+  const bandInnerRef = useRef(null);
   const animationRef = useRef(null);
-  const scrollTriggerRef = useRef(null);
+  const observerRef = useRef(null);
 
   // Memoizar stacks para evitar recriação desnecessária
   const stacks = useMemo(() => [
@@ -48,133 +48,124 @@ const StackCarousel = ({ position = 'top' }) => {
     { name: 'FIGMA', icon: faFigma, color: '#F24E1E' }
   ], []);
 
-  // Memoizar separadores
-  const separators = useMemo(() => [
-    { icon: 'circle', color: '#a0a0a0' },
-    { icon: 'circle', color: '#a0a0a0' },
-    { icon: 'circle', color: '#a0a0a0' },
-    { icon: 'circle', color: '#a0a0a0' }
-  ], []);
-
-  // Função otimizada para criar animação
+  // Função otimizada para criar animação com CSS (muito mais performático)
   const createAnimation = useCallback(() => {
-    if (!bandRef.current || animationRef.current) return;
+    if (!bandInnerRef.current || animationRef.current) return;
 
-    const bandInner = bandRef.current.querySelector('.stack-band-inner');
-    if (!bandInner) return;
-
-    const firstStackSet = bandInner.querySelector('.stack-set');
+    const firstStackSet = bandInnerRef.current.querySelector('.stack-set');
     if (!firstStackSet) return;
     
     const stackSetWidth = firstStackSet.offsetWidth;
     const moveDistance = stackSetWidth;
 
-    // Usar transform3d para aceleração de hardware
-    gsap.set(bandInner, { x: 0, force3D: true });
+    // Usar GSAP apenas para animação suave, sem ScrollTrigger pesado
+    gsap.set(bandInnerRef.current, { x: 0, force3D: true });
     
-    animationRef.current = gsap.to(bandInner, {
+    animationRef.current = gsap.to(bandInnerRef.current, {
       x: -moveDistance,
-      duration: 30, // Aumentar duração para suavizar
+      duration: 40, // Mais lento = menos CPU
       ease: 'none',
       repeat: -1,
       immediateRender: true,
-      force3D: true // Forçar aceleração de hardware
+      force3D: true,
+      lazy: false // Desabilitar lazy para melhor performance
     });
   }, []);
 
-  // Função otimizada para scroll trigger
-  const createScrollTrigger = useCallback(() => {
-    if (!bandRef.current || scrollTriggerRef.current) return;
-
-    scrollTriggerRef.current = ScrollTrigger.create({
-      trigger: "body",
-      start: "top top",
-      end: "bottom bottom",
-      scrub: 1, // Suavizar scrub
-      onUpdate: (self) => {
-        const progress = self.progress;
-        const fadeStart = 0.3;
-        const fadeEnd = 0.6;
-        
-        let opacity = 1;
-        if (progress >= fadeStart) {
-          const fadeProgress = (progress - fadeStart) / (fadeEnd - fadeStart);
-          opacity = Math.max(0, 1 - fadeProgress);
-        }
-        
-        if (bandRef.current) {
-          // Usar transform3d para melhor performance
-          gsap.set(bandRef.current, {
-            opacity: opacity,
-            y: progress * -30, // Reduzir movimento para suavizar
-            force3D: true
-          });
-        }
-      }
-    });
-  }, []);
-
+  // Pausar animação quando não visível (IntersectionObserver)
   useEffect(() => {
     if (!bandRef.current) return;
 
-    // Usar requestAnimationFrame para melhor performance
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (animationRef.current) {
+            if (entry.isIntersecting) {
+              animationRef.current.play();
+            } else {
+              animationRef.current.pause();
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '50px'
+      }
+    );
+
+    observerRef.current.observe(bandRef.current);
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, []);
+
+  // Inicializar animação após mount
+  useEffect(() => {
+    if (!bandInnerRef.current) return;
+
+    // Aguardar próximo frame para garantir que DOM está pronto
     const timer = requestAnimationFrame(() => {
       createAnimation();
-      createScrollTrigger();
     });
 
     return () => {
       cancelAnimationFrame(timer);
       
-      // Limpar animações
       if (animationRef.current) {
         animationRef.current.kill();
         animationRef.current = null;
       }
-      
-      if (scrollTriggerRef.current) {
-        scrollTriggerRef.current.kill();
-        scrollTriggerRef.current = null;
-      }
     };
-  }, [createAnimation, createScrollTrigger]);
+  }, [createAnimation]);
 
-  // Memoizar renderização dos stacks
+  // Memoizar renderização dos stacks - reduzido para 2 cópias apenas
   const renderStacks = useMemo(() => {
     return [...Array(2)].map((_, copyIndex) => (
-      <div key={copyIndex} className={`flex items-center gap-8 stack-set ${position === 'bottom' ? 'flex-row-reverse' : ''}`}>
-        {stacks.map((stack, index) => {
-          const separator = separators[index % separators.length];
-          return (
-            <React.Fragment key={`${copyIndex}-${index}`}>
-              <div className="flex items-center gap-3 px-4 py-2 stack-item">
-                <FontAwesomeIcon 
-                  icon={stack.icon} 
-                  className="text-2xl"
-                  style={{ color: stack.color }}
-                />
-                <span 
-                  className="text-white font-bold text-lg tracking-wider"
-                  style={{ 
-                    fontFamily: 'Clash Grotesk, sans-serif',
-                    textShadow: '0 0 20px rgba(255, 255, 255, 0.3)'
-                  }}
-                >
-                  {stack.name}
-                </span>
-              </div>
-              <div className="flex items-center justify-center w-6">
+      <div 
+        key={copyIndex} 
+        className={`flex items-center gap-6 stack-set ${position === 'bottom' ? 'flex-row-reverse' : ''}`}
+        style={{ contain: 'layout style paint' }} // Otimização CSS
+      >
+        {stacks.map((stack, index) => (
+          <React.Fragment key={`${copyIndex}-${index}`}>
+            <div 
+              className="flex items-center gap-3 px-4 py-2 stack-item"
+              style={{ 
+                contain: 'layout style',
+                willChange: 'auto' // Remover will-change desnecessário
+              }}
+            >
+              <FontAwesomeIcon 
+                icon={stack.icon} 
+                className="text-xl"
+                style={{ color: stack.color }}
+              />
+              <span 
+                className="text-white font-bold text-base tracking-wide"
+                style={{ 
+                  fontFamily: 'Clash Grotesk, sans-serif'
+                  // Removido textShadow para melhor performance
+                }}
+              >
+                {stack.name}
+              </span>
+            </div>
+            {index < stacks.length - 1 && (
+              <div className="flex items-center justify-center w-4">
                 <div 
-                  className="w-1.5 h-1.5 rounded-full"
-                  style={{ backgroundColor: separator.color }}
+                  className="w-1 h-1 rounded-full bg-gray-400"
                 />
               </div>
-            </React.Fragment>
-          );
-        })}
+            )}
+          </React.Fragment>
+        ))}
       </div>
     ));
-  }, [stacks, separators, position]);
+  }, [stacks, position]);
 
   return (
     <div 
@@ -182,14 +173,25 @@ const StackCarousel = ({ position = 'top' }) => {
       className="relative w-full h-20 flex items-center overflow-hidden pointer-events-none z-[60]"
       style={{
         background: '#0A0A0F',
-        borderTop: '1px solid rgba(255, 255, 255, 0.3)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.3)',
-        backdropFilter: 'blur(2px)',
+        borderTop: '1px solid rgba(255, 255, 255, 0.2)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
+        // Removido backdropFilter - muito pesado
         transform: position === 'top' ? 'skewY(-1deg)' : 'skewY(1deg)',
-        willChange: 'transform, opacity' // Otimizar para animações
+        willChange: 'transform',
+        contain: 'layout style paint', // Isolar rendering
+        isolation: 'isolate' // Criar novo contexto de stacking
       }}
     >
-      <div className="flex items-center whitespace-nowrap stack-band-inner">
+      <div 
+        ref={bandInnerRef}
+        className="flex items-center whitespace-nowrap stack-band-inner"
+        style={{
+          willChange: 'transform',
+          contain: 'layout style paint',
+          backfaceVisibility: 'hidden', // Otimização para animações
+          transform: 'translateZ(0)' // Forçar aceleração de hardware
+        }}
+      >
         {renderStacks}
       </div>
     </div>

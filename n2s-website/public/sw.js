@@ -1,5 +1,6 @@
 // Service Worker para cache de assets
-const CACHE_NAME = 'n2s-digital-v1';
+const CACHE_NAME = 'n2s-digital-v3'; // Atualizado para limpar cache antigo
+const MAX_CACHE_SIZE = 10 * 1024 * 1024; // 10MB máximo de cache
 const STATIC_CACHE_URLS = [
   '/',
   '/index.html',
@@ -20,57 +21,115 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// Ativação do Service Worker
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    }).then(() => {
-      return self.clients.claim();
-    })
-  );
-});
+// Função para verificar tamanho da resposta antes de cachear
+async function getResponseSize(response) {
+  const clonedResponse = response.clone();
+  const blob = await clonedResponse.blob();
+  return blob.size;
+}
 
-// Interceptação de requisições
+// Função para verificar se deve fazer cache do recurso
+function shouldCache(request) {
+  const url = new URL(request.url);
+  
+  // Não fazer cache de requisições externas (APIs, analytics, etc)
+  if (url.origin !== self.location.origin) {
+    return false;
+  }
+  
+  // Não fazer cache de imagens (mesmo que sejam pequenas)
+  if (request.destination === 'image') {
+    return false;
+  }
+  
+  // Fazer cache apenas de recursos estáticos essenciais
+  const cacheableTypes = [
+    'script',
+    'style',
+    'font',
+    'manifest'
+  ];
+  
+  // Verificar se é um tipo cacheável
+  if (cacheableTypes.includes(request.destination)) {
+    return true;
+  }
+  
+  // Fazer cache apenas de HTML (páginas)
+  if (request.destination === 'document') {
+    return true;
+  }
+  
+  // NÃO fazer cache de outros recursos automaticamente
+  
+  return false;
+}
+
+// Interceptação de requisições - Estratégia Network First
 self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  
+  // Ignorar requisições que não são GET
+  if (request.method !== 'GET') {
+    return;
+  }
+  
+  // Se não deve fazer cache, apenas busca da rede
+  if (!shouldCache(request)) {
+    event.respondWith(fetch(request));
+    return;
+  }
+  
+  // Estratégia Network First para recursos cacheáveis
   event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        // Se encontrou no cache, retorna a versão em cache
-        if (response) {
+    fetch(request)
+      .then(async (response) => {
+        // Verifica se recebeu uma resposta válida
+        if (!response || response.status !== 200 || response.type !== 'basic') {
           return response;
         }
 
-        // Se não encontrou, faz a requisição para a rede
-        return fetch(event.request).then((response) => {
-          // Verifica se recebeu uma resposta válida
-          if (!response || response.status !== 200 || response.type !== 'basic') {
-            return response;
-          }
-
-          // Clona a resposta
-          const responseToCache = response.clone();
-
-          // Adiciona ao cache
-          caches.open(CACHE_NAME)
-            .then((cache) => {
-              cache.put(event.request, responseToCache);
-            });
-
+        // Verifica tamanho antes de cachear (limite de 500KB por arquivo)
+        const size = await getResponseSize(response);
+        const MAX_FILE_SIZE = 500 * 1024; // 500KB
+        
+        if (size > MAX_FILE_SIZE) {
+          // Arquivo muito grande, não cachear
           return response;
-        });
+        }
+
+        // Clona a resposta para cache
+        const responseToCache = response.clone();
+
+        // Adiciona ao cache (sem bloquear a resposta)
+        caches.open(CACHE_NAME)
+          .then((cache) => {
+            cache.put(request, responseToCache);
+          })
+          .catch(() => {
+            // Ignora erros de cache silenciosamente
+          });
+
+        return response;
       })
       .catch(() => {
-        // Se falhar, retorna uma página offline personalizada
-        if (event.request.destination === 'document') {
-          return caches.match('/index.html');
-        }
+        // Se falhar na rede, tenta buscar do cache
+        return caches.match(request).then((cachedResponse) => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          
+          // Se for uma página e não tiver no cache, retorna index.html
+          if (request.destination === 'document') {
+            return caches.match('/index.html');
+          }
+          
+          // Retorna erro se não encontrar nada
+          return new Response('Recurso não disponível offline', {
+            status: 503,
+            statusText: 'Service Unavailable'
+          });
+        });
       })
   );
 });
@@ -135,18 +194,44 @@ function doBackgroundSync() {
   return Promise.resolve();
 }
 
-// Limpeza de cache antigo
+// Função para limpar cache antigo e manter tamanho controlado
+async function cleanOldCache() {
+  try {
+    const cacheNames = await caches.keys();
+    
+    // Remove caches antigos
+    await Promise.all(
+      cacheNames.map((cacheName) => {
+        if (cacheName !== CACHE_NAME) {
+          console.log('Removendo cache antigo:', cacheName);
+          return caches.delete(cacheName);
+        }
+      })
+    );
+    
+    // Verifica tamanho do cache atual e limpa se necessário
+    const cache = await caches.open(CACHE_NAME);
+    const keys = await cache.keys();
+    
+    // Se tiver muitos itens, remove os mais antigos
+    if (keys.length > 50) {
+      // Remove os 10 itens mais antigos
+      const itemsToRemove = keys.slice(0, 10);
+      await Promise.all(
+        itemsToRemove.map(key => cache.delete(key))
+      );
+    }
+  } catch (error) {
+    console.error('Erro ao limpar cache:', error);
+  }
+}
+
+// Limpeza de cache antigo na ativação
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            console.log('Removendo cache antigo:', cacheName);
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
+    Promise.all([
+      cleanOldCache(),
+      self.clients.claim()
+    ])
   );
 });

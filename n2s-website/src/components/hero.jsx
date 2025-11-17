@@ -337,22 +337,15 @@ export default function Hero() {
   useEffect(() => {
     const timeout = setTimeout(() => setShow(true), 20);
     
-    // Preload de imagens críticas
-    const preloadImages = (imageUrls) => {
-      imageUrls.forEach(url => {
-        const img = new Image();
-        img.src = url;
-      });
+    // Preload apenas das imagens mais críticas (reduzido para economizar cache)
+    // As outras imagens serão carregadas sob demanda via lazy loading
+    const preloadCriticalImages = () => {
+      // Preload apenas do planeta (mais visível na primeira tela)
+      const img = new Image();
+      img.src = '/images/elements/planeta.webp';
     };
     
-    preloadImages([
-      '/images/elements/liquidos.webp',
-      '/images/elements/correntes.webp', 
-      '/images/elements/planeta.webp',
-      '/images/elements/estela.webp',
-      '/images/backgrounds/pattern.webp',
-      '/images/elements/arco.webp'
-    ]);
+    preloadCriticalImages();
     
     // Configurar GSAP para melhor performance e definir opacidades iniciais
     gsap.set([eclipseRef.current, planetaRef.current, correntesRef.current, liquidosRef.current], {
@@ -897,23 +890,6 @@ export default function Hero() {
           />
         </div>
 
-        {/* Iluminacao.mp4 invertida e quase transparente - Layer 2 */}
-        <div className="absolute inset-0 pointer-events-none z-[2]">
-          <video 
-            src="/iluminacao.mp4" 
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover opacity-[0.15]"
-            style={{
-              filter: 'blur(2px) brightness(0.3) contrast(1.2)',
-              mixBlendMode: 'screen'
-            }}
-          />
-        </div>
-
-        
         <div className="w-full text-white text-center flex flex-col items-center justify-center px-4 relative z-10">
           {/* Estela pequena em cima do título */}
           <div className="relative mb-8">

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import Header from '../../components/header';
 import Footer from '../../components/Footer';
-import SEOHead from '../../components/SEOHead';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faCookieBite, 
@@ -92,13 +91,6 @@ export default function CookiesPage() {
 
   return (
     <>
-      <SEOHead 
-        title="Política de Cookies - N2S Group | Uso de Cookies e Tecnologias"
-        description="Conheça nossa política de cookies e como utilizamos tecnologias para melhorar sua experiência. Transparência sobre o uso de cookies em nosso site."
-        keywords="política de cookies, cookies, tecnologias de rastreamento, privacidade digital, LGPD, N2S Group"
-        url="https://n2sgroup.com.br/cookies"
-      />
-      
       <Header />
       
        <main className="pt-20 min-h-screen bg-gradient-to-b from-[#0a0a0f] to-[#1a0b2e]">
